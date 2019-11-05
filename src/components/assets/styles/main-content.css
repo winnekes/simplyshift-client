@@ -1,0 +1,7 @@
+.column {
+    border-right: 1px solid gray;
+}
+
+.column:last-of-type {
+    border: none;
+}
