@@ -30,9 +30,10 @@ export default class ShiftModel extends BaseEntity {
     @Column('text')
     name: string;
 
-    @IsDateString()
-    @Column('timestamp')
-    startsAt: Date;
+    @IsNumber()
+    @Min(0)
+    @Column('bigint')
+    startsAt: number;
 
     @IsNumber()
     @Min(0)

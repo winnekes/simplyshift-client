@@ -12,7 +12,7 @@ import {
     Param,
     Delete,
 } from 'routing-controllers';
-
+import * as moment from 'moment';
 import ShiftModel from '../shiftModels/entity';
 import ShiftEntry from './entity';
 import User from '../users/entity';
@@ -40,14 +40,38 @@ export default class ShiftEntryController {
         @Body() shiftEntry: Partial<ShiftEntry>,
         @Res() response: any
     ) {
-        const timeCalc = function() {};
+        const computeTimes = (date, model: ShiftModel) => {
+            const startDate = moment.parseZone(date).startOf('day');
+
+            const startsAt = moment(startDate)
+                .add({ minutes: model.startsAt })
+                .toLocaleString();
+            const endsAt = moment(startDate)
+                .add({ minutes: +model.startsAt + +model.duration })
+                .toLocaleString();
+            return {
+                startsAt,
+                endsAt,
+            };
+        };
+
         try {
             const { shiftModel } = shiftEntry;
-            const model = ShiftModel.findOne(shiftModel);
-            shiftEntry.user = user;
-            /*             const entity = ShiftEntry.create({startsAt: calculateStartsAt(shiftEntry.startsAt, model.)...shiftEntry}); */
+            const model = await ShiftModel.findOne(shiftModel, {
+                where: { user },
+            });
+            if (!model)
+                throw new NotFoundError(
+                    'Could not find the model for this shift entry.'
+                );
 
-            /*             return await shiftEntry.save(); */
+            shiftEntry.user = user;
+            const entity = ShiftEntry.create({
+                ...shiftEntry,
+                ...computeTimes(shiftEntry.startsAt, model as ShiftModel),
+            });
+
+            return await entity.save();
         } catch (err) {
             console.log(err);
             response.status = 400;
