@@ -6,6 +6,21 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
+function eventStyleGetter(event, start, end, isSelected) {
+    console.log(event);
+    var backgroundColor = '#' + event.color;
+    var style = {
+        backgroundColor: backgroundColor,
+        borderRadius: '0px',
+        opacity: 0.8,
+        color: 'black',
+        border: '0px',
+        display: 'block',
+    };
+    return {
+        style: style,
+    };
+}
 export default function ShiftCalendar(props) {
     return (
         <>
@@ -22,6 +37,8 @@ export default function ShiftCalendar(props) {
                         events={props.shiftEntries}
                         localizer={localizer}
                         style={{ height: '100vh' }}
+                        eventPropGetter={eventStyleGetter}
+                        popup
                     />
                 </div>
             </div>

@@ -8,6 +8,7 @@ export default function(state = [], action = {}) {
                     title: shift.shiftModel.name,
                     start: shift.startsAt,
                     end: shift.endsAt,
+                    color: shift.shiftModel.color,
                 }));
             }
             return state;
