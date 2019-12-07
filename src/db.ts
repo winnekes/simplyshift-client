@@ -3,6 +3,8 @@ import { DefaultNamingStrategy } from 'typeorm/naming-strategy/DefaultNamingStra
 import { NamingStrategyInterface } from 'typeorm/naming-strategy/NamingStrategyInterface';
 import { snakeCase } from 'typeorm/util/StringUtils';
 import User from './users/entity';
+import ShiftModel from './shiftModels/entity';
+import ShiftEntry from './shiftEntries/entity';
 
 class CustomNamingStrategy extends DefaultNamingStrategy
     implements NamingStrategyInterface {
@@ -37,7 +39,7 @@ export default () =>
     createConnection({
         type: 'postgres',
         url: process.env.DATABASE_URL,
-        entities: [User],
+        entities: [User, ShiftModel, ShiftEntry],
         synchronize: true,
         logging: true,
         namingStrategy: new CustomNamingStrategy(),

@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from 'typeorm/repository/BaseEntity';
 import { IsString, MinLength, IsEmail, IsUrl } from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
-
+import ShiftModel from '../shiftModels/entity';
+import ShiftEntry from '../shiftEntries/entity';
 @Entity()
 export default class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -35,4 +36,16 @@ export default class User extends BaseEntity {
     checkPassword(rawPassword: string): Promise<boolean> {
         return bcrypt.compare(rawPassword, this.password);
     }
+
+    @OneToMany(
+        () => ShiftModel,
+        shiftModel => shiftModel.user
+    )
+    shiftModels: ShiftModel[];
+
+    @OneToMany(
+        () => ShiftEntry,
+        shiftEntry => shiftEntry.user
+    )
+    shiftEntries: ShiftEntry[];
 }
