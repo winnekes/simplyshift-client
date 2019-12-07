@@ -7,10 +7,10 @@ import {
     getMetadataArgsStorage,
     Authorized,
     CurrentUser,
+    Res,
 } from 'routing-controllers';
-
-import User from './entity';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
+import User from './entity';
 
 @JsonController()
 export default class UserController {
@@ -22,11 +22,19 @@ export default class UserController {
     }
 
     @Post('/users')
-    async createUser(@Body() user: User) {
+    async createUser(@Body() user: User, @Res() response: any) {
         const { password, ...rest } = user;
         const entity = User.create(rest);
-        await entity.setPassword(password);
-        return entity.save();
+
+        try {
+            await entity.setPassword(password);
+            return await entity.save();
+        } catch (err) {
+            // todo: check for error type (duplicate?)
+            console.log(err);
+            response.status = 400;
+            response.body = { message: 'Cannot create this user.' };
+        }
     }
 
     @Get('/spec')

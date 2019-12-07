@@ -5,12 +5,21 @@ import { verify } from './jwt';
 import UserController from './users/controller';
 import User from './users/entity';
 import LoginController from './logins/controller';
+import ShiftModelController from './shiftModels/controller';
+import SpecController from './specs/controllers';
+import ShiftEntryController from './shiftEntries/controller';
 
 const port = process.env.PORT;
 
 const app = createKoaServer({
     cors: true,
-    controllers: [UserController, LoginController],
+    controllers: [
+        UserController,
+        LoginController,
+        ShiftModelController,
+        ShiftEntryController,
+        SpecController,
+    ],
     authorizationChecker: (action: Action) => {
         const header: string = action.request.headers.authorization;
         if (header && header.startsWith('Bearer ')) {

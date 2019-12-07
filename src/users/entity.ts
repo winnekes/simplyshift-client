@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
+    Unique,
+} from 'typeorm';
 import { BaseEntity } from 'typeorm/repository/BaseEntity';
 import { IsString, MinLength, IsEmail, IsUrl } from 'class-validator';
 import * as bcrypt from 'bcrypt';
@@ -15,7 +21,7 @@ export default class User extends BaseEntity {
     username: string;
 
     @IsEmail()
-    @Column('text')
+    @Column('text', { unique: true })
     email: string;
 
     @IsString()

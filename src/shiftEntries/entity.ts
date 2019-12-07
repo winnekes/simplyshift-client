@@ -1,12 +1,6 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    ManyToMany,
-    ManyToOne,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'typeorm/repository/BaseEntity';
-import { IsString, MinLength, Min } from 'class-validator';
+import { IsString, IsDate } from 'class-validator';
 import User from '../users/entity';
 import ShiftModel from '../shiftModels/entity';
 
@@ -15,13 +9,16 @@ export default class ShiftEntry extends BaseEntity {
     @PrimaryGeneratedColumn()
     id?: number;
 
+    @IsDate()
     @Column('timestamp')
     startsAt: Date;
 
+    @IsDate()
     @Column('timestamp')
     endsAt: Date;
 
-    @Column('varchar')
+    @IsString()
+    @Column('varchar', { nullable: true })
     note: string;
 
     @ManyToOne(
