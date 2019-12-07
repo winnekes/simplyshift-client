@@ -6,8 +6,17 @@ import {
     Unique,
 } from 'typeorm';
 import { BaseEntity } from 'typeorm/repository/BaseEntity';
-import { IsString, MinLength, IsEmail, IsUrl } from 'class-validator';
+import {
+    IsString,
+    MinLength,
+    IsEmail,
+    IsUrl,
+    getFromContainer,
+    MetadataStorage,
+} from 'class-validator';
 import * as bcrypt from 'bcrypt';
+
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import { Exclude } from 'class-transformer';
 import ShiftModel from '../shiftModels/entity';
 import ShiftEntry from '../shiftEntries/entity';

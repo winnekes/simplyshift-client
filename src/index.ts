@@ -21,6 +21,7 @@ const app = createKoaServer({
         SpecController,
     ],
     authorizationChecker: (action: Action) => {
+        console.log(action.request.headers);
         const header: string = action.request.headers.authorization;
         if (header && header.startsWith('Bearer ')) {
             const [, token] = header.split(' ');

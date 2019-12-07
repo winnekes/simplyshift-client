@@ -11,20 +11,37 @@ import {
     Put,
     Param,
     Delete,
+    QueryParam,
 } from 'routing-controllers';
 import * as moment from 'moment';
 import ShiftModel from '../shiftModels/entity';
 import ShiftEntry from './entity';
 import User from '../users/entity';
+import { OpenAPI } from 'routing-controllers-openapi/build/decorators';
+import { MoreThanOrEqual, LessThan } from 'typeorm';
 
 @JsonController()
+@OpenAPI({
+    security: [{ bearerAuth: [] }], // Applied to each method
+})
 export default class ShiftEntryController {
     @Authorized()
     @Get('/shiftEntries')
-    async getAllShiftEntries(@CurrentUser() user: User) {
+    async getAllShiftEntries(
+        @CurrentUser() user: User,
+        @QueryParam('month', { required: false }) month: string
+    ) {
+        var selectedMonth;
+        if (!month) {
+            selectedMonth = moment().startOf('month');
+        } else {
+            selectedMonth = moment(month).startOf('month');
+        }
         const shiftEntries = await ShiftEntry.find({
             where: {
                 user: user,
+                startsAt: MoreThanOrEqual(selectedMonth),
+                endsAt: LessThan(moment(selectedMonth).add(1, 'month')),
             },
         });
         if (!shiftEntries) {
@@ -36,7 +53,8 @@ export default class ShiftEntryController {
     @Authorized()
     @Post('/shiftEntries')
     async createShiftEntry(
-        @CurrentUser() user: User,
+        @CurrentUser()
+        user: User,
         @Body() shiftEntry: Partial<ShiftEntry>,
         @Res() response: any
     ) {

@@ -14,8 +14,12 @@ import {
 
 import ShiftModel from './entity';
 import User from '../users/entity';
+import { OpenAPI } from 'routing-controllers-openapi/build/decorators';
 
 @JsonController()
+@OpenAPI({
+    security: [{ bearerAuth: [] }], // Applied to each method
+})
 export default class ShiftModelController {
     @Authorized()
     @Get('/shiftModels')
