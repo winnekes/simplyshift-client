@@ -1,5 +1,5 @@
 import request from 'superagent';
-
+import { BASE_URL } from '../constants';
 export const SHIFTS_FETCHED = 'SHIFTS_FETCHED';
 export const SHIFT_FETCHED = 'SHIFT_FETCHED';
 export const SELECT_SHIFT = 'SELECT_SHIFT';
@@ -8,57 +8,27 @@ export const SHIFT_CREATE_SUCCESS = 'SHIFT_CREATE_SUCCESS';
 export const SHIFT_DELETE_SUCCESS = 'SHIFT_DELETE_SUCCESS';
 export const SHIFT_UPDATE_SUCCESS = 'SHIFT_UPDATE_SUCCESS';
 
-const baseUrl = 'http://localhost:4020';
-const shiftRoute = '/shifts';
+const shiftEntriesRoute = 'shiftEntries';
 
-export const selectShift = id => ({
-    type: SELECT_SHIFT,
-    payload: id,
-});
-
-const shiftDeleteSuccess = id => ({
-    type: SHIFT_DELETE_SUCCESS,
-    id,
-});
-
-export const scheduleShift = (date, templateId) => ({
-    type: SCHEDULE_SHIFT,
-    payload: {
-        date,
-        templateId,
-    },
-});
-/* const shiftsFetched = shifts => ({
+const shiftEntriesFetched = shiftEntries => ({
     type: SHIFTS_FETCHED,
-    shifts,
+    payload: shiftEntries,
 });
 
-const shiftCreateSuccess = shift => ({
-    type: SHIFT_CREATE_SUCCESS,
-    shift,
-});
-
-const shiftFetched = shift => ({
-    type: SHIFT_FETCHED,
-    shift,
-});
-*/
-/*
-const shiftUpdateSuccess = shift => ({
-    type: SHIFT_UPDATE_SUCCESS,
-    shift,
-});
-
-export const loadShifts = () => (dispatch, getState) => {
-    if (getState().shifts) return;
+export const loadShiftEntries = () => (dispatch, getState) => {
+    const state = getState();
+    const { userToken } = state.user;
 
     request
-        .get(`${baseUrl}/${shiftRoute}`)
+        .get(`${BASE_URL}/${shiftEntriesRoute}`)
+        .set('Authorization', `Bearer ${userToken}`)
         .then(response => {
-            dispatch(shiftsFetched(response.body));
+            dispatch(shiftEntriesFetched(response.body));
         })
         .catch(console.error);
 };
+
+/*
 
 export const createShift = data => dispatch => {
     request

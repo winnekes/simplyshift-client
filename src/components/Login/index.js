@@ -15,7 +15,7 @@ class LoginContainer extends Component {
             email: '',
             password: '',
         });
-        this.props.history.push('/');
+        this.props.history.push('/home');
     };
 
     onChange = event => {
@@ -35,7 +35,7 @@ class LoginContainer extends Component {
                         values={this.state}
                     />
                 )}
-                {this.props.userToken && <Redirect to="/" />}
+                {this.props.userToken && <Redirect to="/home" />}
             </Fragment>
         );
     }
