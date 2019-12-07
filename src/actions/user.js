@@ -20,10 +20,12 @@ export function logout() {
     };
 }
 
-export const signUp = (email, username, password, profileUrl) => dispatch => {
+export const signUp = data => dispatch => {
+    console.log(data);
+    if (!data.profileUrl) delete data.profileUrl;
     request
         .post(`${BASE_URL}/users`)
-        .send({ email, username, password, profileUrl })
+        .send(data)
         .then(response => console.log(response))
         .catch(err => console.log(err));
 };
