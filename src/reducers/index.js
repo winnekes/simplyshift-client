@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux';
-import users from './users';
+import user from './user';
+import shiftModels from './shiftModels';
+import shiftEntries from './shiftEntries';
+import selectedShift from './selectedShift';
 
 export default combineReducers({
-    users
+    user,
+    shiftModels,
+    shiftEntries,
+    selectedShift,
 });

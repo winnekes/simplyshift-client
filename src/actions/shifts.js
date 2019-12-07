@@ -3,6 +3,7 @@ import request from 'superagent';
 export const SHIFTS_FETCHED = 'SHIFTS_FETCHED';
 export const SHIFT_FETCHED = 'SHIFT_FETCHED';
 export const SELECT_SHIFT = 'SELECT_SHIFT';
+export const SCHEDULE_SHIFT = 'SCHEDULE_SHIFT';
 export const SHIFT_CREATE_SUCCESS = 'SHIFT_CREATE_SUCCESS';
 export const SHIFT_DELETE_SUCCESS = 'SHIFT_DELETE_SUCCESS';
 export const SHIFT_UPDATE_SUCCESS = 'SHIFT_UPDATE_SUCCESS';
@@ -20,6 +21,13 @@ const shiftDeleteSuccess = id => ({
     id,
 });
 
+export const scheduleShift = (date, templateId) => ({
+    type: SCHEDULE_SHIFT,
+    payload: {
+        date,
+        templateId,
+    },
+});
 /* const shiftsFetched = shifts => ({
     type: SHIFTS_FETCHED,
     shifts,

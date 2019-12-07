@@ -1,27 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+
 import store from './store';
+import Login from './components/Login';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
-import MainNavbarContainer from './components/MainNavbarContainer';
-import FooterContainer from './components/FooterContainer';
-import MainHeaderContainer from './components/MainHeaderContainer';
-import MainContentContainer from './components/MainContentContainer';
-
-function App() {
-    return (
-        <Provider store={store}>
-            <MainNavbarContainer />
-
-            <Route exact path="/" component={MainHeaderContainer}></Route>
-            <Route exact path="/" component={MainContentContainer}></Route>
-            {/*<Route component={NotFound} />*/}
-
-            <FooterContainer />
-        </Provider>
-    );
+class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <Route exact path="/login" component={Login} />
+            </Provider>
+        );
+    }
 }
 
 export default App;

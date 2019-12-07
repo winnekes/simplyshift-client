@@ -1,8 +1,8 @@
-import { JWT } from '../actions/user';
+import { LOGIN } from '../actions/user';
 
-export default function(state = '', action = {}) {
+export default function(state = {}, action = {}) {
     switch (action.type) {
-        case JWT:
+        case LOGIN:
             return action.payload;
         default:
             return state;
