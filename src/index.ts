@@ -1,13 +1,33 @@
 import 'reflect-metadata';
-import { createKoaServer } from 'routing-controllers';
+import { Action, createKoaServer } from 'routing-controllers';
 import setupDb from './db';
+import { verify } from './jwt';
 import UserController from './users/controller';
+import User from './users/entity';
+import LoginController from './logins/controller';
 
 const port = process.env.PORT;
 
 const app = createKoaServer({
     cors: true,
-    controllers: [UserController],
+    controllers: [UserController, LoginController],
+    authorizationChecker: (action: Action) => {
+        const header: string = action.request.headers.authorization;
+        if (header && header.startsWith('Bearer ')) {
+            const [, token] = header.split(' ');
+            return !!(token && verify(token));
+        }
+        return false;
+    },
+    currentUserChecker: async (action: Action) => {
+        const header: string = action.request.headers.authorization;
+        if (header && header.startsWith('Bearer ')) {
+            const [, token] = header.split(' ');
+
+            return await User.findOne(verify(token).data);
+        }
+        return;
+    },
 });
 
 setupDb()

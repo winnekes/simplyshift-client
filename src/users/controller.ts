@@ -5,6 +5,8 @@ import {
     Body,
     Post,
     getMetadataArgsStorage,
+    Authorized,
+    CurrentUser,
 } from 'routing-controllers';
 
 import User from './entity';
@@ -12,8 +14,10 @@ import { routingControllersToSpec } from 'routing-controllers-openapi';
 
 @JsonController()
 export default class UserController {
+    @Authorized()
     @Get('/users/:id')
-    getUser(@Param('id') id: number) {
+    getUser(@Param('id') id: number, @CurrentUser() user: User) {
+        console.log(user);
         return User.findOne(id);
     }
 
