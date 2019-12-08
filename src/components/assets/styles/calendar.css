@@ -53,4 +53,7 @@
     border-radius: 30px;
 }
 
-.event-details .card {}
+.event-details .card-subtitle {
+    max-height: 335px;
+    overflow-y: auto;
+}

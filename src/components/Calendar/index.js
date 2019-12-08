@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 import { getData } from '../../actions/dispatchHandler';
 import { shiftEntriesFetched, shiftModelsFetched } from '../../actions/shifts';
 import { SHIFT_ENTRIES_PATH, SHIFT_MODELS_PATH } from '../../constants';
-import ShiftCalendar from './Calendar';
+import Calendar from './Calendar';
+import ShiftModels from '../ShiftModels/ShiftModels';
+import EventDetails from './EventDetails';
 
 class CalendarContainer extends Component {
     state = {
         selectedEvent: null,
+        selectedModel: null,
     };
     onNavigate = date => {
         this.props.getData(
@@ -19,22 +22,52 @@ class CalendarContainer extends Component {
         console.log(event);
         this.setState({ selectedEvent: event });
     };
+
+    onSelectModel = model => {
+        this.setState({ selectedModel: model });
+    };
+
+    onSelectSlot = slot => {};
+
     componentDidMount = () => {
         this.props.getData(SHIFT_ENTRIES_PATH, shiftEntriesFetched);
         this.props.getData(SHIFT_MODELS_PATH, shiftModelsFetched);
     };
 
     render() {
-        console.log('test');
         return (
-            <ShiftCalendar
-                user={this.props.user}
-                shiftEntries={this.props.shiftEntries}
-                shiftModels={this.props.shiftModels}
-                onNavigate={this.onNavigate}
-                onSelectEvent={this.onSelectEvent}
-                event={this.state.selectedEvent}
-            />
+            <>
+                <header className="main-calendar-header">
+                    <h1>your shift calendar</h1>
+                    <p>
+                        Here you can view your shift calendar, see who is next
+                        on your hitlist, and when you plan to quit your job, all
+                        in one neat place!
+                    </p>
+                </header>
+                <div className="calendar-wrap">
+                    {this.props.shiftModels && (
+                        <ShiftModels
+                            models={this.props.shiftModels}
+                            onSelectModel={this.onSelectModel}
+                            selectedModel={this.state.selectedModel}
+                        />
+                    )}
+                    <Calendar
+                        user={this.props.user}
+                        shiftEntries={this.props.shiftEntries}
+                        onNavigate={this.onNavigate}
+                        onSelectEvent={this.onSelectEvent}
+                        event={this.state.selectedEvent}
+                    />
+                    <div className="event-details">
+                        <h3>Details</h3>
+                        {this.state.selectedEvent && (
+                            <EventDetails event={this.state.selectedEvent} />
+                        )}
+                    </div>
+                </div>
+            </>
         );
     }
 }

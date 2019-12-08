@@ -59,6 +59,7 @@ const call = (
     data = null,
     responseTransformer = null
 ) => dispatch => {
+    console.log(data);
     const lsData = lscache.get('simplyshift-data');
     let partialRequest = requestObject();
     if (lsData) {
@@ -70,7 +71,7 @@ const call = (
     if (data) {
         partialRequest = partialRequest.send(data);
     }
-    partialRequest
+    return partialRequest
         .then(response => {
             let actionData;
             if (responseTransformer) {

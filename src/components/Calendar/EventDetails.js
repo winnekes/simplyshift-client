@@ -17,6 +17,19 @@ export default function EventDetails(props) {
                 <Card.Title>{event.title}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
                     {event.note}
+                    orem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s, when an unknown
+                    printer tookg software orem Ipsum is simply dummy text of
+                    the printing and typesetting industry. Lorem Ipsum has been
+                    the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer tookg software like Aldus PageMaker
+                    including versions of Lorem orem Ipsum is simply dummy text
+                    of the printing and typesetting industry. Lorem Ipsum has
+                    been the industry's standard dummy text ever since the
+                    1500s, when an unknown printer tookg software like Aldus
+                    PageMaker including versions of Lorem like Aldus PageMaker
+                    including versions of Lorem
                 </Card.Subtitle>
                 <Card.Text>
                     {startDate === endDate && (
