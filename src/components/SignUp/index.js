@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import SignUp from './SignUp';
-import { signUp } from '../../actions/user';
+
+import { USERS_PATH } from '../../constants';
+import { postData } from '../../actions/dispatchHandler';
 
 class SignUpContainer extends Component {
     state = {
@@ -14,7 +16,9 @@ class SignUpContainer extends Component {
 
     onSubmit = event => {
         event.preventDefault();
-        this.props.signUp(this.state);
+        console.log(this.state);
+        this.props.postData(USERS_PATH, null, this.state);
+
         this.setState({
             email: '',
             username: '',
@@ -42,4 +46,4 @@ class SignUpContainer extends Component {
     }
 }
 
-export default connect(null, { signUp })(SignUpContainer);
+export default connect(null, { postData })(SignUpContainer);

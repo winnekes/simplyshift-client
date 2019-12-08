@@ -1,10 +1,10 @@
 import React from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import * as ReactCalendar from 'react-big-calendar';
 import moment from 'moment';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const localizer = momentLocalizer(moment);
+const localizer = ReactCalendar.momentLocalizer(moment);
 
 function eventStyleGetter(event, start, end, isSelected) {
     console.log(event);
@@ -21,7 +21,7 @@ function eventStyleGetter(event, start, end, isSelected) {
         style: style,
     };
 }
-export default function ShiftCalendar(props) {
+export default function Calendar(props) {
     return (
         <>
             <h1>Codaisseur Academy Calendar</h1>
@@ -32,7 +32,7 @@ export default function ShiftCalendar(props) {
             </p>
             <div className="calendar-wrap">
                 <div className="calendar">
-                    <Calendar
+                    <ReactCalendar.Calendar
                         views={['month']}
                         events={props.shiftEntries}
                         localizer={localizer}

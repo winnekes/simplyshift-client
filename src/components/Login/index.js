@@ -3,19 +3,24 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Login from './Login';
 
-import { login } from '../../actions/user';
+import { LOGIN_PATH } from '../../constants';
+import { postData } from '../../actions/dispatchHandler';
+import { login, loginResponseTransformer } from '../../actions/user';
 
 class LoginContainer extends Component {
     state = { email: '', password: '' };
 
     onSubmit = event => {
         event.preventDefault();
-        this.props.login(this.state.email, this.state.password);
-        this.setState({
-            email: '',
-            password: '',
-        });
-        this.props.history.push('/home');
+
+        this.props.postData(
+            LOGIN_PATH,
+            login,
+            this.state,
+            loginResponseTransformer
+        );
+
+        this.props.history.push('/');
     };
 
     onChange = event => {
@@ -25,17 +30,17 @@ class LoginContainer extends Component {
     };
 
     render() {
-        console.log(this.props);
+        console.log(this.state);
         return (
             <Fragment>
-                {!this.props.userToken && (
+                {!this.props.user && (
                     <Login
                         onSubmit={this.onSubmit}
                         onChange={this.onChange}
                         values={this.state}
                     />
                 )}
-                {this.props.userToken && <Redirect to="/home" />}
+                {this.props.user && <Redirect to="/calendar" />}
             </Fragment>
         );
     }
@@ -43,7 +48,7 @@ class LoginContainer extends Component {
 
 const mapStateToProps = state => {
     return {
-        userToken: state.userToken,
+        user: state.user,
     };
 };
-export default connect(mapStateToProps, { login })(LoginContainer);
+export default connect(mapStateToProps, { postData })(LoginContainer);

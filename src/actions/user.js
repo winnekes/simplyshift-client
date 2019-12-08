@@ -1,44 +1,33 @@
-import request from 'superagent';
-import { BASE_URL } from '../constants';
+import lscache from 'lscache';
+
+import { actionCreator } from './dispatchHandler';
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const SET_USER_DATA = 'SET_USER_DATA';
 
-function setUserData(payload) {
-    return {
-        type: LOGIN,
-        payload: {
-            userToken: payload.jwt,
-            userDetails: payload.user,
-        },
-    };
-}
+export const login = actionCreator(LOGIN);
+export const getUserData = actionCreator(SET_USER_DATA);
 
-export function logout() {
-    return {
-        type: LOGOUT,
-    };
-}
-
-export const signUp = data => dispatch => {
-    console.log(data);
-    if (!data.profileUrl) delete data.profileUrl;
-    request
-        .post(`${BASE_URL}/users`)
-        .send(data)
-        .then(response => console.log(response))
-        .catch(err => console.log(err));
+export const logout = () => {
+    lscache.flush();
+    window.location.reload();
 };
 
-export const login = (email, password) => dispatch => {
-    request
-        .post(`${BASE_URL}/login`)
-        .send({ email, password })
-        .then(response => {
-            console.log(response);
-            const action = setUserData(response.body);
-            dispatch(action);
-        })
-
-        .catch(err => console.log(err));
+export const loginResponseTransformer = response => {
+    lscache.enableWarnings(true);
+    lscache.flushExpired();
+    lscache.set('simplyshift-data', response.body, 60);
+    return response.body.user;
 };
+
+export const getUserDataResponseTransformer = response => {
+    lscache.enableWarnings(true);
+    lscache.flushExpired();
+    const userData = lscache.get('simplyshift-data');
+    const updatedUserData = { ...userData, user: response.body };
+    lscache.set('simplyshift-data', updatedUserData, 60);
+    return response.body;
+};
+
+//todo: reset user data
