@@ -6,6 +6,19 @@ import { SHIFT_ENTRIES_PATH, SHIFT_MODELS_PATH } from '../../constants';
 import ShiftCalendar from './Calendar';
 
 class CalendarContainer extends Component {
+    state = {
+        selectedEvent: null,
+    };
+    onNavigate = date => {
+        this.props.getData(
+            `${SHIFT_ENTRIES_PATH}?month=${date}`,
+            shiftEntriesFetched
+        );
+    };
+    onSelectEvent = event => {
+        console.log(event);
+        this.setState({ selectedEvent: event });
+    };
     componentDidMount = () => {
         this.props.getData(SHIFT_ENTRIES_PATH, shiftEntriesFetched);
         this.props.getData(SHIFT_MODELS_PATH, shiftModelsFetched);
@@ -18,6 +31,9 @@ class CalendarContainer extends Component {
                 user={this.props.user}
                 shiftEntries={this.props.shiftEntries}
                 shiftModels={this.props.shiftModels}
+                onNavigate={this.onNavigate}
+                onSelectEvent={this.onSelectEvent}
+                event={this.state.selectedEvent}
             />
         );
     }

@@ -5,6 +5,7 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../assets/styles/calendar.css';
 import { Button } from 'react-bootstrap';
+import EventDetails from './EventDetails';
 
 const localizer = ReactCalendar.momentLocalizer(moment);
 
@@ -37,11 +38,12 @@ export default function Calendar(props) {
             <div className="calendar-wrap">
                 {props.shiftModels && (
                     <div className="shift-models">
-                        <h2>Your shift models</h2>
+                        <h3>your models</h3>
                         <p>Select a shift and assign it to the calendar.</p>
                         <nav>
                             {props.shiftModels.map(shiftModel => (
                                 <Button
+                                    key={shiftModel.id}
                                     style={{
                                         backgroundColor: `#${shiftModel.color}`,
                                     }}
@@ -53,32 +55,21 @@ export default function Calendar(props) {
                     </div>
                 )}
                 <div className="calendar">
-                    <h2>Calendar</h2>
+                    <h3>Calendar</h3>
                     <ReactCalendar.Calendar
                         localizer={localizer}
                         views={['month']}
                         events={props.shiftEntries}
                         eventPropGetter={eventStyleGetter}
+                        onNavigate={props.onNavigate}
+                        onSelectEvent={props.onSelectEvent}
                         popup
                     />
                 </div>
 
                 <div className="event-details">
-                    <h2>Sriram</h2>
-                    <p>You are a monkey</p>
-                    <p>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and
-                        scrambled it to make a type specimen book. It has
-                        survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged.
-                        It was popularised in the 1960s with the release of
-                        Letraset sheets containing Lorem Ipsum passages, and
-                        more recently with desktop publishing software like
-                        Aldus PageMaker including versions of Lorem Ipsum.
-                    </p>
+                    <h3>Details</h3>
+                    {props.event && <EventDetails event={props.event} />}
                 </div>
             </div>
         </>

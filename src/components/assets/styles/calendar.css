@@ -37,7 +37,7 @@
 
 .shift-models,
 .event-details {
-    max-width: 220px;
+    width: 220px;
 }
 
 
@@ -49,4 +49,8 @@
 
 .shift-models nav button {
     margin: 10px;
+    max-width: 100px;
+    border-radius: 30px;
 }
+
+.event-details .card {}
