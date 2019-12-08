@@ -2,6 +2,8 @@ import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
+import '../assets/styles/navigation.css';
+
 export default function Navigation(props) {
     let navigationLinks;
 
@@ -30,7 +32,7 @@ export default function Navigation(props) {
     }
 
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar className="main-navigation" bg="light" expand="lg">
             <LinkContainer to="/">
                 <Navbar.Brand>SimplyShift</Navbar.Brand>
             </LinkContainer>

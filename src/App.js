@@ -14,6 +14,9 @@ import { getUserData, getUserDataResponseTransformer } from './actions/user';
 import { getData } from './actions/dispatchHandler';
 import { USERS_PATH } from './constants';
 
+import './components/assets/styles/main.css';
+import { Container } from 'react-bootstrap';
+
 class App extends Component {
     lsData = lscache.get('simplyshift-data');
     componentDidMount = () => {
@@ -29,14 +32,16 @@ class App extends Component {
         return (
             <>
                 <Route path="/" component={NavigationContainer} />
-                {this.props.user && (
-                    <Route exact path="/" component={CalendarContainer} />
-                )}
-                {!this.props.user && (
-                    <Route exact path="/" component={HomeContainer} />
-                )}
-                <Route exact path="/login" component={LoginContainer} />
-                <Route exact path="/signup" component={SignUpContainer} />
+                <Container className="main-container">
+                    {this.props.user && (
+                        <Route exact path="/" component={CalendarContainer} />
+                    )}
+                    {!this.props.user && (
+                        <Route exact path="/" component={HomeContainer} />
+                    )}
+                    <Route exact path="/login" component={LoginContainer} />
+                    <Route exact path="/signup" component={SignUpContainer} />
+                </Container>
             </>
         );
     }

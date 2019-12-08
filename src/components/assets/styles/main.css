@@ -1,0 +1,39 @@
+html {
+    overflow-y: scroll;
+}
+
+body {
+    font-family: 'PT Sans', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Solway',
+        serif;
+    color: #be0939;
+    text-transform: lowercase;
+}
+
+
+a {
+    color: #be0939 !important;
+}
+
+a:active,
+a:focus,
+a:hover {
+    color: #92072b !important;
+}
+
+.main-container {
+    max-width: 90% !important;
+}
+
+button,
+.btn {
+    box-shadow: 2px 2px lightgray;
+}

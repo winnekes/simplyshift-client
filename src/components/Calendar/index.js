@@ -13,13 +13,21 @@ class CalendarContainer extends Component {
 
     render() {
         console.log('test');
-        return <ShiftCalendar shiftEntries={this.props.shiftEntries} />;
+        return (
+            <ShiftCalendar
+                user={this.props.user}
+                shiftEntries={this.props.shiftEntries}
+                shiftModels={this.props.shiftModels}
+            />
+        );
     }
 }
 
 const mapStateToProps = state => {
     return {
         shiftEntries: state.shiftEntries,
+        shiftModels: state.shiftModels,
+        user: state.user,
     };
 };
 export default connect(mapStateToProps, { getData })(CalendarContainer);

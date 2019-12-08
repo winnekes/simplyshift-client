@@ -1,12 +1,12 @@
-import React, { Fragment } from 'react';
-
+import React from 'react';
 import { Form, Button } from 'react-bootstrap';
+import '../assets/styles/forms.css';
 
 export default function Login(props) {
     console.log(props);
     return (
-        <Fragment>
-            <h2>Login</h2>
+        <div className="main-form">
+            <h1>Login</h1>
 
             <Form onSubmit={props.onSubmit}>
                 <Form.Group controlId="formBasicEmail">
@@ -36,6 +36,6 @@ export default function Login(props) {
                     Login
                 </Button>
             </Form>
-        </Fragment>
+        </div>
     );
 }
