@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getData } from '../../actions/dispatchHandler';
-import { shiftEntriesFetched, shiftModelsFetched } from '../../actions/shifts';
+import { getData, deleteData } from '../../actions/dispatchHandler';
+import {
+    shiftEntriesFetched,
+    shiftModelsFetched,
+    shiftModelDeleted,
+} from '../../actions/shifts';
 import { SHIFT_ENTRIES_PATH, SHIFT_MODELS_PATH } from '../../constants';
 import Calendar from './Calendar';
 import ShiftModels from '../ShiftModels/ShiftModels';
@@ -29,6 +33,14 @@ class CalendarContainer extends Component {
 
     onSelectSlot = slot => {};
 
+    onDeleteModel = id => {
+        this.props
+            .deleteData(SHIFT_MODELS_PATH, id, shiftModelDeleted)
+            .then(() =>
+                this.props.getData(SHIFT_MODELS_PATH, shiftModelsFetched)
+            );
+    };
+
     componentDidMount = () => {
         this.props.getData(SHIFT_ENTRIES_PATH, shiftEntriesFetched);
         this.props.getData(SHIFT_MODELS_PATH, shiftModelsFetched);
@@ -51,6 +63,7 @@ class CalendarContainer extends Component {
                             models={this.props.shiftModels}
                             onSelectModel={this.onSelectModel}
                             selectedModel={this.state.selectedModel}
+                            deleteModel={this.onDeleteModel}
                         />
                     )}
                     <Calendar
@@ -79,4 +92,6 @@ const mapStateToProps = state => {
         user: state.user,
     };
 };
-export default connect(mapStateToProps, { getData })(CalendarContainer);
+export default connect(mapStateToProps, { getData, deleteData })(
+    CalendarContainer
+);

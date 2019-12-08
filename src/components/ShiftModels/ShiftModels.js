@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import EditorModal from './EditorModal';
 
+// todo Delete confirmation, delete failure handling
 export default function ShiftModels(props) {
     const [modalShow, setModalShow] = React.useState(false);
 
@@ -18,13 +20,20 @@ export default function ShiftModels(props) {
                             style={{
                                 backgroundColor: model.color,
                             }}
+                        >
+                            {model.name}
+                        </Button>
+                        <FaEdit
                             onClick={() => {
                                 props.onSelectModel(model);
                                 setModalShow(true);
                             }}
-                        >
-                            {model.name}
-                        </Button>
+                        />
+                        <FaTrash
+                            onClick={() => {
+                                props.deleteModel(model.id);
+                            }}
+                        />
                     </>
                 ))}
                 <Button onClick={() => setModalShow(true)}>+</Button>
