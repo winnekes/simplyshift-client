@@ -32,7 +32,9 @@ export default function Calendar(props) {
                 eventPropGetter={eventStyleGetter}
                 onNavigate={props.onNavigate}
                 onSelectEvent={props.onSelectEvent}
+                onSelectSlot={props.onSelectSlot}
                 popup
+                selectable
             />
         </div>
     );

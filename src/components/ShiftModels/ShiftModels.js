@@ -20,6 +20,9 @@ export default function ShiftModels(props) {
                             style={{
                                 backgroundColor: model.color,
                             }}
+                            onClick={() => {
+                                props.onSelectModel(model);
+                            }}
                         >
                             {model.name}
                         </Button>
@@ -36,7 +39,14 @@ export default function ShiftModels(props) {
                         />
                     </>
                 ))}
-                <Button onClick={() => setModalShow(true)}>+</Button>
+                <Button
+                    onClick={() => {
+                        props.onSelectModel(null);
+                        setModalShow(true);
+                    }}
+                >
+                    +
+                </Button>
                 <EditorModal
                     show={modalShow}
                     onHide={() => setModalShow(false)}

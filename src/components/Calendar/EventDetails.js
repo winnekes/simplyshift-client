@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import Moment from 'react-moment';
 import moment from 'moment';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 export default function EventDetails(props) {
     const { event } = props;
@@ -14,7 +15,14 @@ export default function EventDetails(props) {
             }}
         >
             <Card.Body>
-                <Card.Title>{event.title}</Card.Title>
+                <Card.Title>
+                    {event.title} <FaEdit />
+                    <FaTrash
+                        onClick={() => {
+                            props.deleteEntry(event.id);
+                        }}
+                    />
+                </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
                     {event.note}
                     orem Ipsum is simply dummy text of the printing and

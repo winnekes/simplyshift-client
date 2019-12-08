@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getData, deleteData } from '../../actions/dispatchHandler';
+import { getData, deleteData, postData } from '../../actions/dispatchHandler';
 import {
     shiftEntriesFetched,
     shiftModelsFetched,
     shiftModelDeleted,
+    shiftEntryDeleted,
+    shiftEntryCreated,
 } from '../../actions/shifts';
 import { SHIFT_ENTRIES_PATH, SHIFT_MODELS_PATH } from '../../constants';
 import Calendar from './Calendar';
 import ShiftModels from '../ShiftModels/ShiftModels';
 import EventDetails from './EventDetails';
-
+import moment from 'moment';
 class CalendarContainer extends Component {
     state = {
         selectedEvent: null,
@@ -31,7 +33,22 @@ class CalendarContainer extends Component {
         this.setState({ selectedModel: model });
     };
 
-    onSelectSlot = slot => {};
+    onSelectSlot = slot => {
+        if (this.state.selectedModel) {
+            console.log(this.state.selectedModel, slot);
+
+            const modifiedData = {
+                shiftModel: this.state.selectedModel.id,
+                startsAt: moment(slot.start).toLocaleString(),
+            };
+
+            this.props
+                .postData(SHIFT_ENTRIES_PATH, shiftEntryCreated, modifiedData)
+                .then(() =>
+                    this.props.getData(SHIFT_ENTRIES_PATH, shiftEntriesFetched)
+                );
+        }
+    };
 
     onDeleteModel = id => {
         this.props
@@ -39,6 +56,14 @@ class CalendarContainer extends Component {
             .then(() =>
                 this.props.getData(SHIFT_MODELS_PATH, shiftModelsFetched)
             );
+    };
+    onDeleteEntry = id => {
+        this.props
+            .deleteData(SHIFT_ENTRIES_PATH, id, shiftEntryDeleted)
+            .then(() =>
+                this.props.getData(SHIFT_ENTRIES_PATH, shiftEntriesFetched)
+            )
+            .then(() => this.setState({ selectedEvent: null }));
     };
 
     componentDidMount = () => {
@@ -71,12 +96,16 @@ class CalendarContainer extends Component {
                         shiftEntries={this.props.shiftEntries}
                         onNavigate={this.onNavigate}
                         onSelectEvent={this.onSelectEvent}
+                        onSelectSlot={this.onSelectSlot}
                         event={this.state.selectedEvent}
                     />
                     <div className="event-details">
                         <h3>Details</h3>
                         {this.state.selectedEvent && (
-                            <EventDetails event={this.state.selectedEvent} />
+                            <EventDetails
+                                event={this.state.selectedEvent}
+                                deleteEntry={this.onDeleteEntry}
+                            />
                         )}
                     </div>
                 </div>
@@ -92,6 +121,6 @@ const mapStateToProps = state => {
         user: state.user,
     };
 };
-export default connect(mapStateToProps, { getData, deleteData })(
+export default connect(mapStateToProps, { getData, deleteData, postData })(
     CalendarContainer
 );
