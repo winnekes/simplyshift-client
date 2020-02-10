@@ -1,7 +1,8 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpa } from '@fortawesome/free-solid-svg-icons';
 import '../assets/styles/navigation.css';
 
 export default function Navigation(props) {
@@ -34,7 +35,9 @@ export default function Navigation(props) {
     return (
         <Navbar className="main-navigation" bg="light" expand="lg">
             <LinkContainer to="/">
-                <Navbar.Brand>SimplyShift</Navbar.Brand>
+                <Navbar.Brand>
+                    <FontAwesomeIcon icon={faSpa} /> SimplyShift
+                </Navbar.Brand>
             </LinkContainer>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse
