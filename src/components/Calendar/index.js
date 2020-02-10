@@ -45,7 +45,10 @@ class CalendarContainer extends Component {
             this.props
                 .postData(SHIFT_ENTRIES_PATH, shiftEntryCreated, modifiedData)
                 .then(() =>
-                    this.props.getData(SHIFT_ENTRIES_PATH, shiftEntriesFetched)
+                    this.props.getData(
+                        `${SHIFT_ENTRIES_PATH}?month=${modifiedData.startsAt}`,
+                        shiftEntriesFetched
+                    )
                 );
         }
     };

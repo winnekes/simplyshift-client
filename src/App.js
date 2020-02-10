@@ -31,8 +31,8 @@ class App extends Component {
     render() {
         return (
             <>
-                <Route path="/" component={NavigationContainer} />
                 <Container className="main-container">
+                    <NavigationContainer />
                     {this.props.user && (
                         <Route exact path="/" component={CalendarContainer} />
                     )}

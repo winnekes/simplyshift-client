@@ -7,43 +7,54 @@ import { USERS_PATH } from '../../constants';
 import { postData } from '../../actions/dispatchHandler';
 
 class SignUpContainer extends Component {
-    state = {
+  state = {
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  };
+
+  checkPassword = () => {
+    const { password, confirmPassword } = this.state;
+    if (password === confirmPassword) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  onSubmit = event => {
+    event.preventDefault();
+    if (this.checkPassword()) {
+      this.props.postData(USERS_PATH, null, this.state);
+
+      this.setState({
         email: '',
         username: '',
         password: '',
-        profileUrl: '',
-    };
+        confirmPassword: '',
+      });
 
-    onSubmit = event => {
-        event.preventDefault();
-        console.log(this.state);
-        this.props.postData(USERS_PATH, null, this.state);
-
-        this.setState({
-            email: '',
-            username: '',
-            password: '',
-            profileUrl: '',
-        });
-
-        this.props.history.push('/');
-    };
-
-    onChange = event => {
-        this.setState({
-            [event.target.name]: event.target.value,
-        });
-    };
-
-    render() {
-        return (
-            <SignUp
-                onSubmit={this.onSubmit}
-                onChange={this.onChange}
-                values={this.state}
-            />
-        );
+      this.props.history.push('/');
     }
+  };
+
+  onChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  render() {
+    return (
+      <SignUp
+        onSubmit={this.onSubmit}
+        onChange={this.onChange}
+        doPasswordsMatch={this.checkPassword}
+        values={this.state}
+      />
+    );
+  }
 }
 
 export default connect(null, { postData })(SignUpContainer);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import EditorModal from './EditorModal';
 
 // todo Delete confirmation, delete failure handling
@@ -26,15 +27,12 @@ export default function ShiftModels(props) {
                         >
                             {model.name}
                         </Button>
-                        <FaEdit
+                        <FontAwesomeIcon
+                            icon={faPencilAlt}
+                            pulse
                             onClick={() => {
                                 props.onSelectModel(model);
                                 setModalShow(true);
-                            }}
-                        />
-                        <FaTrash
-                            onClick={() => {
-                                props.deleteModel(model.id);
                             }}
                         />
                     </>
