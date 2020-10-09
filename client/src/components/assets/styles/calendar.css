@@ -1,0 +1,59 @@
+.main-calendar-header {
+    margin-bottom: 50px;
+}
+
+.calendar-wrap {
+    display: flex;
+    flex-direction: row;
+}
+
+.calendar-wrap>div {
+    margin: 0 42px;
+}
+
+.calendar {
+    flex-grow: 2;
+    min-width: 500px;
+    height: 500px;
+
+}
+
+.calendar .rbc-toolbar-label {
+    font-family: 'Solway', serif;
+    font-weight: bold;
+    font-size: 18px;
+    color: #be0939;
+}
+
+.calendar .rbc-month-view {
+    background: #f5f5f5;
+    padding: 25px;
+}
+
+
+.calendar .rbc-event-content {
+    padding-left: 5px;
+}
+
+.shift-models,
+.event-details {
+    width: 220px;
+}
+
+
+.shift-models nav {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.shift-models nav button {
+    margin: 10px;
+    max-width: 100px;
+    border-radius: 30px;
+}
+
+.event-details .card-subtitle {
+    max-height: 335px;
+    overflow-y: auto;
+}
