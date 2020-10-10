@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import SignUp from './SignUp';
+import SignUp from "./SignUp";
 
-import { USERS_PATH } from '../../constants';
-import { postData } from '../../actions/dispatchHandler';
+import { USERS_PATH } from "../../constants";
+import { postData } from "../../actions/dispatchHandler";
 
 class SignUpContainer extends Component {
   state = {
-    email: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
   };
 
   checkPassword = () => {
@@ -23,23 +23,23 @@ class SignUpContainer extends Component {
     }
   };
 
-  onSubmit = event => {
+  onSubmit = (event) => {
     event.preventDefault();
     if (this.checkPassword()) {
       this.props.postData(USERS_PATH, null, this.state);
 
       this.setState({
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
       });
 
-      this.props.history.push('/');
+      this.props.history.push("/");
     }
   };
 
-  onChange = event => {
+  onChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });

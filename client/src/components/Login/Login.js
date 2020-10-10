@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-import { Form, Button } from 'react-bootstrap';
-import '../assets/styles/forms.css';
+import { Form, Button } from "react-bootstrap";
+import "../assets/styles/forms.css";
 
 export default function Login(props) {
   const { email, password } = props.values;
@@ -36,7 +36,7 @@ export default function Login(props) {
           />
         </Form.Group>
         <Form.Text className="text-muted">
-          Don't have an account? Then please <Link to="/signup">sign up</Link>{' '}
+          Don't have an account? Then please <Link to="/signup">sign up</Link>{" "}
           now
         </Form.Text>
         <Button variant="danger" type="submit" className="mt-3">

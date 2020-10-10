@@ -1,6 +1,6 @@
 {
-    "watch": ["src"],
-    "ext": "ts tsx js jsx",
-    "ignore": ["src/**/*.spec.ts"],
-    "exec": "npx ts-node ./src/index.ts"
+  "watch": ["src"],
+  "ext": "ts tsx js jsx",
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "PORT=4400 DATABASE_URL=postgres://postgres:secret@localhost:5432/postgres npx ts-node ./src/index.ts"
 }

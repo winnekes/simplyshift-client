@@ -1,46 +1,43 @@
-import { createConnection } from 'typeorm';
-import { DefaultNamingStrategy } from 'typeorm/naming-strategy/DefaultNamingStrategy';
-import { NamingStrategyInterface } from 'typeorm/naming-strategy/NamingStrategyInterface';
-import { snakeCase } from 'typeorm/util/StringUtils';
-import User from './users/entity';
-import ShiftModel from './shiftModels/entity';
-import ShiftEntry from './shiftEntries/entity';
+import { createConnection } from "typeorm";
+import { DefaultNamingStrategy } from "typeorm/naming-strategy/DefaultNamingStrategy";
+import { NamingStrategyInterface } from "typeorm/naming-strategy/NamingStrategyInterface";
+import { snakeCase } from "typeorm/util/StringUtils";
+import User from "./users/entity";
+import ShiftModel from "./shiftModels/entity";
+import ShiftEntry from "./shiftEntries/entity";
 
-class CustomNamingStrategy extends DefaultNamingStrategy
-    implements NamingStrategyInterface {
-    tableName(targetName: string, userSpecifiedName: string): string {
-        return userSpecifiedName
-            ? userSpecifiedName
-            : snakeCase(targetName) + 's';
-    }
+class CustomNamingStrategy
+  extends DefaultNamingStrategy
+  implements NamingStrategyInterface {
+  tableName(targetName: string, userSpecifiedName: string): string {
+    return userSpecifiedName ? userSpecifiedName : snakeCase(targetName) + "s";
+  }
 
-    columnName(
-        propertyName: string,
-        customName: string,
-        embeddedPrefixes: string[]
-    ): string {
-        return snakeCase(
-            embeddedPrefixes
-                .concat(customName ? customName : propertyName)
-                .join('_')
-        );
-    }
+  columnName(
+    propertyName: string,
+    customName: string,
+    embeddedPrefixes: string[]
+  ): string {
+    return snakeCase(
+      embeddedPrefixes.concat(customName ? customName : propertyName).join("_")
+    );
+  }
 
-    columnNameCustomized(customName: string): string {
-        return customName;
-    }
+  columnNameCustomized(customName: string): string {
+    return customName;
+  }
 
-    relationName(propertyName: string): string {
-        return snakeCase(propertyName);
-    }
+  relationName(propertyName: string): string {
+    return snakeCase(propertyName);
+  }
 }
 
 export default () =>
-    createConnection({
-        type: 'postgres',
-        url: process.env.DATABASE_URL,
-        entities: [User, ShiftModel, ShiftEntry],
-        synchronize: true,
-        logging: true,
-        namingStrategy: new CustomNamingStrategy(),
-    }).then(_ => console.log('Connected to Postgres with TypeORM'));
+  createConnection({
+    type: "postgres",
+    url: process.env.DATABASE_URL,
+    entities: [User, ShiftModel, ShiftEntry],
+    synchronize: true,
+    logging: true,
+    namingStrategy: new CustomNamingStrategy(),
+  }).then((_) => console.log("Connected to Postgres with TypeORM"));

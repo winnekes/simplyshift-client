@@ -1,7 +1,7 @@
-import React from 'react';
-import { Form, Button } from 'react-bootstrap';
-import '../assets/styles/forms.css';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Form, Button } from "react-bootstrap";
+import "../assets/styles/forms.css";
+import { Link } from "react-router-dom";
 
 export default function SignUp(props) {
   const {
@@ -60,7 +60,7 @@ export default function SignUp(props) {
             required
           />
           {doPasswordsMatch() ? (
-            ''
+            ""
           ) : (
             <Form.Text className="text-danger">
               The passwords do not match

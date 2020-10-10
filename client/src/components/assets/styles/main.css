@@ -1,11 +1,11 @@
 html {
-    overflow-y: scroll;
-    font-size: 16px;
+  overflow-y: scroll;
+  font-size: 16px;
 }
 
 body {
-    font-family: 'PT Sans', sans-serif;
-    background: #cccccc;
+  font-family: "PT Sans", sans-serif;
+  background: #cccccc;
 }
 
 h1,
@@ -14,56 +14,52 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Solway',
-        serif;
-    color: #be0939;
-    text-transform: lowercase;
+  font-family: "Solway", serif;
+  color: #be0939;
+  text-transform: lowercase;
 }
 
 a {
-    color: #be0939 !important;
+  color: #be0939 !important;
 }
 
 a:active,
 a:focus,
 a:hover {
-    color: #92072b !important;
+  color: #92072b !important;
 }
 
 .main-container {
-    max-width: 90% !important;
-    background: white;
-    margin: 4rem auto;
-    padding: 20px !important;
-    overflow: visible !important;
-    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-        0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12);
-    min-height: 200px;
-    width: 50vw;
-
+  max-width: 90% !important;
+  background: white;
+  margin: 4rem auto;
+  padding: 20px !important;
+  overflow: visible !important;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+  min-height: 200px;
+  width: 50vw;
 }
 
 button,
 .btn {
-    box-shadow: 2px 2px lightgray;
+  box-shadow: 2px 2px lightgray;
 }
 
 @media only screen and (max-width: 600px) {
-    .main-container {
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 0;
-        margin: 0;
-        height: 100vh !important;
-    }
+  .main-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0;
+    margin: 0;
+    height: 100vh !important;
+  }
 }
 
 @media only screen and (max-width: 1000px) {
-    .main-container {
-        width: 70vw;
-    }
+  .main-container {
+    width: 70vw;
+  }
 }
