@@ -1,23 +1,15 @@
 {
-  "name": "new-server",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "target/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "compile": "npx tsc"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/winnekes/simplyshift-new-server.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/winnekes/simplyshift-new-server/issues"
-  },
-  "homepage": "https://github.com/winnekes/simplyshift-new-server#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "class-transformer": ">=0.3.1",

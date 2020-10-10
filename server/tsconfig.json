@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "lib": ["es2019", "es2020.promise", "es2020.bigint", "es2020.string"],
+    "target": "es2019",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitThis": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
     "skipLibCheck": false,
@@ -12,8 +17,7 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2017",
-    "outDir": "target/",
+    "outDir": "lib/",
     "rootDir": "src/"
   },
   "include": ["src/**/*"],
