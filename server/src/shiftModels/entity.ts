@@ -2,20 +2,12 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   Unique,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
-import {
-  IsString,
-  MinLength,
-  IsDate,
-  IsNumber,
-  Min,
-  IsDateString,
-} from "class-validator";
+import { IsString, MinLength, IsNumber, Min } from "class-validator";
 import User from "../users/entity";
 import ShiftEntry from "../shiftEntries/entity";
 
@@ -28,25 +20,25 @@ export default class ShiftModel extends BaseEntity {
   @IsString()
   @MinLength(2)
   @Column("text")
-  name: string;
+  name!: string;
 
   @IsNumber()
   @Min(0)
   @Column("bigint")
-  startsAt: number;
+  startsAt!: number;
 
   @IsNumber()
   @Min(0)
   @Column("bigint")
-  duration: number;
+  duration!: number;
 
   @IsString()
   @Column("text")
-  color: string;
+  color!: string;
 
-  @ManyToOne(() => User, (user) => user.shiftModels, { nullable: false })
-  user: User;
+  @ManyToOne(() => User, (user) => user.shiftModels)
+  user!: User;
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)
-  shiftEntries: ShiftEntry[];
+  shiftEntries!: ShiftEntry[];
 }

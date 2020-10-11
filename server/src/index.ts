@@ -9,6 +9,9 @@ import ShiftModelController from "./shiftModels/controller";
 import SpecController from "./specs/controllers";
 import ShiftEntryController from "./shiftEntries/controller";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const port = process.env.PORT;
 
 const app = createKoaServer({

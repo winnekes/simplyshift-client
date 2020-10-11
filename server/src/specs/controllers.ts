@@ -1,10 +1,9 @@
-import { Exclude } from "class-transformer";
 import {
   Get,
   getMetadataArgsStorage,
   JsonController,
 } from "routing-controllers";
-import { routingControllersToSpec, OpenAPI } from "routing-controllers-openapi";
+import { routingControllersToSpec } from "routing-controllers-openapi";
 import { validationMetadatasToSchemas } from "class-validator-jsonschema";
 import { MetadataStorage, getFromContainer } from "class-validator";
 

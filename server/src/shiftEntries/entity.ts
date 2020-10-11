@@ -11,21 +11,19 @@ export default class ShiftEntry extends BaseEntity {
 
   @IsDate()
   @Column("timestamp")
-  startsAt: Date;
+  startsAt!: Date;
 
   @IsDate()
   @Column("timestamp")
-  endsAt: Date;
+  endsAt!: Date;
 
   @IsString()
-  @Column("varchar", { nullable: true })
-  note: string;
+  @Column("varchar")
+  note!: string;
 
-  @ManyToOne(() => User, (user) => user.shiftEntries, { nullable: false })
-  user: User;
+  @ManyToOne(() => User, (user) => user.shiftEntries)
+  user!: User;
 
-  @ManyToOne(() => ShiftModel, (shiftModel) => shiftModel.shiftEntries, {
-    nullable: false,
-  })
-  shiftModel: ShiftModel;
+  @ManyToOne(() => ShiftModel, (shiftModel) => shiftModel.shiftEntries)
+  shiftModel!: ShiftModel;
 }

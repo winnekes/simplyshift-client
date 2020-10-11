@@ -6,6 +6,11 @@ import User from "./users/entity";
 import ShiftModel from "./shiftModels/entity";
 import ShiftEntry from "./shiftEntries/entity";
 
+import dotenv from "dotenv";
+dotenv.config({
+  path: __dirname + "/.env",
+});
+
 class CustomNamingStrategy
   extends DefaultNamingStrategy
   implements NamingStrategyInterface {

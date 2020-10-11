@@ -1,23 +1,14 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  Unique,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import {
   IsString,
   MinLength,
   IsEmail,
   IsUrl,
-  getFromContainer,
-  MetadataStorage,
   IsOptional,
 } from "class-validator";
 import * as bcrypt from "bcrypt";
 
-import { validationMetadatasToSchemas } from "class-validator-jsonschema";
 import { Exclude } from "class-transformer";
 import ShiftModel from "../shiftModels/entity";
 import ShiftEntry from "../shiftEntries/entity";
@@ -28,17 +19,17 @@ export default class User extends BaseEntity {
 
   @MinLength(2)
   @Column("text")
-  username: string;
+  username!: string;
 
   @IsEmail()
   @Column("text", { unique: true })
-  email: string;
+  email!: string;
 
   @IsString()
   @MinLength(8)
   @Column("text")
   @Exclude({ toPlainOnly: true })
-  password: string;
+  password!: string;
 
   @IsUrl()
   @IsOptional()
@@ -55,8 +46,8 @@ export default class User extends BaseEntity {
   }
 
   @OneToMany(() => ShiftModel, (shiftModel) => shiftModel.user)
-  shiftModels: ShiftModel[];
+  shiftModels!: ShiftModel[];
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.user)
-  shiftEntries: ShiftEntry[];
+  shiftEntries!: ShiftEntry[];
 }

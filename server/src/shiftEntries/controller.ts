@@ -6,14 +6,13 @@ import {
   Authorized,
   CurrentUser,
   NotFoundError,
-  BadRequestError,
   Res,
   Put,
   Param,
   Delete,
   QueryParam,
 } from "routing-controllers";
-import * as moment from "moment";
+import moment from "moment";
 import ShiftModel from "../shiftModels/entity";
 import ShiftEntry from "./entity";
 import User from "../users/entity";
@@ -55,10 +54,10 @@ export default class ShiftEntryController {
   async createShiftEntry(
     @CurrentUser()
     user: User,
-    @Body() shiftEntry: Partial<ShiftEntry>,
+    @Body() shiftEntry: ShiftEntry,
     @Res() response: any
   ) {
-    const computeTimes = (date, model: ShiftModel) => {
+    const computeTimes = (date: Date, model: ShiftModel) => {
       const startDate = moment.parseZone(date).startOf("day");
 
       const startsAt = moment(startDate)
