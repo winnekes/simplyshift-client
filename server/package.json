@@ -25,7 +25,7 @@
     "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
     "moment": "^2.29.1",
-    "pg": "^7.18.2",
+    "pg": "^8.5.1",
     "routing-controllers": "^0.8.1",
     "routing-controllers-openapi": "^1.8.1",
     "ts-node": "^8.10.2",

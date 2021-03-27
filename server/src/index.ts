@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { Action, createKoaServer } from "routing-controllers";
-import setupDb from "./db";
+import { connectToDb } from "./db";
 import { verify } from "./jwt";
 import UserController from "./users/controller";
 import User from "./users/entity";
@@ -43,6 +43,11 @@ const app = createKoaServer({
   },
 });
 
-setupDb()
-  .then((_) => app.listen(port, () => console.log(`Listening on port ${port}`)))
-  .catch((err) => console.error(err));
+async function initialiseServer() {
+  const dbConnection = await connectToDb();
+  const server = app.listen(port, () =>
+    console.log(`Listening on port ${port}`)
+  );
+}
+
+initialiseServer();

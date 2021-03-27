@@ -37,12 +37,15 @@ class CustomNamingStrategy
   }
 }
 
-export default () =>
-  createConnection({
+export const connectToDb = async () => {
+  await createConnection({
     type: "postgres",
     url: process.env.DATABASE_URL,
     entities: [User, ShiftModel, ShiftEntry],
     synchronize: true,
     logging: true,
     namingStrategy: new CustomNamingStrategy(),
-  }).then((_) => console.log("Connected to Postgres with TypeORM"));
+  });
+
+  console.log("Successfully connected to DB.");
+};
