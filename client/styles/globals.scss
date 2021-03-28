@@ -5,6 +5,7 @@
 // Brand colours
 $primary: #099d8c;
 $primary-light: #2fa092;
+$secondary: #2fa092;
 
 // Update Bulma's global variables
 $body-background-color: #F7F7F7;
@@ -12,14 +13,15 @@ $link: $primary-light;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
 
+$title-family: "Solway", serif;
+$title-color: $primary;
+$family-sans-serif: "PT Sans", sans-serif;
+
 // Update some of Bulma's component variables
 
 //$control-border-width: 2px;
 //$input-border-color: transparent;
 //$input-shadow: none;
-
-//  Import custom styles
-@import "type";
 
 // Import Bulma styles (only what is used)
 @import "../node_modules/bulma/sass/utilities/_all.sass";
@@ -33,6 +35,7 @@ $fullhd-enabled: false;
 @import "../node_modules/bulma/sass/layout/section.sass";
 @import "../node_modules/bulma/sass/elements/notification.sass";
 @import "../node_modules/bulma/sass/helpers/_all.sass";
+@import "../node_modules/bulma/bulma.sass";
+@import "~@creativebulma/bulma-divider";
 
-
-//@import "../node_modules/bulma/bulma.sass"
+@import "nav";

@@ -1,5 +1,9 @@
-import Head from "next/head";
+import { Layout } from "../components/layout";
 
 export default function Home() {
-  return <h1>SimplyShift</h1>;
+  return (
+    <Layout title="A simple calendar to keep track of your shifts">
+      <img src="/images/illustration-calendar.svg" />
+    </Layout>
+  );
 }
