@@ -1,7 +1,6 @@
 import {
   JsonController,
   Get,
-  Param,
   Body,
   Post,
   getMetadataArgsStorage,
@@ -15,10 +14,10 @@ import User from "./entity";
 @JsonController()
 export default class UserController {
   @Authorized()
-  @Get("/users/:id")
-  getUser(@Param("id") id: number, @CurrentUser() user: User) {
-    console.log(user);
-    return User.findOne(id);
+  @Get("/users/me")
+  getUser(@CurrentUser() user: User) {
+    console.log({ user });
+    return User.findOne(user.id);
   }
 
   @Post("/users")
@@ -31,7 +30,6 @@ export default class UserController {
       return await entity.save();
     } catch (err) {
       // todo: check for error type (duplicate?)
-      console.log(err);
       response.status = 400;
       response.body = { message: "Cannot create this user." };
     }
@@ -41,7 +39,6 @@ export default class UserController {
   getSpec() {
     const storage = getMetadataArgsStorage();
     const spec = routingControllersToSpec(storage);
-    console.log(spec);
     return spec;
   }
 }

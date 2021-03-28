@@ -8,10 +8,10 @@ import {
   IsOptional,
 } from "class-validator";
 import * as bcrypt from "bcrypt";
-
 import { Exclude } from "class-transformer";
 import ShiftModel from "../shiftModels/entity";
 import ShiftEntry from "../shiftEntries/entity";
+
 @Entity()
 export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -27,7 +27,7 @@ export default class User extends BaseEntity {
 
   @IsString()
   @MinLength(8)
-  @Column("text")
+  @Column("text", { select: false })
   @Exclude({ toPlainOnly: true })
   password!: string;
 
