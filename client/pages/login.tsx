@@ -2,18 +2,40 @@ import { Layout } from "../components/layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../constants/colors";
+import { useForm } from "react-hook-form";
+import { useAuthContext } from "../contexts/auth-context";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export default function Login() {
+  const auth = useAuthContext();
+  const { register, handleSubmit, errors } = useForm<FormData>();
+  const onSubmit = handleSubmit(({ email, password }) => {
+    auth.login({ email, password });
+  });
+
   return (
     <Layout title="Login">
       <h3 className="title is-3 has-text-primary">Login</h3>
 
       <div className="columns is-vcentered is-variable is-8">
         <div className="column">
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="field">
               <p className="control has-icons-left has-icons-right">
-                <input className="input" type="email" placeholder="Email" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  ref={register({ required: "This field is required" })}
+                  className="input"
+                />
+                <p className="help is-danger">
+                  {errors.email && errors.email.message}
+                </p>
                 <FontAwesomeIcon
                   icon={faEnvelope}
                   color={Colors.Brand01}
@@ -24,10 +46,15 @@ export default function Login() {
             <div className="field">
               <p className="control has-icons-left">
                 <input
-                  className="input"
                   type="password"
                   placeholder="Password"
+                  name="password"
+                  ref={register({ required: "This field is required" })}
+                  className="input"
                 />
+                <p className="help is-danger">
+                  {errors.password && errors.password.message}
+                </p>
                 <FontAwesomeIcon
                   icon={faLock}
                   color={Colors.Brand01}
@@ -37,7 +64,12 @@ export default function Login() {
             </div>
             <div className="field">
               <p className="control">
-                <a className="button is-primary is-pulled-right">Submit</a>
+                <button
+                  className="button is-primary is-pulled-right"
+                  type="submit"
+                >
+                  Submit
+                </button>
               </p>
             </div>
           </form>
