@@ -17,7 +17,7 @@ type AuthContextType = {
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
-function AuthProvider(props) {
+export function AuthProvider(props) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<{} | null>(null);
@@ -27,24 +27,16 @@ function AuthProvider(props) {
       if (window) {
         const token = window.localStorage.getItem("token");
         setToken(token);
-
-        console.log("Got a token in the cookies, let's see if it is valid");
         api.defaults.headers.Authorization = `Bearer ${token}`;
         const { data: user } = await api.get("users/me");
         if (user) setUser(user);
       }
-      console.log({ user });
+
       setLoading(false);
     }
+    console.log({ user });
     loadUserFromStorage();
-  }, []);
-
-  useEffect(() => {
-    if (window) {
-      const token = window.localStorage.getItem("token");
-      setToken(token);
-    }
-  }, []);
+  }, [token]);
 
   const login = async ({ email, password }: loginData) => {
     const response = await api.post(`login`, { email, password });
@@ -70,14 +62,11 @@ function AuthProvider(props) {
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, register, token }}
+      value={{ login, logout, register, user, token }}
       {...props}
     />
   );
 }
-
-const useAuth = () => React.useContext(AuthContext);
-export { AuthProvider, useAuth };
 
 export function useAuthContext() {
   const data = useContext(AuthContext);

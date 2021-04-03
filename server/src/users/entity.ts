@@ -27,7 +27,7 @@ export default class User extends BaseEntity {
 
   @IsString()
   @MinLength(8)
-  @Column("text", { select: false })
+  @Column("text")
   @Exclude({ toPlainOnly: true })
   password!: string;
 
