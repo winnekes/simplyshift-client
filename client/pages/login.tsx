@@ -4,6 +4,7 @@ import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../constants/colors";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../contexts/auth-context";
+import { useRouter } from "next/router";
 
 type FormData = {
   email: string;
@@ -12,9 +13,13 @@ type FormData = {
 
 export default function Login() {
   const auth = useAuthContext();
+  const router = useRouter();
   const { register, handleSubmit, errors } = useForm<FormData>();
-  const onSubmit = handleSubmit(({ email, password }) => {
+  const onSubmit = handleSubmit(async ({ email, password }) => {
     auth.login({ email, password });
+    if (auth.token) {
+      await router.push("/calendar");
+    }
   });
 
   return (
