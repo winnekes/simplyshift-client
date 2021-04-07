@@ -27,14 +27,18 @@ export function AuthProvider(props) {
       if (window) {
         const token = window.localStorage.getItem("token");
         setToken(token);
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        const { data: user } = await api.get("users/me");
-        if (user) setUser(user);
+        if (token) {
+          api.defaults.headers.Authorization = `Bearer ${token}`;
+          const { data } = await api.get("users/me");
+          if (data) {
+            setUser(data);
+          }
+        }
       }
 
       setLoading(false);
     }
-    console.log({ user });
+
     loadUserFromStorage();
   }, [token]);
 
@@ -57,15 +61,18 @@ export function AuthProvider(props) {
 
     setToken(null);
     delete api.defaults.headers["Authorization"];
-    window.location.pathname = "/login";
+    window.location.pathname = "/";
   };
-
-  return (
-    <AuthContext.Provider
-      value={{ login, logout, register, user, token }}
-      {...props}
-    />
-  );
+  // todo spinner
+  if (loading) return <div>Loading</div>;
+  if (!loading) {
+    return (
+      <AuthContext.Provider
+        value={{ login, logout, register, user, token }}
+        {...props}
+      />
+    );
+  }
 }
 
 export function useAuthContext() {
