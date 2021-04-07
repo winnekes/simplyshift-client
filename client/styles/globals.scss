@@ -1,7 +1,12 @@
 @charset "utf-8";
 
 @import url('https://fonts.googleapis.com/css?family=PT+Sans|Solway&display=swap');
-
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 // Brand colours
 $primary: #099d8c;
 $primary-light: #2fa092;
