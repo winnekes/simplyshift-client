@@ -1,15 +1,16 @@
 import "reflect-metadata";
-import { Action, createKoaServer } from "routing-controllers";
+import { Action, BadRequestError, createKoaServer } from "routing-controllers";
 import { connectToDb } from "./db";
 import { verify } from "./jwt";
-import UserController from "./users/controller";
-import User from "./users/entity";
+import UserController from "./identity-access/controller";
+import User from "./identity-access/entity";
 import LoginController from "./logins/controller";
 import ShiftModelController from "./shiftModels/controller";
 import SpecController from "./specs/controllers";
 import ShiftEntryController from "./shiftEntries/controller";
 
 import dotenv from "dotenv";
+import { JsonWebTokenError } from "jsonwebtoken";
 dotenv.config();
 
 const port = process.env.PORT;
@@ -23,12 +24,21 @@ const app = createKoaServer({
     ShiftEntryController,
     SpecController,
   ],
-  authorizationChecker: (action: Action) => {
+  authorizationChecker: async (action: Action) => {
     console.log(action.request.headers);
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
-      return !!(token && verify(token));
+
+      // todo better Auth check (is decoded ID a user)
+      try {
+        const userId = verify(token).data;
+        return !!(await User.findOne(userId));
+      } catch (e) {
+        if (e instanceof JsonWebTokenError) {
+          throw new BadRequestError("JWT expired");
+        }
+      }
     }
     return false;
   },
@@ -44,10 +54,8 @@ const app = createKoaServer({
 });
 
 async function initialiseServer() {
-  const dbConnection = await connectToDb();
-  const server = app.listen(port, () =>
-    console.log(`Listening on port ${port}`)
-  );
+  await connectToDb();
+  app.listen(port, () => console.log(`Listening on port ${port}`));
 }
 
 initialiseServer();

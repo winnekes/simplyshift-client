@@ -5,7 +5,7 @@ import {
   BadRequestError,
 } from "routing-controllers";
 import { IsString } from "class-validator";
-import User from "../users/entity";
+import User from "../identity-access/entity";
 import { sign } from "../jwt";
 
 class AuthenticatePayload {
