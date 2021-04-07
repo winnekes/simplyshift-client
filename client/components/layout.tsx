@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
 import { Navbar } from "./navbar";
+import { Box, Container } from "@chakra-ui/react";
 
 type Props = {
   title: string;
@@ -15,10 +16,10 @@ export const Layout: FunctionComponent<Props> = ({ children, title }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="container mt-4 is-white box">
+      <Container maxW="container.md">
         <Navbar />
-        <main className="hero px-4 py-6 is-white">{children}</main>
-      </div>
+        <main>{children}</main>
+      </Container>
     </>
   );
 };
