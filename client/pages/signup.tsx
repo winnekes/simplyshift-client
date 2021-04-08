@@ -1,11 +1,11 @@
-import { Layout } from "../components/layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../constants/colors";
+import { PageWrapper } from "../components/page-wrapper";
 
 export default function Signup() {
   return (
-    <Layout title="Sign up">
+    <PageWrapper title="Sign up">
       <h3 className="title is-3 has-text-primary">Sign up for SimplyShift</h3>
       <div className="columns is-vcentered is-variable is-8">
         <div className="column">
@@ -61,6 +61,6 @@ export default function Signup() {
           </form>
         </div>
       </div>
-    </Layout>
+    </PageWrapper>
   );
 }
