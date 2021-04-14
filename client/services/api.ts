@@ -6,7 +6,7 @@ import { createStandaloneToast } from "@chakra-ui/react";
 let urls = {
   test: `http://localhost:4400`,
   development: "http://localhost:4400/",
-  production: "https://your-production-url.com/",
+  production: "http://localhost:4400  /",
 };
 
 export const api = Axios.create({
@@ -17,15 +17,18 @@ export const api = Axios.create({
   },
 });
 
+// TODO better error handling
+// TODO refactor Toast
 api.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    console.log();
     return response;
   },
   function (error) {
-    console.log("AAAAAH");
+    if (error.response.data.message === "JWT expired") {
+      localStorage.removeItem("token");
+    }
     const toast = createStandaloneToast();
     // const customToast = createStandaloneToast({ theme: yourCustomTheme })
     toast({

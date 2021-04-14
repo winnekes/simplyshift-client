@@ -3,15 +3,14 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   HStack,
-  Link,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
   Stack,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import RouteLink from "next/link";
 import { useAuthContext } from "../contexts/auth-context";
@@ -19,11 +18,18 @@ import { useAuthContext } from "../contexts/auth-context";
 export function Navbar() {
   const auth = useAuthContext();
   return (
-    <>
-      <Flex h={16} alignItems="center" justifyContent="space-between">
+    <Box bg="#ffffff" mb="2rem" borderBottom="1px solid lightgray">
+      <Flex
+        m="0 auto"
+        h={16}
+        alignItems="center"
+        justifyContent="space-between"
+        maxWidth="container.md"
+      >
         <HStack spacing={8} alignItems="center">
-          <Box>Simply Shift</Box>
+          <Heading>SimplyShift</Heading>
         </HStack>
+
         <Flex alignItems="center">
           <Menu>
             {auth.token && (
@@ -64,9 +70,9 @@ export function Navbar() {
                     fontSize="sm"
                     fontWeight={600}
                     color="white"
-                    bg="pink.400"
+                    bg="brand01.100"
                     _hover={{
-                      bg: "pink.300",
+                      bg: "brand01.200",
                     }}
                   >
                     Sign Up
@@ -77,6 +83,6 @@ export function Navbar() {
           </Menu>
         </Flex>
       </Flex>
-    </>
+    </Box>
   );
 }

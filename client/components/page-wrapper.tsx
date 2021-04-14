@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
 import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
@@ -32,8 +32,9 @@ export const PageWrapper: FunctionComponent<Props> = ({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
+      <Navbar />
+
       <Container maxW="container.md">
-        <Navbar />
         {!isProtectedPage || (isProtectedPage && auth.token && auth.user) ? (
           <main>{children}</main>
         ) : (
