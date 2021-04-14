@@ -15,7 +15,7 @@ import {
 import moment from "moment";
 import ShiftModel from "../shiftModels/entity";
 import ShiftEntry from "./entity";
-import User from "../users/entity";
+import User from "../identity-access/entity";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { MoreThanOrEqual, LessThan } from "typeorm";
 

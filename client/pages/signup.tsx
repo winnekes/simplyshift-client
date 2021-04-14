@@ -1,66 +1,123 @@
-import { Layout } from "../components/layout";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import { Colors } from "../constants/colors";
+import { PageWrapper } from "../components/page-wrapper";
+import {
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  SimpleGrid,
+  Flex,
+  Button,
+  Heading,
+  InputGroup,
+  InputLeftElement,
+  Icon,
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { FaEnvelope, FaKey } from "react-icons/fa";
+
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
 
 export default function Signup() {
+  const { register, handleSubmit, errors } = useForm<FormData>();
   return (
-    <Layout title="Sign up">
-      <h3 className="title is-3 has-text-primary">Sign up for SimplyShift</h3>
-      <div className="columns is-vcentered is-variable is-8">
-        <div className="column">
-          <img src="/images/illustration-signup.svg" />
-        </div>
-        <div className="column">
-          <form>
-            <div className="field">
-              <p className="control has-icons-left has-icons-right">
-                <input className="input" type="email" placeholder="Email" />
-                <FontAwesomeIcon
-                  icon={faEnvelope}
-                  color={Colors.Brand01}
-                  className="is-left icon is-small p-1"
-                />
-              </p>
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="password"
-                  placeholder="Password"
-                />
-                <FontAwesomeIcon
-                  icon={faLock}
-                  color={Colors.Brand01}
-                  className="is-left icon is-small p-1"
-                />
-              </p>
-            </div>
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  className="input"
-                  type="password"
-                  placeholder="Repeat your password"
-                />
-                <FontAwesomeIcon
-                  icon={faLock}
-                  color={Colors.Brand01}
-                  className="is-left icon is-small p-1"
-                />
-              </p>
-            </div>
-            <div className="field">
-              <p className="control">
-                <a className="button is-primary is-pulled-right">
-                  Setup your calendar now!
-                </a>
-              </p>
-            </div>
-          </form>
-        </div>
-      </div>
-    </Layout>
+    <PageWrapper title="Sign up">
+      <Heading as="h2" size="lg">
+        Sign up for SimplyShift
+      </Heading>
+      <SimpleGrid columns={2} gap={6}>
+        <img src="/images/illustration-signup.svg" />
+
+        <form>
+          <FormControl isRequired>
+            <FormLabel>Email address</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon as={FaEnvelope} color="brand01.100" />
+              </InputLeftElement>
+              <Input
+                type="email"
+                placeholder="simply@shift.com"
+                name="email"
+                ref={register({ required: "This field is required" })}
+              />
+            </InputGroup>
+            <FormHelperText>
+              {errors.email && errors.email.message}
+            </FormHelperText>
+          </FormControl>
+
+          <Flex>
+            <FormControl isRequired>
+              <FormLabel>First name</FormLabel>
+              <Input
+                type="email"
+                placeholder="Email"
+                name="email"
+                ref={register({ required: "This field is required" })}
+              />
+              <FormHelperText>
+                {errors.email && errors.email.message}
+              </FormHelperText>
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Last name</FormLabel>
+              <Input
+                type="email"
+                placeholder="Email"
+                name="email"
+                ref={register({ required: "This field is required" })}
+              />
+              <FormHelperText>
+                {errors.email && errors.email.message}
+              </FormHelperText>
+            </FormControl>
+          </Flex>
+
+          <FormControl isRequired>
+            <FormLabel>Password</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon as={FaKey} color="brand01.100" />
+              </InputLeftElement>
+              <Input
+                type="password"
+                placeholder="Password"
+                name="password"
+                ref={register({ required: "This field is required" })}
+              />
+            </InputGroup>
+            <FormHelperText>
+              {errors.password && errors.password.message}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl isRequired>
+            <FormLabel>Confirm your password</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon as={FaKey} color="brand01.100" />
+              </InputLeftElement>
+              <Input
+                type="password"
+                placeholder="Password"
+                name="password"
+                ref={register({ required: "This field is required" })}
+              />
+            </InputGroup>
+            <FormHelperText>
+              {errors.password && errors.password.message}
+            </FormHelperText>
+          </FormControl>
+
+          <Button>Setup your calendar now!</Button>
+        </form>
+      </SimpleGrid>
+    </PageWrapper>
   );
 }

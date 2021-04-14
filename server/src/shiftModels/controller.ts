@@ -13,7 +13,7 @@ import {
 } from "routing-controllers";
 
 import ShiftModel from "./entity";
-import User from "../users/entity";
+import User from "../identity-access/entity";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 
 @JsonController()

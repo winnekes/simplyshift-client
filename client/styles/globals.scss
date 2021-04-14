@@ -1,41 +1,10 @@
 @charset "utf-8";
 
-@import url('https://fonts.googleapis.com/css?family=PT+Sans|Solway&display=swap');
+@import url('https://fonts.googleapis.com/css?family=PT+Sans|Quicksand&display=swap');
 
-// Brand colours
-$primary: #099d8c;
-$primary-light: #2fa092;
-$secondary: #2fa092;
-
-// Update Bulma's global variables
-$body-background-color: #F7F7F7;
-$link: $primary-light;
-$widescreen-enabled: false;
-$fullhd-enabled: false;
-
-$title-family: "Solway", serif;
-$title-color: $primary;
-$family-sans-serif: "PT Sans", sans-serif;
-
-// Update some of Bulma's component variables
-
-//$control-border-width: 2px;
-//$input-border-color: transparent;
-//$input-shadow: none;
-
-// Import Bulma styles (only what is used)
-@import "../node_modules/bulma/sass/utilities/_all.sass";
-@import "../node_modules/bulma/sass/base/_all.sass";
-@import "../node_modules/bulma/sass/elements/button.sass";
-@import "../node_modules/bulma/sass/elements/container.sass";
-@import "../node_modules/bulma/sass/elements/title.sass";
-@import "../node_modules/bulma/sass/form/_all.sass";
-@import "../node_modules/bulma/sass/components/navbar.sass";
-@import "../node_modules/bulma/sass/layout/hero.sass";
-@import "../node_modules/bulma/sass/layout/section.sass";
-@import "../node_modules/bulma/sass/elements/notification.sass";
-@import "../node_modules/bulma/sass/helpers/_all.sass";
-@import "../node_modules/bulma/bulma.sass";
-@import "~@creativebulma/bulma-divider";
-
-@import "nav";
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}

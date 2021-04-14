@@ -1,21 +1,21 @@
-import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+  createContext,
+} from "react";
 import { api } from "../services/api";
 
-type loginData = {
-  email: string;
-  password: string;
-};
-
 type AuthContextType = {
-  login: (data: loginData) => void;
   logout: () => void;
   token: string | null;
-  setToken: () => void;
-  user: () => void;
+  setToken: Dispatch<SetStateAction<string>>;
+  user: {} | null;
 };
 
-const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>(undefined);
 
 export function AuthProvider(props) {
   const [token, setToken] = useState<string | null>(null);
@@ -27,51 +27,48 @@ export function AuthProvider(props) {
       if (window) {
         const token = window.localStorage.getItem("token");
         setToken(token);
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        const { data: user } = await api.get("users/me");
-        if (user) setUser(user);
+        if (token) {
+          api.defaults.headers.Authorization = `Bearer ${token}`;
+          const { data } = await api.get("users/me");
+          if (data) {
+            setUser(data);
+          }
+        }
       }
 
       setLoading(false);
     }
-    console.log({ user });
+
     loadUserFromStorage();
   }, [token]);
 
-  const login = async ({ email, password }: loginData) => {
-    const response = await api.post(`login`, { email, password });
-
-    setToken(response.data["jwt"]);
-
-    if (window) {
-      window.localStorage.setItem("token", response.data["jwt"]);
-    }
+  const properties: AuthContextType = {
+    setToken: (token: string) => {
+      window.localStorage.setItem("token", token);
+      setToken(token);
+    },
+    logout: () => {
+      if (window) {
+        window.localStorage.removeItem("token");
+      }
+      setToken(null);
+      delete api.defaults.headers["Authorization"];
+      window.location.pathname = "/";
+    },
+    user,
+    token,
   };
-
-  const register = () => {};
-
-  const logout = () => {
-    if (window) {
-      window.localStorage.removeItem("token");
-    }
-
-    setToken(null);
-    delete api.defaults.headers["Authorization"];
-    window.location.pathname = "/login";
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{ login, logout, register, user, token }}
-      {...props}
-    />
-  );
+  // todo spinner
+  if (loading) return <div>Loading</div>;
+  if (!loading) {
+    return <AuthContext.Provider value={properties} {...props} />;
+  }
 }
 
 export function useAuthContext() {
   const data = useContext(AuthContext);
   if (!data) {
-    throw new Error("useAuthContext must be used within AuthContext.Provider");
+    throw new Error("AuthProvider is missing");
   }
   return data;
 }
