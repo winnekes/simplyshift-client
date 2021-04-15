@@ -1,5 +1,4 @@
 import {
-  Box,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -9,10 +8,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Stack,
-  StackDivider,
 } from "@chakra-ui/react";
-import { Head } from "next/document";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
