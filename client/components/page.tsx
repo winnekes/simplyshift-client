@@ -7,28 +7,24 @@ interface PageSubComponents {
   Content: FunctionComponent;
 }
 
-const Title: FunctionComponent = ({ children }) => {
-  return <Box py={6}>{children}</Box>;
-};
+const Title: FunctionComponent = ({ children }) => <Box py={6}>{children}</Box>;
 
-const Content: FunctionComponent = ({ children }) => {
-  return (
-    <Box
-      bg="white"
-      p={6}
-      marginY={4}
-      border={[null, "1px solid lightgray"]}
-      borderY={["1px solid lightgray"]}
-      width={width}
-    >
-      {children}
-    </Box>
-  );
-};
+const Content: FunctionComponent = ({ children }) => (
+  <Box
+    bg="white"
+    p={6}
+    marginY={4}
+    border={[null, "1px solid lightgray"]}
+    borderY={["1px solid lightgray"]}
+    width={width}
+  >
+    {children}
+  </Box>
+);
 
-export const Page: FunctionComponent & PageSubComponents = ({ children }) => {
-  return <div>{children}</div>;
-};
+export const Page: FunctionComponent & PageSubComponents = ({ children }) => (
+  <div>{children}</div>
+);
 
 Page.Title = Title;
 Page.Content = Content;
