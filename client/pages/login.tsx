@@ -16,6 +16,7 @@ import { Head } from "next/document";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
+import { DividedSegment } from "../components/divided-segment";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
 import { useAuthContext } from "../contexts/auth-context";
@@ -45,57 +46,50 @@ export default function Login() {
           <Heading>Login</Heading>
         </Page.Title>
         <Page.Content>
-          <Stack
-            direction={["column", "row"]}
-            spacing="24px"
-            divider={<StackDivider borderColor="gray.200" />}
-          >
-            <Box flex="1">
-              <form onSubmit={onSubmit}>
-                <FormControl>
-                  <FormLabel>Email address</FormLabel>
-                  <InputGroup>
-                    <InputLeftElement pointerEvents="none">
-                      <Icon as={FaEnvelope} color="brand01.100" />
-                    </InputLeftElement>
-                    <Input
-                      type="email"
-                      placeholder="simply@shift.com"
-                      name="email"
-                      ref={register({ required: "This field is required" })}
-                    />
-                  </InputGroup>
-                  <FormHelperText>
-                    {errors.email && errors.email.message}
-                  </FormHelperText>
-                </FormControl>
+          <DividedSegment>
+            <form onSubmit={onSubmit}>
+              <FormControl>
+                <FormLabel>Email address</FormLabel>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={FaEnvelope} color="brand01.100" />
+                  </InputLeftElement>
+                  <Input
+                    type="email"
+                    placeholder="simply@shift.com"
+                    name="email"
+                    ref={register({ required: "This field is required" })}
+                  />
+                </InputGroup>
+                <FormHelperText>
+                  {errors.email && errors.email.message}
+                </FormHelperText>
+              </FormControl>
 
-                <FormControl>
-                  <FormLabel>Password</FormLabel>
-                  <InputGroup>
-                    <InputLeftElement pointerEvents="none">
-                      <Icon as={FaKey} color="brand01.100" />
-                    </InputLeftElement>
-                    <Input
-                      variant="filled"
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      ref={register({ required: "This field is required" })}
-                    />
-                  </InputGroup>
-                  <FormHelperText>
-                    {errors.password && errors.password.message}
-                  </FormHelperText>
-                </FormControl>
+              <FormControl>
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={FaKey} color="brand01.100" />
+                  </InputLeftElement>
+                  <Input
+                    variant="filled"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    ref={register({ required: "This field is required" })}
+                  />
+                </InputGroup>
+                <FormHelperText>
+                  {errors.password && errors.password.message}
+                </FormHelperText>
+              </FormControl>
 
-                <button type="submit">Submit</button>
-              </form>
-            </Box>
-            <Box flex="1">
-              <Image src="/images/illustration-login.svg" />
-            </Box>
-          </Stack>
+              <button type="submit">Submit</button>
+            </form>
+
+            <Image src="/images/illustration-login.svg" />
+          </DividedSegment>
         </Page.Content>
       </Page>
     </PageWrapper>
