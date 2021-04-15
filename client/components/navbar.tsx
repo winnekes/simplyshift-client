@@ -13,6 +13,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import RouteLink from "next/link";
+import { width } from "../constants/theme";
 import { useAuthContext } from "../contexts/auth-context";
 
 export function Navbar() {
@@ -20,11 +21,12 @@ export function Navbar() {
   return (
     <Box bg="#ffffff" mb="2rem" borderBottom="1px solid lightgray">
       <Flex
-        m="0 auto"
+        mx={[4, "auto"]}
+        my={[0, "0"]}
         h={16}
         alignItems="center"
         justifyContent="space-between"
-        maxWidth="container.md"
+        maxWidth={width}
       >
         <HStack spacing={8} alignItems="center">
           <Heading>SimplyShift</Heading>

@@ -4,6 +4,7 @@ import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
 import { useAuthContext } from "../contexts/auth-context";
 import { useRouter } from "next/router";
+import { width } from "../constants/theme";
 
 type Props = {
   title: string;
@@ -24,6 +25,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
     }
   }, []);
 
+  // todo skeleton
   return (
     <>
       <Head>
@@ -34,11 +36,11 @@ export const PageWrapper: FunctionComponent<Props> = ({
 
       <Navbar />
 
-      <Container maxW="container.md">
+      <Container maxW={width} p={0}>
         {!isProtectedPage || (isProtectedPage && auth.token && auth.user) ? (
-          <main>{children}</main>
+          <>{children}</>
         ) : (
-          <div>Not allowed</div>
+          <>Not allowed</>
         )}
       </Container>
     </>
