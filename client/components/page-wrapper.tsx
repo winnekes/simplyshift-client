@@ -4,7 +4,7 @@ import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
 import { useAuthContext } from "../contexts/auth-context";
 import { useRouter } from "next/router";
-import { width } from "../constants/theme";
+import { width } from "../theme/theme";
 
 type Props = {
   title: string;

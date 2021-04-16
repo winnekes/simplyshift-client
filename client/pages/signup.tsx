@@ -12,6 +12,7 @@ import {
   InputLeftElement,
   Icon,
   Heading,
+  Stack,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
@@ -54,7 +55,7 @@ export default function Signup() {
                 </FormHelperText>
               </FormControl>
 
-              <Flex>
+              <Stack direction={["column", "row"]} spacing={1}>
                 <FormControl isRequired>
                   <FormLabel>First name</FormLabel>
                   <Input
@@ -80,8 +81,7 @@ export default function Signup() {
                     {errors.email && errors.email.message}
                   </FormHelperText>
                 </FormControl>
-              </Flex>
-
+              </Stack>
               <FormControl isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
@@ -118,7 +118,7 @@ export default function Signup() {
                 </FormHelperText>
               </FormControl>
 
-              <Button>Setup your calendar now!</Button>
+              <Button variant="primary">Setup your calendar now!</Button>
             </form>
           </DividedSegment>
         </Page.Content>

@@ -12,11 +12,10 @@ import {
   MenuList,
   Stack,
   useColorMode,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import RouteLink from "next/link";
-import { colors } from "../constants/colors";
-import { width } from "../constants/theme";
+import { colors } from "../theme/colors";
+import { width } from "../theme/theme";
 import { useAuthContext } from "../contexts/auth-context";
 
 export function Navbar() {
@@ -26,6 +25,7 @@ export function Navbar() {
 
   return (
     <Box
+      py={2}
       bg={colors[colorMode].ui02}
       mb="2rem"
       borderBottom={`1px solid ${colors[colorMode].ui03}`}

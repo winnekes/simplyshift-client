@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -69,7 +70,6 @@ export default function Login() {
                     <Icon as={FaKey} color="brand01.100" />
                   </InputLeftElement>
                   <Input
-                    variant="filled"
                     type="password"
                     placeholder="Password"
                     name="password"
@@ -81,7 +81,9 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <button type="submit">Submit</button>
+              <Button type="submit" variant="secondary">
+                Submit
+              </Button>
             </form>
 
             <Image src="/images/illustration-login.svg" />
