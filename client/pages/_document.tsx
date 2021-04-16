@@ -1,6 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ColorModeScript } from "@chakra-ui/react";
-import { theme } from "../constants/theme";
+import { theme } from "../theme/theme";
 
 // todo figure out if converting to functional component is possible
 class MyDocument extends Document {

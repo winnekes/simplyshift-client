@@ -1,14 +1,16 @@
 import { Box, useColorMode } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
-import { colors } from "../constants/colors";
-import { width } from "../constants/theme";
+import { colors } from "../theme/colors";
+import { width } from "../theme/theme";
 
 interface PageSubComponents {
   Title: FunctionComponent;
   Content: FunctionComponent;
 }
 
-const Title: FunctionComponent = ({ children }) => <Box py={6}>{children}</Box>;
+const Title: FunctionComponent = ({ children }) => (
+  <Box paddingX={[6, 0]}>{children}</Box>
+);
 
 const Content: FunctionComponent = ({ children }) => {
   const { colorMode } = useColorMode();
