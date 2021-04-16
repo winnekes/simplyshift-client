@@ -1,30 +1,30 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { colors } from "./colors";
 
+// color mode configuration
+// todo store somewhere
 const config: ThemeConfig = {
   initialColorMode: "light",
-  useSystemColorMode: true,
+  useSystemColorMode: false,
 };
 
-const colors = {
-  brand01: {
-    100: "#a0cec2",
-    200: "",
-  },
+const themeColors = {
+  brand01: colors.brand01,
 };
 
 export const theme = extendTheme({
   config,
-  colors,
+  colors: themeColors,
   fonts: {
     body: "PT Sans",
     heading: "Quicksand",
   },
   styles: {
-    global: {
+    global: (props) => ({
       body: {
-        bg: "#F5F5F5",
+        bg: props.colorMode === "dark" ? colors.dark.ui01 : colors.light.ui01,
       },
-    },
+    }),
   },
 });
 

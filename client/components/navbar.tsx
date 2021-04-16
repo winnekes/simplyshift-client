@@ -11,15 +11,25 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import RouteLink from "next/link";
+import { colors } from "../constants/colors";
 import { width } from "../constants/theme";
 import { useAuthContext } from "../contexts/auth-context";
 
 export function Navbar() {
   const auth = useAuthContext();
+  const { toggleColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
+
   return (
-    <Box bg="#ffffff" mb="2rem" borderBottom="1px solid lightgray">
+    <Box
+      bg={colors[colorMode].ui02}
+      mb="2rem"
+      borderBottom={`1px solid ${colors[colorMode].ui03}`}
+    >
       <Flex
         mx={[4, "auto"]}
         my={[0, "0"]}
@@ -29,7 +39,7 @@ export function Navbar() {
         maxWidth={width}
       >
         <HStack spacing={8} alignItems="center">
-          <Heading>SimplyShift</Heading>
+          <Heading onClick={toggleColorMode}>SimplyShift</Heading>
         </HStack>
 
         <Flex alignItems="center">
