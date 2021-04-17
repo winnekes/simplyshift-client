@@ -4,14 +4,14 @@ import dotenv from "dotenv";
 import { JsonWebTokenError } from "jsonwebtoken";
 import "reflect-metadata";
 import { Action, BadRequestError, createKoaServer } from "routing-controllers";
-import { connectToDb } from "./db";
-import UserController from "./identity-access/controller";
-import User from "./identity-access/entity";
-import { verify } from "./jwt";
-import LoginController from "./login/login-controller";
-import ShiftEntryController from "./shiftEntries/controller";
-import ShiftModelController from "./shiftModels/controller";
-import SpecController from "./specs/controllers";
+import { connectToDb } from "./database/connection";
+import UserController from "./domains/identity-access/user-controller";
+import User from "./domains/identity-access/user";
+import { verify } from "./utils/jwt";
+import LoginController from "./domains/identity-access/login-controller";
+import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
+import ShiftModelController from "./domains/shift-model/shift-model-controller";
+import SpecController from "./domains/specs/spec-controller";
 
 dotenv.config();
 

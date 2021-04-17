@@ -13,9 +13,9 @@ import {
   QueryParam,
 } from "routing-controllers";
 import moment from "moment";
-import ShiftModel from "../shiftModels/entity";
-import ShiftEntry from "./entity";
-import User from "../identity-access/entity";
+import ShiftModel from "../shift-model/shift-model";
+import ShiftEntry from "./shift-entry";
+import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { MoreThanOrEqual, LessThan } from "typeorm";
 
@@ -25,7 +25,7 @@ import { MoreThanOrEqual, LessThan } from "typeorm";
 })
 export default class ShiftEntryController {
   @Authorized()
-  @Get("/shiftEntries")
+  @Get("/shift-entry")
   async getAllShiftEntries(
     @CurrentUser() user: User,
     @QueryParam("month", { required: false }) month: string
@@ -50,7 +50,7 @@ export default class ShiftEntryController {
   }
 
   @Authorized()
-  @Post("/shiftEntries")
+  @Post("/shift-entry")
   async createShiftEntry(
     @CurrentUser()
     user: User,
@@ -100,7 +100,7 @@ export default class ShiftEntryController {
   }
 
   @Authorized()
-  @Put("/shiftEntries/:id")
+  @Put("/shift-entry/:id")
   async updateShiftEntry(
     @Param("id") id: number,
     @CurrentUser() user: User,
@@ -112,7 +112,7 @@ export default class ShiftEntryController {
   }
 
   @Authorized()
-  @Delete("/shiftEntries/:id")
+  @Delete("/shift-entry/:id")
   async deleteShiftEntry(
     @Param("id") id: number,
     @CurrentUser() user: User,

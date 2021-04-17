@@ -12,8 +12,8 @@ import {
   Delete,
 } from "routing-controllers";
 
-import ShiftModel from "./entity";
-import User from "../identity-access/entity";
+import ShiftModel from "./shift-model";
+import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 
 @JsonController()
@@ -22,7 +22,7 @@ import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 })
 export default class ShiftModelController {
   @Authorized()
-  @Get("/shiftModels")
+  @Get("/shift-model")
   async getAllShiftModels(@CurrentUser() user: User) {
     const shiftModels = await ShiftModel.find({
       where: {
@@ -36,7 +36,7 @@ export default class ShiftModelController {
   }
 
   @Authorized()
-  @Post("/shiftModels")
+  @Post("/shift-model")
   async createShiftModel(
     @CurrentUser() user: User,
     @Body() shiftModel: ShiftModel,
@@ -56,7 +56,7 @@ export default class ShiftModelController {
   }
 
   @Authorized()
-  @Put("/shiftModels/:id")
+  @Put("/shift-model/:id")
   async updateShiftModel(
     @Param("id") id: number,
     @CurrentUser() user: User,
@@ -68,7 +68,7 @@ export default class ShiftModelController {
   }
 
   @Authorized()
-  @Delete("/shiftModels/:id")
+  @Delete("/shift-model/:id")
   async deleteShiftModel(
     @Param("id") id: number,
     @CurrentUser() user: User,

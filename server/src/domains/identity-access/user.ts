@@ -9,13 +9,13 @@ import {
 } from "class-validator";
 import * as bcrypt from "bcrypt";
 import { Exclude } from "class-transformer";
-import ShiftModel from "../shiftModels/entity";
-import ShiftEntry from "../shiftEntries/entity";
+import ShiftModel from "../shift-model/shift-model";
+import ShiftEntry from "../shift-entry/shift-entry";
 
 @Entity()
 export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @MinLength(2)
   @Column("text")

@@ -8,8 +8,8 @@ import {
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, MinLength, IsNumber, Min } from "class-validator";
-import User from "../identity-access/entity";
-import ShiftEntry from "../shiftEntries/entity";
+import User from "../identity-access/user";
+import ShiftEntry from "../shift-entry/shift-entry";
 
 @Entity()
 @Unique("UNQ_NAME_USER", ["name", "user"])
