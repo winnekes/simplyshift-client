@@ -7,7 +7,7 @@ export const colors = {
   light: {
     ui01: "#f5f5f5",
     ui02: "#ffffff",
-    ui03: "#d3d3d3",
+    ui03: "#e7e7e7",
   },
   dark: {
     ui01: "#181818",

@@ -20,6 +20,7 @@ const Content: FunctionComponent = ({ children }) => {
       bg={colors[colorMode].ui02}
       p={6}
       marginY={4}
+      borderRadius={5}
       border={[null, `1px solid ${colors[colorMode].ui03}`]}
       borderY={[`1px solid ${colors[colorMode].ui03}`]}
       width={width}
