@@ -1,17 +1,26 @@
+import * as Sentry from "@sentry/node";
+import { LogLevel } from "@sentry/types";
+import dotenv from "dotenv";
+import { JsonWebTokenError } from "jsonwebtoken";
 import "reflect-metadata";
 import { Action, BadRequestError, createKoaServer } from "routing-controllers";
 import { connectToDb } from "./db";
-import { verify } from "./jwt";
 import UserController from "./identity-access/controller";
 import User from "./identity-access/entity";
-import LoginController from "./logins/controller";
+import { verify } from "./jwt";
+import LoginController from "./login/login-controller";
+import ShiftEntryController from "./shiftEntries/controller";
 import ShiftModelController from "./shiftModels/controller";
 import SpecController from "./specs/controllers";
-import ShiftEntryController from "./shiftEntries/controller";
 
-import dotenv from "dotenv";
-import { JsonWebTokenError } from "jsonwebtoken";
 dotenv.config();
+
+// todo figure out why errors are not getting logged
+Sentry.init({
+  dsn:
+    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  logLevel: LogLevel.Error,
+});
 
 const port = process.env.PORT;
 
@@ -53,9 +62,20 @@ const app = createKoaServer({
   },
 });
 
-async function initialiseServer() {
-  await connectToDb();
-  app.listen(port, () => console.log(`Listening on port ${port}`));
-}
+// todo not working - fix!
+app.on(
+  "error",
+  (err: any, ctx: { request: Sentry.Handlers.ExpressRequest }) => {
+    console.log("I GET HERE");
+    Sentry.withScope(function (scope) {
+      scope.addEventProcessor(function (event) {
+        return Sentry.Handlers.parseRequest(event, ctx.request);
+      });
+      Sentry.captureException(err);
+    });
+  }
+);
 
-initialiseServer();
+connectToDb();
+
+app.listen(port, () => console.log(`Listening on port ${port}`));
