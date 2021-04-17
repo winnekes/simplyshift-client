@@ -9,7 +9,7 @@ import {
   Res,
 } from "routing-controllers";
 import { routingControllersToSpec } from "routing-controllers-openapi";
-import User from "./entity";
+import User from "./user";
 
 @JsonController()
 export default class UserController {

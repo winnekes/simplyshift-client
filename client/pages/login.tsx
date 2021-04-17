@@ -13,27 +13,30 @@ import {
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
+import { useMutation } from "react-query";
 import { DividedSegment } from "../components/divided-segment";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
 import { useAuthContext } from "../contexts/auth-context";
-import { api } from "../services/api";
-
-type FormData = {
-  email: string;
-  password: string;
-};
+import { login, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
   const auth = useAuthContext();
   const router = useRouter();
-  const { register, handleSubmit, errors } = useForm<FormData>();
+  const { register, handleSubmit, errors } = useForm<LoginMutationData>();
+
+  const { isSuccess, error, data, mutate } = useMutation(login);
+
   const onSubmit = handleSubmit(async ({ email, password }) => {
-    const response = await api.post("login", { email, password });
+    mutate({ email, password });
 
-    auth.setToken(response.data["jwt"]);
+    if (error) {
+    }
+    if (isSuccess && data) {
+      auth.setToken(data.data["jwt"]);
 
-    await router.push("/calendar");
+      await router.push("/calendar");
+    }
   });
 
   return (
