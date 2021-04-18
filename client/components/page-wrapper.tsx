@@ -4,7 +4,7 @@ import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
 import { useAuthContext } from "../contexts/auth-context";
 import { useRouter } from "next/router";
-import { width } from "../constants/theme";
+import { width } from "../theme/theme";
 
 type Props = {
   title: string;
@@ -21,7 +21,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (isProtectedPage && (!auth.token || !auth.user)) {
-      router.replace("/login");
+      router.push("/login");
     }
   }, []);
 

@@ -1,4 +1,5 @@
 import {
+  Button,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -8,31 +9,33 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
+import { useMutation } from "react-query";
 import { DividedSegment } from "../components/divided-segment";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
 import { useAuthContext } from "../contexts/auth-context";
-import { api } from "../services/api";
-
-type FormData = {
-  email: string;
-  password: string;
-};
+import { login, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
   const auth = useAuthContext();
   const router = useRouter();
-  const { register, handleSubmit, errors } = useForm<FormData>();
+  const { register, handleSubmit, errors } = useForm<LoginMutationData>();
+
+  const { isLoading, error, mutate } = useMutation(login, {
+    onSuccess: ({ data }) => {
+      auth.setToken(data["jwt"]);
+
+      router.push("/calendar");
+    },
+  });
+
   const onSubmit = handleSubmit(async ({ email, password }) => {
-    const response = await api.post("login", { email, password });
-
-    auth.setToken(response.data["jwt"]);
-
-    await router.push("/calendar");
+    mutate({ email, password });
   });
 
   return (
@@ -58,7 +61,7 @@ export default function Login() {
                   />
                 </InputGroup>
                 <FormHelperText>
-                  {errors.email && errors.email.message}
+                  {errors.email && errors.email.message} &nbsp;
                 </FormHelperText>
               </FormControl>
 
@@ -69,19 +72,20 @@ export default function Login() {
                     <Icon as={FaKey} color="brand01.100" />
                   </InputLeftElement>
                   <Input
-                    variant="filled"
                     type="password"
                     placeholder="Password"
                     name="password"
                     ref={register({ required: "This field is required" })}
                   />
                 </InputGroup>
-                <FormHelperText>
-                  {errors.password && errors.password.message}
+                <FormHelperText color="red">
+                  {errors.password && errors.password.message} &nbsp;
                 </FormHelperText>
               </FormControl>
 
-              <button type="submit">Submit</button>
+              <Button type="submit" variant="secondary">
+                {isLoading ? <Spinner /> : "Submit"}
+              </Button>
             </form>
 
             <Image src="/images/illustration-login.svg" />

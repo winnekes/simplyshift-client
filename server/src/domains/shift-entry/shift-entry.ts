@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, IsDate } from "class-validator";
-import User from "../identity-access/entity";
-import ShiftModel from "../shiftModels/entity";
+import User from "../identity-access/user";
+import ShiftModel from "../shift-model/shift-model";
 
 @Entity("shift_entries")
 export default class ShiftEntry extends BaseEntity {

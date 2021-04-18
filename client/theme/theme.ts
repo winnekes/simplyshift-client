@@ -1,5 +1,6 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { colors } from "./colors";
+import { Button } from "./components/button";
 
 // color mode configuration
 // todo store somewhere
@@ -19,6 +20,7 @@ export const theme = extendTheme({
     body: "PT Sans",
     heading: "Quicksand",
   },
+  components: { Button },
   styles: {
     global: (props) => ({
       body: {

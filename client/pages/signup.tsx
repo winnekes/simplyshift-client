@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+import { useMutation } from "react-query";
 import { DividedSegment } from "../components/divided-segment";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
@@ -6,25 +8,35 @@ import {
   FormHelperText,
   FormLabel,
   Input,
-  Flex,
   Button,
   InputGroup,
   InputLeftElement,
   Icon,
   Heading,
+  Stack,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
-
-type FormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+import { useAuthContext } from "../contexts/auth-context";
+import { signup, SignupMutationData } from "../services/mutations/signup";
 
 export default function Signup() {
-  const { register, handleSubmit, errors } = useForm<FormData>();
+  const auth = useAuthContext();
+  const router = useRouter();
+  const { register, handleSubmit, errors } = useForm<SignupMutationData>();
+
+  const { isLoading, error, mutate } = useMutation(signup, {
+    onSuccess: ({ data }) => {
+      auth.setToken(data["jwt"]);
+
+      router.push("/calendar");
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    mutate(data);
+  });
+
   return (
     <PageWrapper title="Sign up">
       <Page>
@@ -35,7 +47,7 @@ export default function Signup() {
           <DividedSegment>
             <img src="/images/illustration-signup.svg" />
 
-            <form>
+            <form onSubmit={onSubmit}>
               <FormControl isRequired>
                 <FormLabel>Email address</FormLabel>
                 <InputGroup>
@@ -44,44 +56,47 @@ export default function Signup() {
                   </InputLeftElement>
                   <Input
                     type="email"
-                    placeholder="simply@shift.com"
                     name="email"
-                    ref={register({ required: "This field is required" })}
+                    placeholder="simply@shift.com"
+                    ref={register({
+                      required: "This field is required",
+                    })}
                   />
                 </InputGroup>
                 <FormHelperText>
-                  {errors.email && errors.email.message}
+                  {errors.email && errors.email.message} &nbsp;
                 </FormHelperText>
               </FormControl>
 
-              <Flex>
+              <Stack direction={["column", "row"]} spacing={1}>
                 <FormControl isRequired>
                   <FormLabel>First name</FormLabel>
                   <Input
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    ref={register({ required: "This field is required" })}
+                    placeholder="First name"
+                    name="firstName"
+                    ref={register({
+                      required: "This field is required",
+                    })}
                   />
                   <FormHelperText>
-                    {errors.email && errors.email.message}
+                    {errors.firstName && errors.firstName.message}
                   </FormHelperText>
                 </FormControl>
 
                 <FormControl isRequired>
                   <FormLabel>Last name</FormLabel>
                   <Input
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    ref={register({ required: "This field is required" })}
+                    name="lastName"
+                    placeholder="Last name"
+                    ref={register({
+                      required: "This field is required",
+                    })}
                   />
                   <FormHelperText>
-                    {errors.email && errors.email.message}
+                    {errors.lastName && errors.lastName.message}
                   </FormHelperText>
                 </FormControl>
-              </Flex>
-
+              </Stack>
               <FormControl isRequired>
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
@@ -92,7 +107,10 @@ export default function Signup() {
                     type="password"
                     placeholder="Password"
                     name="password"
-                    ref={register({ required: "This field is required" })}
+                    ref={register({
+                      required: "This field is required",
+                      min: 8,
+                    })}
                   />
                 </InputGroup>
                 <FormHelperText>
@@ -108,9 +126,12 @@ export default function Signup() {
                   </InputLeftElement>
                   <Input
                     type="password"
-                    placeholder="Password"
-                    name="password"
-                    ref={register({ required: "This field is required" })}
+                    placeholder="Confirm your password"
+                    name="passwordRepeated"
+                    ref={register({
+                      required: "This field is required",
+                      min: 8,
+                    })}
                   />
                 </InputGroup>
                 <FormHelperText>
@@ -118,7 +139,9 @@ export default function Signup() {
                 </FormHelperText>
               </FormControl>
 
-              <Button>Setup your calendar now!</Button>
+              <Button variant="primary" type="submit">
+                Setup your calendar now!
+              </Button>
             </form>
           </DividedSegment>
         </Page.Content>

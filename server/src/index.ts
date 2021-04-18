@@ -1,22 +1,33 @@
-import "reflect-metadata";
-import { Action, BadRequestError, createKoaServer } from "routing-controllers";
-import { connectToDb } from "./db";
-import { verify } from "./jwt";
-import UserController from "./identity-access/controller";
-import User from "./identity-access/entity";
-import LoginController from "./logins/controller";
-import ShiftModelController from "./shiftModels/controller";
-import SpecController from "./specs/controllers";
-import ShiftEntryController from "./shiftEntries/controller";
-
+import * as Sentry from "@sentry/node";
+import { LogLevel } from "@sentry/types";
 import dotenv from "dotenv";
 import { JsonWebTokenError } from "jsonwebtoken";
+import "reflect-metadata";
+import { Action, BadRequestError, createKoaServer } from "routing-controllers";
+import { connectToDb } from "./database/connection";
+import UserController from "./domains/identity-access/user-controller";
+import User from "./domains/identity-access/user";
+import { ErrorLoggingMiddleware } from "./utils/error-logging-middleware";
+import { verify } from "./utils/jwt";
+import LoginController from "./domains/identity-access/login-controller";
+import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
+import ShiftModelController from "./domains/shift-model/shift-model-controller";
+import SpecController from "./domains/specs/spec-controller";
+
 dotenv.config();
 
 const port = process.env.PORT;
 
+Sentry.init({
+  dsn:
+    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  logLevel: LogLevel.Error,
+});
+
 const app = createKoaServer({
   cors: true,
+  middlewares: [ErrorLoggingMiddleware],
+  defaultErrorHandler: false,
   controllers: [
     UserController,
     LoginController,
@@ -25,7 +36,6 @@ const app = createKoaServer({
     SpecController,
   ],
   authorizationChecker: async (action: Action) => {
-    console.log(action.request.headers);
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
@@ -53,9 +63,6 @@ const app = createKoaServer({
   },
 });
 
-async function initialiseServer() {
-  await connectToDb();
-  app.listen(port, () => console.log(`Listening on port ${port}`));
-}
+connectToDb();
 
-initialiseServer();
+app.listen(port, () => console.log(`Listening on port ${port}`));
