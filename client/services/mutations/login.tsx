@@ -5,6 +5,6 @@ export type LoginMutationData = {
   password: string;
 };
 
-export const login = ({ email, password }: LoginMutationData) => {
-  return api.post("login", { email, password });
+export const login = (data: LoginMutationData) => {
+  return api.post("login", data);
 };

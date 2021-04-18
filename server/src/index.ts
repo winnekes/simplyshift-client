@@ -7,6 +7,7 @@ import { Action, BadRequestError, createKoaServer } from "routing-controllers";
 import { connectToDb } from "./database/connection";
 import UserController from "./domains/identity-access/user-controller";
 import User from "./domains/identity-access/user";
+import { ErrorLoggingMiddleware } from "./utils/error-logging-middleware";
 import { verify } from "./utils/jwt";
 import LoginController from "./domains/identity-access/login-controller";
 import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
@@ -15,17 +16,18 @@ import SpecController from "./domains/specs/spec-controller";
 
 dotenv.config();
 
-// todo figure out why errors are not getting logged
+const port = process.env.PORT;
+
 Sentry.init({
   dsn:
     "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
   logLevel: LogLevel.Error,
 });
 
-const port = process.env.PORT;
-
 const app = createKoaServer({
   cors: true,
+  middlewares: [ErrorLoggingMiddleware],
+  defaultErrorHandler: false,
   controllers: [
     UserController,
     LoginController,
@@ -34,7 +36,6 @@ const app = createKoaServer({
     SpecController,
   ],
   authorizationChecker: async (action: Action) => {
-    console.log(action.request.headers);
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
@@ -61,20 +62,6 @@ const app = createKoaServer({
     return;
   },
 });
-
-// todo not working - fix!
-app.on(
-  "error",
-  (err: any, ctx: { request: Sentry.Handlers.ExpressRequest }) => {
-    console.log("I GET HERE");
-    Sentry.withScope(function (scope) {
-      scope.addEventProcessor(function (event) {
-        return Sentry.Handlers.parseRequest(event, ctx.request);
-      });
-      Sentry.captureException(err);
-    });
-  }
-);
 
 connectToDb();
 

@@ -1,29 +1,33 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { BaseEntity } from "typeorm/repository/BaseEntity";
-import {
-  IsString,
-  MinLength,
-  IsEmail,
-  IsUrl,
-  IsOptional,
-} from "class-validator";
 import * as bcrypt from "bcrypt";
 import { Exclude } from "class-transformer";
-import ShiftModel from "../shift-model/shift-model";
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+  MinLength,
+} from "class-validator";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity } from "typeorm/repository/BaseEntity";
 import ShiftEntry from "../shift-entry/shift-entry";
+import ShiftModel from "../shift-model/shift-model";
 
 @Entity()
 export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @MinLength(2)
-  @Column("text")
-  username!: string;
-
   @IsEmail()
   @Column("text", { unique: true })
   email!: string;
+
+  @IsString()
+  @Column("text")
+  firstName!: string;
+
+  @IsString()
+  @Column("text")
+  lastName!: string;
 
   @IsString()
   @MinLength(8)
@@ -37,8 +41,7 @@ export default class User extends BaseEntity {
   profileUrl?: string | null;
 
   async setPassword(rawPassword: string) {
-    const hash = await bcrypt.hash(rawPassword, 10);
-    this.password = hash;
+    return (this.password = await bcrypt.hash(rawPassword, 10));
   }
 
   checkPassword(rawPassword: string): Promise<boolean> {
