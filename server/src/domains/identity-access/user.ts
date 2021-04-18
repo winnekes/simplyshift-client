@@ -17,13 +17,17 @@ export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @MinLength(2)
-  @Column("text")
-  username!: string;
-
   @IsEmail()
   @Column("text", { unique: true })
   email!: string;
+
+  @IsString()
+  @Column("text")
+  firstName!: string;
+
+  @IsString()
+  @Column("text")
+  lastName!: string;
 
   @IsString()
   @MinLength(8)

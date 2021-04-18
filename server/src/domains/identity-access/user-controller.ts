@@ -6,9 +6,10 @@ import {
   getMetadataArgsStorage,
   Authorized,
   CurrentUser,
-  Res,
+  BadRequestError,
 } from "routing-controllers";
 import { routingControllersToSpec } from "routing-controllers-openapi";
+import { sign } from "../../utils/jwt";
 import User from "./user";
 
 @JsonController()
@@ -21,17 +22,26 @@ export default class UserController {
   }
 
   @Post("/users")
-  async createUser(@Body() user: User, @Res() response: any) {
-    const { password, ...rest } = user;
-    const entity = User.create(rest);
+  async createUser(@Body() data: User & { passwordRepeated: string }) {
+    const user = await User.findOne({ where: { email: data.email } });
+    if (user) {
+      throw new BadRequestError("A user with that email already exists.");
+    }
+
+    const { password, passwordRepeated, ...rest } = data;
+
+    if (password !== passwordRepeated) {
+      throw new BadRequestError("Passwords do not match.");
+    }
 
     try {
+      const entity = User.create(rest);
       await entity.setPassword(password);
-      return await entity.save();
+      const user = await entity.save();
+      const jwt = sign({ id: user.id });
+      return { jwt, user };
     } catch (err) {
-      // todo: check for error type (duplicate?)
-      response.status = 400;
-      response.body = { message: "Cannot create this user." };
+      throw new BadRequestError("Something went wrong");
     }
   }
 

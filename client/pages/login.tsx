@@ -34,8 +34,6 @@ export default function Login() {
     },
   });
 
-  console.log({ error });
-
   const onSubmit = handleSubmit(async ({ email, password }) => {
     mutate({ email, password });
   });
@@ -63,7 +61,7 @@ export default function Login() {
                   />
                 </InputGroup>
                 <FormHelperText>
-                  {errors.email && errors.email.message}
+                  {errors.email && errors.email.message} &nbsp;
                 </FormHelperText>
               </FormControl>
 
@@ -80,8 +78,8 @@ export default function Login() {
                     ref={register({ required: "This field is required" })}
                   />
                 </InputGroup>
-                <FormHelperText>
-                  {errors.password && errors.password.message}
+                <FormHelperText color="red">
+                  {errors.password && errors.password.message} &nbsp;
                 </FormHelperText>
               </FormControl>
 

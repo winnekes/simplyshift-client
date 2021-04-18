@@ -21,7 +21,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (isProtectedPage && (!auth.token || !auth.user)) {
-      router.replace("/login");
+      router.push("/login");
     }
   }, []);
 
