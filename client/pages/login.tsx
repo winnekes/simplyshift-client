@@ -9,6 +9,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -25,18 +26,18 @@ export default function Login() {
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<LoginMutationData>();
 
-  const { isSuccess, error, data, mutate } = useMutation(login);
+  const { isLoading, error, mutate } = useMutation(login, {
+    onSuccess: ({ data }) => {
+      auth.setToken(data["jwt"]);
+
+      router.push("/calendar");
+    },
+  });
+
+  console.log({ error });
 
   const onSubmit = handleSubmit(async ({ email, password }) => {
     mutate({ email, password });
-
-    if (error) {
-    }
-    if (isSuccess && data) {
-      auth.setToken(data.data["jwt"]);
-
-      await router.push("/calendar");
-    }
   });
 
   return (
@@ -85,7 +86,7 @@ export default function Login() {
               </FormControl>
 
               <Button type="submit" variant="secondary">
-                Submit
+                {isLoading ? <Spinner /> : "Submit"}
               </Button>
             </form>
 

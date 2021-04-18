@@ -19,13 +19,13 @@ class AuthenticationPayload {
 @JsonController()
 export default class LoginController {
   @Post("/login")
-  async authenticate(@Body() { email, password }: AuthenticationPayload) {
-    const user = await User.findOne({ where: { email } });
+  async authenticate(@Body() data: AuthenticationPayload) {
+    const user = await User.findOne({ where: { email: data.email } });
     if (!user) {
       throw new BadRequestError("A user with this email does not exist");
     }
 
-    if (!(await user.checkPassword(password))) {
+    if (!(await user.checkPassword(data.password))) {
       throw new BadRequestError("Wrong email and password combination");
     }
 
