@@ -18,7 +18,7 @@ export const theme = extendTheme({
   colors: themeColors,
   fonts: {
     body: "PT Sans",
-    heading: "Quicksand",
+    heading: "Dosis",
   },
   components: { Button },
   styles: {
