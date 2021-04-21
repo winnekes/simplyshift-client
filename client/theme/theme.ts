@@ -17,8 +17,8 @@ export const theme = extendTheme({
   config,
   colors: themeColors,
   fonts: {
-    body: "PT Sans",
-    heading: "Dosis",
+    body: "Roboto",
+    heading: "Roboto Condensed",
   },
   components: { Button },
   styles: {
