@@ -8,6 +8,7 @@ import {
 } from "react";
 import { api } from "../services/api";
 
+// TODO rethink this logic
 type AuthContextType = {
   logout: () => void;
   token: string | null;
