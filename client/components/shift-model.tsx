@@ -30,7 +30,7 @@ export const ShiftModel = () => {
         <DrawerOverlay>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader>Create your account</DrawerHeader>
+            <DrawerHeader>Update shift details</DrawerHeader>
 
             <DrawerBody>
               <Input placeholder="Type here..." />

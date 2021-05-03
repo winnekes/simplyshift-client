@@ -5,6 +5,7 @@ import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { ShiftModel } from "../components/shift-model";
 
 export default function Calendar() {
   const localizer = momentLocalizer(moment);
@@ -24,9 +25,13 @@ export default function Calendar() {
             startAccessor="start"
             endAccessor="end"
             style={{ height: 500 }}
+            views={["month"]}
+            popup
+            selectable
           />
         </Page.Content>
       </Page>
+      {<ShiftModel />}
     </PageWrapper>
   );
 }
