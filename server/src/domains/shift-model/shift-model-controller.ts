@@ -16,6 +16,8 @@ import ShiftModel from "./shift-model";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 
+// todo error handling
+// todo better responses
 @JsonController()
 @OpenAPI({
   security: [{ bearerAuth: [] }], // Applied to each method
