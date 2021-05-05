@@ -1,4 +1,4 @@
-import "../styles/globals.scss";
+import "../theme/globals.scss";
 import type { AppProps } from "next/app";
 import { AuthProvider } from "../contexts/auth-context";
 import { ChakraProvider } from "@chakra-ui/react";

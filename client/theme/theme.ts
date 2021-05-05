@@ -1,6 +1,7 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { colors } from "./colors";
-import { Button } from "./components/button";
+import { Button } from "./overrides/button";
+import { Modal } from "./overrides/modal";
 
 // color mode configuration
 // todo store somewhere
@@ -20,7 +21,7 @@ export const theme = extendTheme({
     body: "Roboto",
     heading: "Roboto Condensed",
   },
-  components: { Button },
+  components: { Button, Modal },
   styles: {
     global: (props) => ({
       body: {
