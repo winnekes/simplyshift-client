@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { CirclePicker } from "react-color";
 import { useForm, Controller } from "react-hook-form";
-
 import { useMutation } from "react-query";
 import {
   AddShiftModelData,
@@ -46,7 +45,7 @@ export function AddModelModal({ onClose }: Props) {
   });
 
   return (
-    <Modal isOpen onClose={onClose} isCentered>
+    <Modal isOpen onClose={onClose} isCentered size="sm">
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={onSubmit}>
@@ -71,7 +70,7 @@ export function AddModelModal({ onClose }: Props) {
               <FormLabel>Starts at</FormLabel>
               <Input
                 type="time"
-                name="startAt"
+                name="startsAt"
                 ref={register({ required: "This field is required" })}
               />
               <FormHelperText>

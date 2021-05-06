@@ -7,7 +7,7 @@ import {
   Unique,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
-import { IsString, MinLength, IsNumber, Min } from "class-validator";
+import { IsString, MinLength, IsMilitaryTime } from "class-validator";
 import User from "../identity-access/user";
 import ShiftEntry from "../shift-entry/shift-entry";
 
@@ -22,15 +22,13 @@ export default class ShiftModel extends BaseEntity {
   @Column("text")
   name!: string;
 
-  @IsNumber()
-  @Min(0)
-  @Column("bigint")
-  startsAt!: number;
+  @IsMilitaryTime()
+  @Column("time")
+  startsAt!: Date;
 
-  @IsNumber()
-  @Min(0)
-  @Column("bigint")
-  duration!: number;
+  @IsMilitaryTime()
+  @Column("time")
+  endsAt!: Date;
 
   @IsString()
   @Column("text")
