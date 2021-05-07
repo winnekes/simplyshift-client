@@ -16,6 +16,8 @@ export const api = Axios.create({
   },
 });
 
+export const fetcher = (url) => api.get(url).then((res) => res.data);
+
 // TODO better error handling
 // TODO ErrorBoundary
 // TODO refactor Toast
