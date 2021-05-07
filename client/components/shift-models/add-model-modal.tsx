@@ -20,6 +20,7 @@ import {
   AddShiftModelData,
   addShiftModelMutation,
 } from "../../services/mutations/add-shift-model";
+import { mutate as mut } from "swr";
 
 type Props = {
   onClose: () => void;
@@ -42,6 +43,7 @@ export function AddModelModal({ onClose }: Props) {
   });
   const onSubmit = handleSubmit(async (data) => {
     mutate(data);
+    mut("/shift-model");
   });
 
   return (

@@ -6,6 +6,7 @@ import { PageWrapper } from "../components/page-wrapper";
 import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { ShiftModelsList } from "../components/shift-models/shift-models-list";
 
 // todo optimise usage of arrow functions?
 export default function Calendar() {
@@ -39,6 +40,7 @@ export default function Calendar() {
             >
               Add shift
             </Button>
+            <ShiftModelsList />
           </Page.Content>
         </Page>
       </PageWrapper>
