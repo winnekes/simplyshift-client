@@ -5,3 +5,11 @@ export type ShiftModel = {
   endsAt: Date;
   color: string;
 };
+
+export type ShiftEntry = {
+  id: number;
+  startsAt: Date;
+  endsAt: Date;
+  note: string;
+  shiftModel: ShiftModel;
+};

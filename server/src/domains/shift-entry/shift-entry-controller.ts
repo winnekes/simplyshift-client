@@ -28,24 +28,29 @@ export default class ShiftEntryController {
   @Get("/shift-entry")
   async getAllShiftEntries(
     @CurrentUser() user: User,
-    @QueryParam("month", { required: false }) month: string
+    @QueryParam("date", { required: false }) date: string
   ) {
     var selectedMonth;
-    if (!month) {
+
+    if (!date || date === "null") {
       selectedMonth = moment().startOf("month");
     } else {
-      selectedMonth = moment(month).startOf("month");
+      selectedMonth = moment(date).startOf("month");
     }
+    console.log(selectedMonth);
     const shiftEntries = await ShiftEntry.find({
       where: {
         user: user,
         startsAt: MoreThanOrEqual(selectedMonth),
         endsAt: LessThan(moment(selectedMonth).add(1, "month")),
       },
+      relations: ["shiftModel"],
     });
+
     if (!shiftEntries) {
       throw new NotFoundError("No shift entries were not found.");
     }
+    console.log({ shiftEntries });
     return shiftEntries;
   }
 
@@ -54,27 +59,12 @@ export default class ShiftEntryController {
   async createShiftEntry(
     @CurrentUser()
     user: User,
-    @Body() shiftEntry: ShiftEntry,
+    @Body() shiftEntry: { shiftModelId: number; startsAt: Date },
     @Res() response: any
   ) {
-    const computeTimes = (date: Date, model: ShiftModel) => {
-      const startDate = moment.parseZone(date).startOf("day");
-
-      const startsAt = moment(startDate)
-        .add({ minutes: model.startsAt })
-        .toLocaleString();
-      const endsAt = moment(startDate)
-        .add({ minutes: +model.startsAt + +model.duration })
-        .toLocaleString();
-      return {
-        startsAt,
-        endsAt,
-      };
-    };
-
     try {
-      const { shiftModel } = shiftEntry;
-      const model = await ShiftModel.findOne(shiftModel, {
+      const { shiftModelId } = shiftEntry;
+      const model = await ShiftModel.findOne(shiftModelId, {
         where: { user },
       });
       if (!model)
@@ -82,11 +72,20 @@ export default class ShiftEntryController {
           "Could not find the model for this shift entry."
         );
 
-      shiftEntry.user = user;
-      const entity = ShiftEntry.create({
-        ...shiftEntry,
-        ...computeTimes(shiftEntry.startsAt, model as ShiftModel),
-      });
+      const startDate = moment.parseZone(shiftEntry.startsAt).startOf("day");
+
+      const entity = ShiftEntry.create();
+      entity.user = user;
+      entity.note = "";
+      entity.startsAt = moment(startDate)
+        .add(moment.duration(model.startsAt))
+        .toDate();
+
+      entity.endsAt = moment(startDate)
+        .add(moment.duration(model.endsAt))
+        .toDate();
+
+      entity.shiftModel = model;
 
       return await entity.save();
     } catch (err) {

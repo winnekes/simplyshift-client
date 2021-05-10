@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 import moment from "moment";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useSWR, { mutate } from "swr";
 import { api, fetcher } from "../../services/api";
 import { ShiftModel } from "../../types";
@@ -23,7 +23,15 @@ import { ErrorContainer } from "../error-container";
 import { Loading } from "../loading";
 import { EditModelModal } from "./edit-model-modal";
 
-export const ShiftModelsList = () => {
+type Props = {
+  selectedModelId: number;
+  setSelectedModelId: Dispatch<SetStateAction<number>>;
+};
+
+export const ShiftModelsList = ({
+  selectedModelId,
+  setSelectedModelId,
+}: Props) => {
   const [
     selectedModelForEdit,
     setSelectedModelForEdit,
@@ -39,12 +47,24 @@ export const ShiftModelsList = () => {
     await mutate("/shift-model");
   };
 
+  const selectModelHandler = (id: number) => {
+    if (selectedModelId === id) {
+      return setSelectedModelId(null);
+    }
+    return setSelectedModelId(id);
+  };
+
   return (
     <>
       <Flex align="stretch">
         {data.map((model) => (
           <HStack spacing={4} key={model.id}>
-            <Tag bg={model.color} borderRadius="full">
+            <Tag
+              bg={model.color}
+              borderRadius="full"
+              as="button"
+              onClick={() => selectModelHandler(model.id)}
+            >
               <TagLabel>
                 {model.name}
                 <Popover gutter={12} placement="top" isLazy>

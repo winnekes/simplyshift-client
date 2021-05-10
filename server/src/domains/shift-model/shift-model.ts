@@ -25,11 +25,11 @@ export default class ShiftModel extends BaseEntity {
 
   @IsMilitaryTime()
   @Column("time")
-  startsAt!: Date;
+  startsAt!: string;
 
   @IsMilitaryTime()
   @Column("time")
-  endsAt!: Date;
+  endsAt!: string;
 
   @IsString()
   @Column("text")
