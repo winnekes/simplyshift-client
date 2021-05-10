@@ -31,7 +31,7 @@
     "routing-controllers": "^0.8.1",
     "routing-controllers-openapi": "^1.8.1",
     "ts-node": "^8.10.2",
-    "typeorm": "^0.2.28"
+    "typeorm": "^0.2.32"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
