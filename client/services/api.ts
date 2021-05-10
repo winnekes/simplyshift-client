@@ -38,6 +38,7 @@ api.interceptors.response.use(
       }
     }
 
+    console.log({ error });
     const toast = createStandaloneToast();
 
     toast({
