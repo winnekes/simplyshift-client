@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   Unique,
+  DeleteDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, MinLength, IsMilitaryTime } from "class-validator";
@@ -39,4 +40,7 @@ export default class ShiftModel extends BaseEntity {
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)
   shiftEntries!: ShiftEntry[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

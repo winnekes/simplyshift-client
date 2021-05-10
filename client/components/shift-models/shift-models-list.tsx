@@ -1,21 +1,43 @@
-import { Flex, HStack, Tag, TagLabel, TagRightIcon } from "@chakra-ui/react";
-import { EditIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  Flex,
+  HStack,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  Button,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Tag,
+  TagLabel,
+  TagRightIcon,
+  Spacer,
+} from "@chakra-ui/react";
+import { DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
+import moment from "moment";
 import { useState } from "react";
-import useSWR from "swr";
-import { fetcher } from "../../services/api";
+import useSWR, { mutate } from "swr";
+import { api, fetcher } from "../../services/api";
 import { ShiftModel } from "../../types";
-import { ViewModelModal } from "./view-model-modal";
+import { ErrorContainer } from "../error-container";
+import { Loading } from "../loading";
+import { EditModelModal } from "./edit-model-modal";
 
 export const ShiftModelsList = () => {
   const [
-    selectedModelForView,
-    setSelectedModelForView,
+    selectedModelForEdit,
+    setSelectedModelForEdit,
   ] = useState<ShiftModel | null>(null);
 
   const { data, error } = useSWR<ShiftModel[]>("/shift-model", fetcher);
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
+  if (error) return <ErrorContainer />;
+  if (!data) return <Loading />;
+
+  const deleteModel = async (id: number) => {
+    await api.delete(`/shift-model/${id}`);
+    await mutate("/shift-model");
+  };
 
   return (
     <>
@@ -25,21 +47,51 @@ export const ShiftModelsList = () => {
             <Tag bg={model.color} borderRadius="full">
               <TagLabel>
                 {model.name}
-                <TagRightIcon boxSize="12px" as={EditIcon} />
-                <TagRightIcon
-                  boxSize="12px"
-                  as={ViewIcon}
-                  onClick={() => setSelectedModelForView(model)}
-                />
+                <Popover gutter={12} placement="top" isLazy>
+                  <PopoverTrigger>
+                    <TagRightIcon boxSize="12px" margin="2px" as={ViewIcon} />
+                  </PopoverTrigger>
+                  <PopoverContent maxWidth="250px">
+                    <PopoverArrow />
+                    <PopoverHeader border="0" fontWeight="bold">
+                      <Flex alignItems="center">
+                        {model.name}
+                        <Spacer />
+                        <Button
+                          variant="ghost"
+                          padding="1"
+                          size="sm"
+                          onClick={() => deleteModel(model.id)}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          padding="1"
+                          size="sm"
+                          onClick={() => setSelectedModelForEdit(model)}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </Flex>
+                    </PopoverHeader>
+                    <PopoverBody>
+                      Start time:{" "}
+                      {moment(model.startsAt, "HH:mm").format("HH:mm")} <br />
+                      Ends at: {moment(model.endsAt, "HH:mm").format("HH:mm")}
+                      <br />
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
               </TagLabel>
             </Tag>
           </HStack>
         ))}
       </Flex>
-      {selectedModelForView && (
-        <ViewModelModal
-          model={selectedModelForView}
-          onClose={() => setSelectedModelForView(null)}
+      {selectedModelForEdit && (
+        <EditModelModal
+          model={selectedModelForEdit}
+          onClose={() => setSelectedModelForEdit(null)}
         />
       )}
     </>

@@ -16,11 +16,9 @@ import {
 import { CirclePicker } from "react-color";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation } from "react-query";
-import {
-  AddShiftModelData,
-  addShiftModelMutation,
-} from "../../services/mutations/add-shift-model";
+import { AddShiftModelData } from "../../services/mutations/add-shift-model";
 import { mutate as mut } from "swr";
+import { editShiftModelMutation } from "../../services/mutations/edit-shift-model";
 import { ShiftModel } from "../../types";
 
 type Props = {
@@ -29,31 +27,32 @@ type Props = {
 };
 
 // todo coherent theme usage
-export function ViewModelModal({ model, onClose }: Props) {
+export function EditModelModal({ model, onClose }: Props) {
+  const { id, ...rest } = model;
   const {
     register,
     handleSubmit,
     errors,
     setValue,
     control,
-  } = useForm<AddShiftModelData>();
+  } = useForm<AddShiftModelData>({ defaultValues: { ...rest } });
 
-  const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
-    onSuccess: ({ data }) => {
-      console.log("yes, added!", data);
+  const { isLoading, error, mutate } = useMutation(editShiftModelMutation, {
+    onSuccess: async ({ data }) => {
+      await mut("/shift-model");
     },
   });
-  const onSubmit = handleSubmit(async (data) => {
-    mutate(data);
-    mut("/shift-model");
-  });
 
+  const onSubmit = handleSubmit(async (data) => {
+    await mutate({ id, ...data });
+  });
+  // todo refactor (form is identical to AddModelModal)
   return (
     <Modal isOpen onClose={onClose} isCentered size="sm">
       <ModalOverlay />
       <ModalContent>
         <form onSubmit={onSubmit}>
-          <ModalHeader>View model {model.name}</ModalHeader>
+          <ModalHeader>Edit shift {model.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl>
