@@ -5,9 +5,10 @@ import {
   ManyToOne,
   OneToMany,
   Unique,
+  DeleteDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
-import { IsString, MinLength, IsNumber, Min } from "class-validator";
+import { IsString, MinLength, IsMilitaryTime } from "class-validator";
 import User from "../identity-access/user";
 import ShiftEntry from "../shift-entry/shift-entry";
 
@@ -22,15 +23,13 @@ export default class ShiftModel extends BaseEntity {
   @Column("text")
   name!: string;
 
-  @IsNumber()
-  @Min(0)
-  @Column("bigint")
-  startsAt!: number;
+  @IsMilitaryTime()
+  @Column("time")
+  startsAt!: string;
 
-  @IsNumber()
-  @Min(0)
-  @Column("bigint")
-  duration!: number;
+  @IsMilitaryTime()
+  @Column("time")
+  endsAt!: string;
 
   @IsString()
   @Column("text")
@@ -41,4 +40,7 @@ export default class ShiftModel extends BaseEntity {
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)
   shiftEntries!: ShiftEntry[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
