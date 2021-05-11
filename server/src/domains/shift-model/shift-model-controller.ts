@@ -11,30 +11,30 @@ import {
   Param,
   Delete,
 } from "routing-controllers";
-import { getRepository } from "typeorm";
+import { getCustomRepository, getRepository } from "typeorm";
 
 import ShiftModel from "./shift-model";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
+import { ShiftModelRepository } from "./shift-model-repository";
 
 // todo error handling
 // todo better responses
 @JsonController()
 @OpenAPI({
-  security: [{ bearerAuth: [] }], // Applied to each method
+  security: [{ bearerAuth: [] }],
 })
 export default class ShiftModelController {
   @Authorized()
   @Get("/shift-model")
   async getAllShiftModels(@CurrentUser() user: User) {
-    const shiftModels = await ShiftModel.find({
-      where: {
-        user: user,
-      },
-    });
+    const shiftModelRepository = getCustomRepository(ShiftModelRepository);
+    const shiftModels = await shiftModelRepository.findAllForUser(user);
+
     if (!shiftModels) {
       throw new NotFoundError("No shift models were not found.");
     }
+
     return shiftModels;
   }
 
@@ -74,7 +74,7 @@ export default class ShiftModelController {
   @Delete("/shift-model/:id")
   async deleteShiftModel(
     @Param("id") id: number,
-    @CurrentUser() user: User,
+    //@CurrentUser() user: User,
     @Res() response: any
   ) {
     const shiftRepository = getRepository(ShiftModel);

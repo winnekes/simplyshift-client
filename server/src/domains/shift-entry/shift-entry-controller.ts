@@ -13,15 +13,15 @@ import {
   QueryParam,
 } from "routing-controllers";
 import moment from "moment";
-import ShiftModel from "../shift-model/shift-model";
+import { ShiftModelRepository } from "../shift-model/shift-model-repository";
 import ShiftEntry from "./shift-entry";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
-import { MoreThanOrEqual, LessThan } from "typeorm";
+import { MoreThanOrEqual, LessThan, getCustomRepository } from "typeorm";
 
 @JsonController()
 @OpenAPI({
-  security: [{ bearerAuth: [] }], // Applied to each method
+  security: [{ bearerAuth: [] }],
 })
 export default class ShiftEntryController {
   @Authorized()
@@ -37,7 +37,7 @@ export default class ShiftEntryController {
     } else {
       selectedMonth = moment(date).startOf("month");
     }
-    console.log(selectedMonth);
+
     const shiftEntries = await ShiftEntry.find({
       where: {
         user: user,
@@ -50,7 +50,7 @@ export default class ShiftEntryController {
     if (!shiftEntries) {
       throw new NotFoundError("No shift entries were not found.");
     }
-    console.log({ shiftEntries });
+    //  console.log({ shiftEntries });
     return shiftEntries;
   }
 
@@ -62,11 +62,14 @@ export default class ShiftEntryController {
     @Body() shiftEntry: { shiftModelId: number; startsAt: Date },
     @Res() response: any
   ) {
+    const shiftModelRepository = getCustomRepository(ShiftModelRepository);
     try {
       const { shiftModelId } = shiftEntry;
-      const model = await ShiftModel.findOne(shiftModelId, {
-        where: { user },
+
+      const model = await shiftModelRepository.findOneForUser(user, {
+        where: { id: shiftModelId },
       });
+
       if (!model)
         throw new NotFoundError(
           "Could not find the model for this shift entry."
