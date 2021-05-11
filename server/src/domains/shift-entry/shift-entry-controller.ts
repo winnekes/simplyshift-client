@@ -73,17 +73,23 @@ export default class ShiftEntryController {
         );
 
       const startDate = moment.parseZone(shiftEntry.startsAt).startOf("day");
+      const start = moment(startDate)
+        .add(moment.duration(model.startsAt))
+        .toDate();
+      const end =
+        model.startsAt > model.endsAt
+          ? moment(startDate)
+              .add(moment.duration(model.endsAt))
+              .add("1", "day")
+              .toDate()
+          : moment(startDate).add(moment.duration(model.endsAt)).toDate();
 
       const entity = ShiftEntry.create();
       entity.user = user;
       entity.note = "";
-      entity.startsAt = moment(startDate)
-        .add(moment.duration(model.startsAt))
-        .toDate();
+      entity.startsAt = start;
 
-      entity.endsAt = moment(startDate)
-        .add(moment.duration(model.endsAt))
-        .toDate();
+      entity.endsAt = end;
 
       entity.shiftModel = model;
 
