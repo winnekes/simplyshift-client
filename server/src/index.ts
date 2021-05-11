@@ -54,6 +54,7 @@ const app = createKoaServer({
     return false;
   },
   currentUserChecker: async (action: Action) => {
+    // probably send userId as header?
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
