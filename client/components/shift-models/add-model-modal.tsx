@@ -39,11 +39,11 @@ export function AddModelModal({ onClose }: Props) {
   const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
     onSuccess: ({ data }) => {
       console.log("yes, added!", data);
+      mut("/shift-model");
     },
   });
   const onSubmit = handleSubmit(async (data) => {
     mutate(data);
-    mut("/shift-model");
   });
 
   return (
