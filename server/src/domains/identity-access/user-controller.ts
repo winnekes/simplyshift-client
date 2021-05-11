@@ -7,6 +7,7 @@ import {
   Authorized,
   CurrentUser,
   BadRequestError,
+  Param,
 } from "routing-controllers";
 import { routingControllersToSpec } from "routing-controllers-openapi";
 import { sign } from "../../utils/jwt";
@@ -15,10 +16,13 @@ import User from "./user";
 @JsonController()
 export default class UserController {
   @Authorized()
-  @Get("/users/me")
-  getUser(@CurrentUser() user: User) {
-    console.log({ user });
-    return User.findOne(user.id);
+  @Get("/users/:id")
+  async getUser(@Param("id") id: number, @CurrentUser() user: User) {
+    const unsafeUser = await User.findOne(id);
+    if (unsafeUser?.id !== user.id) {
+      throw new BadRequestError("User not found.");
+    }
+    return user;
   }
 
   @Post("/users")
