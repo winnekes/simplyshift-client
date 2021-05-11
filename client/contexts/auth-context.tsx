@@ -28,20 +28,23 @@ export function AuthProvider(props) {
         const token = window.localStorage.getItem("token");
         setToken(token);
         if (token) {
-          api.defaults.headers.Authorization = `Bearer ${token}`;
-          const { data } = await api.get("users/me");
-          if (data) {
-            setUser(data);
+          try {
+            api.defaults.headers.Authorization = `Bearer ${token}`;
+            const { data } = await api.get("users/me");
+            if (data) {
+              setUser(data);
+            }
+          } catch (e) {
+            console.log(e);
           }
         }
       }
-
-      setLoading(false);
     }
 
     loadUserFromStorage();
+    setLoading(false);
   }, [token]);
-
+  //todo no provider
   const properties: AuthContextType = {
     setToken: (token: string) => {
       window.localStorage.setItem("token", token);

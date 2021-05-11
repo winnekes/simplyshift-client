@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   HStack,
+  Image,
   Menu,
   MenuButton,
   MenuDivider,
@@ -13,6 +14,7 @@ import {
   Stack,
   useColorMode,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import RouteLink from "next/link";
 import { colors } from "../theme/colors";
 import { width } from "../theme/theme";
@@ -38,8 +40,15 @@ export function Navbar() {
         justifyContent="space-between"
         maxWidth={width}
       >
-        <HStack spacing={8} alignItems="center">
-          <Heading onClick={toggleColorMode}>SimplyShift</Heading>
+        <HStack spacing={4} alignItems="center">
+          <Heading size="1xl" onClick={toggleColorMode}>
+            SimplyShift
+          </Heading>
+          {auth.token && (
+            <Link href="/calendar">
+              <Box>Calendar</Box>
+            </Link>
+          )}
         </HStack>
 
         <Flex alignItems="center">
@@ -58,7 +67,9 @@ export function Navbar() {
                   />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>Link 1</MenuItem>
+                  <Link href="/profile" passHref>
+                    <MenuItem>Profile</MenuItem>
+                  </Link>
                   <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
                   <MenuItem onClick={() => auth.logout()}>Logout</MenuItem>

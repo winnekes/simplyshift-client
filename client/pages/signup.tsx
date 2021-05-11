@@ -139,7 +139,7 @@ export default function Signup() {
                 </FormHelperText>
               </FormControl>
 
-              <Button variant="primary" type="submit">
+              <Button isLoading={isLoading} variant="primary" type="submit">
                 Setup your calendar now!
               </Button>
             </form>
