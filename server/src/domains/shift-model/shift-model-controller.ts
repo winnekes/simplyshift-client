@@ -11,11 +11,14 @@ import {
   Param,
   Delete,
 } from "routing-controllers";
+import { getRepository } from "typeorm";
 
 import ShiftModel from "./shift-model";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 
+// todo error handling
+// todo better responses
 @JsonController()
 @OpenAPI({
   security: [{ bearerAuth: [] }], // Applied to each method
@@ -74,8 +77,9 @@ export default class ShiftModelController {
     @CurrentUser() user: User,
     @Res() response: any
   ) {
+    const shiftRepository = getRepository(ShiftModel);
     try {
-      if ((await ShiftModel.delete({ id, user })).affected === 0) {
+      if ((await shiftRepository.softDelete({ id })).affected === 0) {
         throw new NotFoundError("Could not find shift model to delete.");
       }
 

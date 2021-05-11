@@ -83,8 +83,8 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <Button type="submit" variant="secondary">
-                {isLoading ? <Spinner /> : "Submit"}
+              <Button isLoading={isLoading} type="submit" variant="secondary">
+                Submit
               </Button>
             </form>
 
