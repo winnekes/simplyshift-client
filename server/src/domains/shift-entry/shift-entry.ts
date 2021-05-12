@@ -1,13 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, IsDate } from "class-validator";
+import Calendar from "../calendar/calendar";
 import User from "../identity-access/user";
 import ShiftModel from "../shift-model/shift-model";
 
 @Entity("shift_entries")
 export default class ShiftEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @IsDate()
   @Column("timestamp")
@@ -26,4 +35,16 @@ export default class ShiftEntry extends BaseEntity {
 
   @ManyToOne(() => ShiftModel, (shiftModel) => shiftModel.shiftEntries)
   shiftModel!: ShiftModel;
+
+  @ManyToOne(() => Calendar, (calendar) => calendar.shiftEntries)
+  calendar!: Calendar;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt?: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
