@@ -1,8 +1,9 @@
 import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
+import { useUser } from "../hooks/use-user";
+import { Loading } from "./loading";
 import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
-import { useAuthContext } from "../contexts/auth-context";
 import { useRouter } from "next/router";
 import { width } from "../theme/theme";
 
@@ -17,13 +18,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
   isProtectedPage,
 }) => {
   const router = useRouter();
-  const auth = useAuthContext();
-
-  useEffect(() => {
-    if (isProtectedPage && (!auth.token || !auth.user)) {
-      router.push("/login");
-    }
-  }, []);
+  const { user, error, loading } = useUser();
 
   // todo skeleton
   return (
@@ -37,10 +32,10 @@ export const PageWrapper: FunctionComponent<Props> = ({
       <Navbar />
 
       <Container maxW={width} p={0}>
-        {!isProtectedPage || (isProtectedPage && auth.token && auth.user) ? (
+        {!isProtectedPage || (isProtectedPage && user) ? (
           <>{children}</>
         ) : (
-          <>Not allowed</>
+          <Loading />
         )}
       </Container>
     </>

@@ -7,7 +7,6 @@ import {
   Authorized,
   CurrentUser,
   BadRequestError,
-  Param,
 } from "routing-controllers";
 import { routingControllersToSpec } from "routing-controllers-openapi";
 import { getCustomRepository } from "typeorm";
@@ -20,12 +19,8 @@ export default class UserController {
   private userRepository = getCustomRepository(UserRepository);
 
   @Authorized()
-  @Get("/users/:id")
-  async getUser(@Param("id") id: number, @CurrentUser() user: User) {
-    const unsafeUser = await this.userRepository.findOne(id);
-    if (unsafeUser?.id !== user.id) {
-      throw new BadRequestError("User not found.");
-    }
+  @Get("/users/profile")
+  async getUser(@CurrentUser() user: User) {
     return user;
   }
 

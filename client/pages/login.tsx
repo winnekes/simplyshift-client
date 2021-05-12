@@ -9,7 +9,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -18,19 +17,16 @@ import { useMutation } from "react-query";
 import { DividedSegment } from "../components/divided-segment";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
-import { useAuthContext } from "../contexts/auth-context";
 import { login, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
-  const auth = useAuthContext();
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<LoginMutationData>();
 
   const { isLoading, error, mutate } = useMutation(login, {
-    onSuccess: ({ data }) => {
-      auth.setToken(data["jwt"]);
-
-      router.push("/calendar");
+    onSuccess: async ({ data }) => {
+      window.localStorage.setItem("token", data["jwt"]);
+      await router.push("/calendar");
     },
   });
 

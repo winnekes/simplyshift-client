@@ -1,5 +1,6 @@
 import Axios, { AxiosError } from "axios";
 import { createStandaloneToast } from "@chakra-ui/react";
+import Router from "next/router";
 
 // todo update when necessary
 const urls = {
@@ -35,19 +36,25 @@ api.interceptors.response.use(
 
       if (error.response.data?.message === "JWT expired") {
         localStorage.removeItem("token");
+        Router.push("/");
       }
     }
 
     console.log({ error });
     const toast = createStandaloneToast();
 
-    toast({
-      title: errorMessage,
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
+    const id = "test-toast";
+    console.log({ toastId: toast.isActive(id) });
 
+    if (!toast.isActive(id)) {
+      toast({
+        id,
+        title: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
     return Promise.reject(error);
   }
 );
