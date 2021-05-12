@@ -13,17 +13,21 @@ import {
   QueryParam,
 } from "routing-controllers";
 import moment from "moment";
-import ShiftModel from "../shift-model/shift-model";
+import { ShiftModelRepository } from "../shift-model/shift-model-repository";
 import ShiftEntry from "./shift-entry";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
-import { MoreThanOrEqual, LessThan } from "typeorm";
+import { MoreThanOrEqual, LessThan, getCustomRepository } from "typeorm";
+import { ShiftEntryRepository } from "./shift-entry-repository";
 
 @JsonController()
 @OpenAPI({
-  security: [{ bearerAuth: [] }], // Applied to each method
+  security: [{ bearerAuth: [] }],
 })
 export default class ShiftEntryController {
+  private shiftModelRepository = getCustomRepository(ShiftModelRepository);
+  private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
+
   @Authorized()
   @Get("/shift-entry")
   async getAllShiftEntries(
@@ -37,8 +41,8 @@ export default class ShiftEntryController {
     } else {
       selectedMonth = moment(date).startOf("month");
     }
-    console.log(selectedMonth);
-    const shiftEntries = await ShiftEntry.find({
+
+    const shiftEntries = await this.shiftEntryRepository.find({
       where: {
         user: user,
         startsAt: MoreThanOrEqual(selectedMonth),
@@ -50,7 +54,7 @@ export default class ShiftEntryController {
     if (!shiftEntries) {
       throw new NotFoundError("No shift entries were not found.");
     }
-    console.log({ shiftEntries });
+    //  console.log({ shiftEntries });
     return shiftEntries;
   }
 
@@ -64,9 +68,11 @@ export default class ShiftEntryController {
   ) {
     try {
       const { shiftModelId } = shiftEntry;
-      const model = await ShiftModel.findOne(shiftModelId, {
-        where: { user },
+
+      const model = await this.shiftModelRepository.findOneForUser(user, {
+        where: { id: shiftModelId },
       });
+
       if (!model)
         throw new NotFoundError(
           "Could not find the model for this shift entry."
@@ -111,9 +117,13 @@ export default class ShiftEntryController {
     @CurrentUser() user: User,
     @Body() update: Partial<ShiftEntry>
   ) {
-    const entity = await ShiftEntry.findOne(id, { where: { user } });
+    const entity = await this.shiftEntryRepository.findOne(id, {
+      where: { user },
+    });
     if (!entity) throw new NotFoundError("Cannot find the shift entry.");
-    return await ShiftEntry.merge(entity, update).save();
+    const updatedEntity = await this.shiftEntryRepository.merge(entity, update);
+
+    return await this.shiftEntryRepository.save(updatedEntity);
   }
 
   @Authorized()
@@ -124,7 +134,9 @@ export default class ShiftEntryController {
     @Res() response: any
   ) {
     try {
-      if ((await ShiftEntry.delete({ id, user })).affected === 0) {
+      if (
+        (await this.shiftEntryRepository.delete({ id, user })).affected === 0
+      ) {
         throw new NotFoundError("Could not find shift entry to delete.");
       }
       response.body = {

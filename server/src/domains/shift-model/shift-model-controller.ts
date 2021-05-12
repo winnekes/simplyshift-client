@@ -11,30 +11,31 @@ import {
   Param,
   Delete,
 } from "routing-controllers";
-import { getRepository } from "typeorm";
+import { getCustomRepository } from "typeorm";
 
 import ShiftModel from "./shift-model";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
+import { ShiftModelRepository } from "./shift-model-repository";
 
 // todo error handling
 // todo better responses
 @JsonController()
 @OpenAPI({
-  security: [{ bearerAuth: [] }], // Applied to each method
+  security: [{ bearerAuth: [] }],
 })
 export default class ShiftModelController {
+  private shiftModelRepository = getCustomRepository(ShiftModelRepository);
+
   @Authorized()
   @Get("/shift-model")
   async getAllShiftModels(@CurrentUser() user: User) {
-    const shiftModels = await ShiftModel.find({
-      where: {
-        user: user,
-      },
-    });
+    const shiftModels = await this.shiftModelRepository.findAllForUser(user);
+
     if (!shiftModels) {
       throw new NotFoundError("No shift models were not found.");
     }
+
     return shiftModels;
   }
 
@@ -47,7 +48,7 @@ export default class ShiftModelController {
   ) {
     try {
       shiftModel.user = user;
-      return await shiftModel.save();
+      return await this.shiftModelRepository.save(shiftModel);
     } catch (err) {
       console.log(err);
       response.status = 400;
@@ -65,7 +66,9 @@ export default class ShiftModelController {
     @CurrentUser() user: User,
     @Body() update: Partial<ShiftModel>
   ) {
-    const entity = await ShiftModel.findOne(id, { where: { user } });
+    const entity = await this.shiftModelRepository.findOne(id, {
+      where: { user },
+    });
     if (!entity) throw new NotFoundError("Cannot find the shift model.");
     return await ShiftModel.merge(entity, update).save();
   }
@@ -74,12 +77,11 @@ export default class ShiftModelController {
   @Delete("/shift-model/:id")
   async deleteShiftModel(
     @Param("id") id: number,
-    @CurrentUser() user: User,
+    //@CurrentUser() user: User,
     @Res() response: any
   ) {
-    const shiftRepository = getRepository(ShiftModel);
     try {
-      if ((await shiftRepository.softDelete({ id })).affected === 0) {
+      if ((await this.shiftModelRepository.softDelete({ id })).affected === 0) {
         throw new NotFoundError("Could not find shift model to delete.");
       }
 

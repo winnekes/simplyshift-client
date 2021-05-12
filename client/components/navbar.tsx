@@ -5,7 +5,6 @@ import {
   Flex,
   Heading,
   HStack,
-  Image,
   Menu,
   MenuButton,
   MenuDivider,
@@ -16,12 +15,14 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
+import { useAuthContext } from "../contexts/auth-context";
+import { useUser } from "../hooks/use-user";
 import { colors } from "../theme/colors";
 import { width } from "../theme/theme";
-import { useAuthContext } from "../contexts/auth-context";
 
 export function Navbar() {
   const auth = useAuthContext();
+  const { user, error, loading } = useUser();
   const { toggleColorMode } = useColorMode();
   const { colorMode } = useColorMode();
 
@@ -44,7 +45,8 @@ export function Navbar() {
           <Heading size="1xl" onClick={toggleColorMode}>
             SimplyShift
           </Heading>
-          {auth.token && (
+
+          {user && (
             <Link href="/calendar">
               <Box>Calendar</Box>
             </Link>
@@ -53,7 +55,7 @@ export function Navbar() {
 
         <Flex alignItems="center">
           <Menu>
-            {auth.token && (
+            {user && (
               <>
                 <MenuButton
                   as={Button}
@@ -76,7 +78,7 @@ export function Navbar() {
                 </MenuList>
               </>
             )}
-            {!auth.token && (
+            {!user && (
               <Stack
                 flex={{ base: 1, md: 0 }}
                 justify="flex-end"

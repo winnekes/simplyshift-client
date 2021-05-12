@@ -13,6 +13,7 @@ import LoginController from "./domains/identity-access/login-controller";
 import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
 import ShiftModelController from "./domains/shift-model/shift-model-controller";
 import SpecController from "./domains/specs/spec-controller";
+import logger from "koa-logger";
 
 dotenv.config();
 
@@ -53,6 +54,7 @@ const app = createKoaServer({
     return false;
   },
   currentUserChecker: async (action: Action) => {
+    // probably send userId as header?
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
@@ -62,6 +64,8 @@ const app = createKoaServer({
     return;
   },
 });
+
+app.use(logger());
 
 connectToDb();
 
