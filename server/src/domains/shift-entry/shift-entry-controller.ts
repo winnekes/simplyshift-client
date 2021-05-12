@@ -13,6 +13,7 @@ import {
   QueryParam,
 } from "routing-controllers";
 import moment from "moment";
+import { CalendarRepository } from "../calendar/calendar-repository";
 import { ShiftModelRepository } from "../shift-model/shift-model-repository";
 import ShiftEntry from "./shift-entry";
 import User from "../identity-access/user";
@@ -27,22 +28,19 @@ import { ShiftEntryRepository } from "./shift-entry-repository";
 export default class ShiftEntryController {
   private shiftModelRepository = getCustomRepository(ShiftModelRepository);
   private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
+  private calendarRepository = getCustomRepository(CalendarRepository);
 
   @Authorized()
   @Get("/shift-entry")
-  async getAllShiftEntries(
+  getAllShiftEntries(
     @CurrentUser() user: User,
-    @QueryParam("date", { required: false }) date: string
-  ) {
-    var selectedMonth;
+    @QueryParam("date", { required: false }) date: Date
+  ): Promise<ShiftEntry[]> {
+    const selectedMonth = !date
+      ? moment().startOf("month")
+      : moment(date).startOf("month");
 
-    if (!date || date === "null") {
-      selectedMonth = moment().startOf("month");
-    } else {
-      selectedMonth = moment(date).startOf("month");
-    }
-
-    const shiftEntries = await this.shiftEntryRepository.find({
+    return this.shiftEntryRepository.find({
       where: {
         user: user,
         startsAt: MoreThanOrEqual(selectedMonth),
@@ -50,12 +48,6 @@ export default class ShiftEntryController {
       },
       relations: ["shiftModel"],
     });
-
-    if (!shiftEntries) {
-      throw new NotFoundError("No shift entries were not found.");
-    }
-    //  console.log({ shiftEntries });
-    return shiftEntries;
   }
 
   @Authorized()
@@ -63,11 +55,11 @@ export default class ShiftEntryController {
   async createShiftEntry(
     @CurrentUser()
     user: User,
-    @Body() shiftEntry: { shiftModelId: number; startsAt: Date },
+    @Body() data: { shiftModelId: number; startsAt: Date },
     @Res() response: any
-  ) {
+  ): Promise<ShiftEntry> {
     try {
-      const { shiftModelId } = shiftEntry;
+      const { shiftModelId } = data;
 
       const model = await this.shiftModelRepository.findOneForUser(user, {
         where: { id: shiftModelId },
@@ -78,7 +70,7 @@ export default class ShiftEntryController {
           "Could not find the model for this shift entry."
         );
 
-      const startDate = moment.parseZone(shiftEntry.startsAt).startOf("day");
+      const startDate = moment.parseZone(data.startsAt).startOf("day");
       const start = moment(startDate)
         .add(moment.duration(model.startsAt))
         .toDate();
@@ -90,16 +82,21 @@ export default class ShiftEntryController {
               .toDate()
           : moment(startDate).add(moment.duration(model.endsAt)).toDate();
 
-      const entity = ShiftEntry.create();
-      entity.user = user;
-      entity.note = "";
-      entity.startsAt = start;
+      const shiftEntry = this.shiftEntryRepository.create();
+      shiftEntry.user = user;
+      shiftEntry.note = "";
+      shiftEntry.startsAt = start;
+      shiftEntry.endsAt = end;
+      shiftEntry.shiftModel = model;
 
-      entity.endsAt = end;
+      const calendar = await this.calendarRepository.findActiveOneForUser(user);
+      if (!calendar) {
+        throw new Error("No calendar found");
+      }
 
-      entity.shiftModel = model;
+      shiftEntry.calendar = calendar;
 
-      return await entity.save();
+      return await shiftEntry.save();
     } catch (err) {
       console.log(err);
       response.status = 400;

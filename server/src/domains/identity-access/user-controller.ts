@@ -11,12 +11,14 @@ import {
 import { routingControllersToSpec } from "routing-controllers-openapi";
 import { getCustomRepository } from "typeorm";
 import { sign } from "../../utils/jwt";
+import { CalendarRepository } from "../calendar/calendar-repository";
 import User from "./user";
 import { UserRepository } from "./user-repository";
 
 @JsonController()
 export default class UserController {
   private userRepository = getCustomRepository(UserRepository);
+  private calendarRepository = getCustomRepository(CalendarRepository);
 
   @Authorized()
   @Get("/users/profile")
@@ -26,10 +28,10 @@ export default class UserController {
 
   @Post("/users")
   async createUser(@Body() data: User & { passwordRepeated: string }) {
-    const user = await this.userRepository.findOne({
+    const existingUser = await this.userRepository.findOne({
       where: { email: data.email },
     });
-    if (user) {
+    if (existingUser) {
       throw new BadRequestError("A user with that email already exists.");
     }
 
@@ -40,10 +42,16 @@ export default class UserController {
     }
 
     try {
-      const entity = this.userRepository.create(rest);
-      await entity.setPassword(password);
-      const user = await entity.save();
+      const user = this.userRepository.create(rest);
+      await user.setPassword(password);
+      await this.userRepository.save(user);
+
+      const calendar = this.calendarRepository.create();
+      calendar.user = user;
+      calendar.isDefault = true;
+      await this.calendarRepository.save(calendar);
       const jwt = sign({ id: user.id });
+
       return { jwt, user };
     } catch (err) {
       throw new BadRequestError("Something went wrong");

@@ -4,48 +4,36 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  Unique,
-  DeleteDateColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
-import {
-  IsString,
-  MinLength,
-  IsMilitaryTime,
-  IsHexColor,
-} from "class-validator";
+import { IsBoolean, IsHexColor, IsString } from "class-validator";
 import User from "../identity-access/user";
 import ShiftEntry from "../shift-entry/shift-entry";
 
 @Entity()
-@Unique("UNQ_NAME_USER", ["name", "user"])
-export default class ShiftModel extends BaseEntity {
+export default class Calendar extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @IsString()
-  @MinLength(2)
-  @Column("text")
+  @Column("varchar", { default: "default" })
   name!: string;
 
-  @IsMilitaryTime()
-  @Column("time")
-  startsAt!: string;
-
-  @IsMilitaryTime()
-  @Column("time")
-  endsAt!: string;
-
   @IsHexColor()
-  @Column("text")
+  @Column("varchar", { default: "#efefef" })
   color!: string;
 
-  @ManyToOne(() => User, (user) => user.shiftModels)
+  @IsBoolean()
+  @Column("boolean", { default: false })
+  isDefault!: boolean;
+
+  @ManyToOne(() => User, (user) => user.shiftEntries)
   user!: User;
 
-  @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)
+  @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.calendar)
   shiftEntries!: ShiftEntry[];
 
   @CreateDateColumn()
