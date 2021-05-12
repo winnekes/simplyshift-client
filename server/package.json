@@ -8,7 +8,8 @@
     "watch": "rm -rf ./lib/ && tsc --project . --watch",
     "start:services": "docker-compose --project-name=simplyshift up",
     "start": "./node_modules/.bin/nodemon --watch ./lib --exec node --inspect lib/index.js, ./node_modules/.bin/nodemon --watch ./lib --exec \"node --inspect lib/index.js\"",
-    "compile": "npx tsc"
+    "compile": "npx tsc",
+    "doc": "npx typedoc src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -32,6 +33,7 @@
     "routing-controllers": "^0.8.1",
     "routing-controllers-openapi": "^1.8.1",
     "ts-node": "^8.10.2",
+    "typedoc": "^0.20.36",
     "typeorm": "^0.2.32"
   },
   "devDependencies": {
