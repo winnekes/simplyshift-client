@@ -6,8 +6,9 @@ import {
   NotFoundError,
 } from "routing-controllers";
 import { IsString } from "class-validator";
-import User from "./user";
+import { getCustomRepository } from "typeorm";
 import { sign } from "../../utils/jwt";
+import { UserRepository } from "./user-repository";
 
 class AuthenticationPayload {
   @IsString()
@@ -19,9 +20,12 @@ class AuthenticationPayload {
 
 @JsonController()
 export default class LoginController {
+  private userRepository = getCustomRepository(UserRepository);
   @Post("/login")
   async authenticate(@Body() data: AuthenticationPayload) {
-    const user = await User.findOne({ where: { email: data.email } });
+    const user = await this.userRepository.findOne({
+      where: { email: data.email },
+    });
     if (!user) {
       throw new NotFoundError("That email address does not exist");
     }

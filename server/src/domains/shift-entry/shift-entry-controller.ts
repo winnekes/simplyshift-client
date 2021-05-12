@@ -18,12 +18,16 @@ import ShiftEntry from "./shift-entry";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { MoreThanOrEqual, LessThan, getCustomRepository } from "typeorm";
+import { ShiftEntryRepository } from "./shift-entry-repository";
 
 @JsonController()
 @OpenAPI({
   security: [{ bearerAuth: [] }],
 })
 export default class ShiftEntryController {
+  private shiftModelRepository = getCustomRepository(ShiftModelRepository);
+  private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
+
   @Authorized()
   @Get("/shift-entry")
   async getAllShiftEntries(
@@ -38,7 +42,7 @@ export default class ShiftEntryController {
       selectedMonth = moment(date).startOf("month");
     }
 
-    const shiftEntries = await ShiftEntry.find({
+    const shiftEntries = await this.shiftEntryRepository.find({
       where: {
         user: user,
         startsAt: MoreThanOrEqual(selectedMonth),
@@ -62,11 +66,10 @@ export default class ShiftEntryController {
     @Body() shiftEntry: { shiftModelId: number; startsAt: Date },
     @Res() response: any
   ) {
-    const shiftModelRepository = getCustomRepository(ShiftModelRepository);
     try {
       const { shiftModelId } = shiftEntry;
 
-      const model = await shiftModelRepository.findOneForUser(user, {
+      const model = await this.shiftModelRepository.findOneForUser(user, {
         where: { id: shiftModelId },
       });
 
@@ -114,9 +117,13 @@ export default class ShiftEntryController {
     @CurrentUser() user: User,
     @Body() update: Partial<ShiftEntry>
   ) {
-    const entity = await ShiftEntry.findOne(id, { where: { user } });
+    const entity = await this.shiftEntryRepository.findOne(id, {
+      where: { user },
+    });
     if (!entity) throw new NotFoundError("Cannot find the shift entry.");
-    return await ShiftEntry.merge(entity, update).save();
+    const updatedEntity = await this.shiftEntryRepository.merge(entity, update);
+
+    return await this.shiftEntryRepository.save(updatedEntity);
   }
 
   @Authorized()
@@ -127,7 +134,9 @@ export default class ShiftEntryController {
     @Res() response: any
   ) {
     try {
-      if ((await ShiftEntry.delete({ id, user })).affected === 0) {
+      if (
+        (await this.shiftEntryRepository.delete({ id, user })).affected === 0
+      ) {
         throw new NotFoundError("Could not find shift entry to delete.");
       }
       response.body = {
