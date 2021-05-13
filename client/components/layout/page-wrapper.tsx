@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../../contexts/auth-context";
 import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
-import { width } from "../theme/theme";
+import { width } from "../../theme/theme";
 
 type Props = {
   title: string;

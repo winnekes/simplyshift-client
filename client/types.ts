@@ -3,6 +3,8 @@ export type User = {
   email: string;
   firstName: string;
   lastName: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type ShiftModel = {
@@ -11,6 +13,9 @@ export type ShiftModel = {
   startsAt: Date;
   endsAt: Date;
   color: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
 };
 
 export type ShiftEntry = {
@@ -19,4 +24,7 @@ export type ShiftEntry = {
   endsAt: Date;
   note: string;
   shiftModel: ShiftModel;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
 };

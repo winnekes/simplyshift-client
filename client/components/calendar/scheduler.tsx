@@ -10,11 +10,11 @@ import {
 } from "react-big-calendar";
 import { useMutation } from "react-query";
 import useSWR from "swr";
-import { fetcher } from "../services/api";
-import { addShiftEntryMutation } from "../services/mutations/add-shift-entry";
-import { ShiftEntry } from "../types";
-import { ErrorContainer } from "./error-container";
-import { ShiftModelsList } from "./shift-models/shift-models-list";
+import { fetcher } from "../../services/api";
+import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry";
+import { ShiftEntry } from "../../types";
+import { ErrorContainer } from "../common/error-container";
+import { ShiftModelsList } from "../shift-models/shift-models-list";
 
 export const Scheduler = () => {
   const [selectedTimeframe, setSelectedTimeFrame] = useState(new Date());

@@ -19,8 +19,8 @@ import { Dispatch, SetStateAction, useState } from "react";
 import useSWR, { mutate } from "swr";
 import { api, fetcher } from "../../services/api";
 import { ShiftModel } from "../../types";
-import { ErrorContainer } from "../error-container";
-import { Loading } from "../loading";
+import { ErrorContainer } from "../common/error-container";
+import { Loading } from "../common/loading";
 import { EditModelModal } from "./edit-model-modal";
 
 type Props = {
@@ -32,10 +32,8 @@ export const ShiftModelsList = ({
   selectedModelId,
   setSelectedModelId,
 }: Props) => {
-  const [
-    selectedModelForEdit,
-    setSelectedModelForEdit,
-  ] = useState<ShiftModel | null>(null);
+  const [selectedModelForEdit, setSelectedModelForEdit] =
+    useState<ShiftModel | null>(null);
 
   const { data, error } = useSWR<ShiftModel[]>("/shift-model", fetcher);
 
@@ -53,6 +51,7 @@ export const ShiftModelsList = ({
     }
     return setSelectedModelId(id);
   };
+  console.log({ data });
 
   return (
     <>

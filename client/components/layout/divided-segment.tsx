@@ -1,6 +1,6 @@
 import { Box, Stack, StackDivider, useColorMode } from "@chakra-ui/react";
 import { Children, FunctionComponent } from "react";
-import { colors } from "../theme/colors";
+import { colors } from "../../theme/colors";
 
 export const DividedSegment: FunctionComponent = ({ children }) => {
   const { colorMode } = useColorMode();

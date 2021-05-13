@@ -15,9 +15,9 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
-import { useAuth } from "../contexts/auth-context";
-import { colors } from "../theme/colors";
-import { width } from "../theme/theme";
+import { useAuth } from "../../contexts/auth-context";
+import { colors } from "../../theme/colors";
+import { width } from "../../theme/theme";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -28,12 +28,13 @@ export function Navbar() {
   return (
     <Box
       py={2}
+      px={[6]}
       bg={colors[colorMode].ui02}
       mb="2rem"
       borderBottom={`1px solid ${colors[colorMode].ui03}`}
     >
       <Flex
-        mx={[4, "auto"]}
+        mx={[0, "auto"]}
         my={[0, "0"]}
         h={16}
         alignItems="center"

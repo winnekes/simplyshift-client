@@ -14,9 +14,9 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
-import { DividedSegment } from "../components/divided-segment";
-import { Page } from "../components/page";
-import { PageWrapper } from "../components/page-wrapper";
+import { DividedSegment } from "../components/layout/divided-segment";
+import { Page } from "../components/layout/page";
+import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../contexts/auth-context";
 import { login, LoginMutationData } from "../services/mutations/login";
 

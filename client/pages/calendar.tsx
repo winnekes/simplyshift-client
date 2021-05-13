@@ -1,9 +1,9 @@
 import { Button, Heading } from "@chakra-ui/react";
 import { useState } from "react";
-import { Scheduler } from "../components/scheduler";
+import { Scheduler } from "../components/calendar/scheduler";
 import { AddModelModal } from "../components/shift-models/add-model-modal";
-import { Page } from "../components/page";
-import { PageWrapper } from "../components/page-wrapper";
+import { Page } from "../components/layout/page";
+import { PageWrapper } from "../components/layout/page-wrapper";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 // todo optimise usage of arrow functions?

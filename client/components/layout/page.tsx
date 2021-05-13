@@ -1,7 +1,7 @@
 import { Box, useColorMode } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
-import { colors } from "../theme/colors";
-import { width } from "../theme/theme";
+import { colors } from "../../theme/colors";
+import { width } from "../../theme/theme";
 
 interface PageSubComponents {
   Title: FunctionComponent;
@@ -9,7 +9,7 @@ interface PageSubComponents {
 }
 
 const Title: FunctionComponent = ({ children }) => (
-  <Box paddingX={[6, 0]}>{children}</Box>
+  <Box paddingX={[6, 6]}>{children}</Box>
 );
 
 const Content: FunctionComponent = ({ children }) => {
