@@ -63,15 +63,14 @@ export function AuthProvider(props) {
   };
 
   // TODO switch on error messages (-> for default message)
-  const onResponseError = (error: AxiosError) => {
+  const onResponseError = async (error: AxiosError) => {
     let errorMessage = "Oh no, something went wrong!";
 
     if (error.response) {
       errorMessage = error.response.data.message;
 
       if (error.response.data?.message === "JWT expired") {
-        logout();
-        router.push("/");
+        await logout();
       }
     }
 
