@@ -16,16 +16,15 @@ import {
 import Link from "next/link";
 import RouteLink from "next/link";
 import { useAuthContext } from "../contexts/auth-context";
-import { useUser } from "../hooks/use-user";
 import { colors } from "../theme/colors";
 import { width } from "../theme/theme";
 
 export function Navbar() {
-  const auth = useAuthContext();
-  const { user, error, loading } = useUser();
+  const { user, logout } = useAuthContext();
   const { toggleColorMode } = useColorMode();
   const { colorMode } = useColorMode();
 
+  console.log("nav", user);
   return (
     <Box
       py={2}
@@ -74,7 +73,7 @@ export function Navbar() {
                   </Link>
                   <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={() => auth.logout()}>Logout</MenuItem>
+                  <MenuItem onClick={() => logout()}>Logout</MenuItem>
                 </MenuList>
               </>
             )}

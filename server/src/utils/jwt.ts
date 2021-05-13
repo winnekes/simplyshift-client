@@ -1,7 +1,7 @@
 import * as jwt from "jsonwebtoken";
 
 const secret = process.env.JWT_SECRET || "i love robots";
-const ttl = 3600;
+const ttl = 10;
 
 interface JwtPayload {
   id: number;

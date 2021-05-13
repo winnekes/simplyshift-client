@@ -17,15 +17,18 @@ import { useMutation } from "react-query";
 import { DividedSegment } from "../components/divided-segment";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
+import { useAuthContext } from "../contexts/auth-context";
 import { login, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
+  const auth = useAuthContext();
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<LoginMutationData>();
 
   const { isLoading, error, mutate } = useMutation(login, {
     onSuccess: async ({ data }) => {
-      window.localStorage.setItem("token", data["jwt"]);
+      auth.setToken(data["jwt"]);
+      auth.setUser(data["user"]);
       await router.push("/calendar");
     },
   });

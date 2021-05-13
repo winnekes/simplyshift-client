@@ -28,6 +28,7 @@ export default function Signup() {
   const { isLoading, error, mutate } = useMutation(signup, {
     onSuccess: ({ data }) => {
       auth.setToken(data["jwt"]);
+      auth.setUser(data["user"]);
 
       router.push("/calendar");
     },
