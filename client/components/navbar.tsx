@@ -15,12 +15,12 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
-import { useAuthContext } from "../contexts/auth-context";
+import { useAuth } from "../contexts/auth-context";
 import { colors } from "../theme/colors";
 import { width } from "../theme/theme";
 
 export function Navbar() {
-  const { user, logout } = useAuthContext();
+  const { user, logout } = useAuth();
   const { toggleColorMode } = useColorMode();
   const { colorMode } = useColorMode();
 

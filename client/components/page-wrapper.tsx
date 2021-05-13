@@ -1,7 +1,6 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
-import { useAuthContext } from "../contexts/auth-context";
-import { Loading } from "./loading";
+import { useAuth } from "../contexts/auth-context";
 import { Navbar } from "./navbar";
 import { Container } from "@chakra-ui/react";
 import { width } from "../theme/theme";
@@ -16,7 +15,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
   title,
   isProtectedPage,
 }) => {
-  const { user } = useAuthContext();
+  const { user } = useAuth();
 
   return (
     <>
@@ -32,7 +31,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
         {!isProtectedPage || (isProtectedPage && user) ? (
           <>{children}</>
         ) : (
-          <>t</>
+          <></>
         )}
       </Container>
     </>

@@ -1,6 +1,6 @@
 import { createStandaloneToast } from "@chakra-ui/react";
-import { AxiosError } from "axios";
-import Router from "next/router";
+import { AxiosError, AxiosResponse } from "axios";
+import { useRouter } from "next/router";
 import {
   Dispatch,
   SetStateAction,
@@ -10,118 +10,105 @@ import {
   createContext,
 } from "react";
 import useSWR from "swr";
-import { Loading } from "../components/loading";
 import { api, fetcher } from "../services/api";
 import { User } from "../types";
 
 type AuthContextType = {
   user: User | null;
-  logout: () => void;
-  token: string;
-  setToken: Dispatch<SetStateAction<string>>;
   setUser: Dispatch<SetStateAction<User>>;
+  setToken: Dispatch<SetStateAction<string>>;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>(undefined);
 
 export function AuthProvider(props) {
+  const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [shouldLoadUser] = useState(!!token);
 
-  const [loading, setLoading] = useState(true);
-  const { data } = useSWR<User>(
-    shouldLoadUser ? "/users/profile" : null,
-    fetcher
-  );
+  const { data } = useSWR<User>(token ? "/users/profile" : null, fetcher);
 
   useEffect(() => {
-    async function loadTokenFromStorage() {
-      if (window) {
-        const token = window.localStorage.getItem("token");
-        setToken(token);
-        if (token) {
-          api.defaults.headers.Authorization = `Bearer ${token}`;
-        } else {
-          delete api.defaults.headers["Authorization"];
-          setUser(null);
-        }
+    if (window) {
+      const token = window.localStorage.getItem("token");
+      setToken(token);
+      if (token) {
+        api.defaults.headers.Authorization = `Bearer ${token}`;
       }
     }
-
-    loadTokenFromStorage();
-
-    setLoading(false);
   }, [token]);
 
-  const logout = () => {
+  useEffect(() => {
+    if (data) {
+      setUser(data);
+    }
+  }, [data]);
+
+  const logout = async () => {
     if (window) {
       window.localStorage.removeItem("token");
-      Router.push("/");
     }
 
     setUser(null);
     setToken(null);
+
     delete api.defaults.headers["Authorization"];
+    await router.push("/");
   };
 
-  api.interceptors.response.use(
-    function (response) {
-      // Any status code that lie within the range of 2xx cause this function to trigger
-      // Do something with response data
-      return response;
-    },
-    function (error: AxiosError) {
-      let errorMessage = "Oh no, something went wrong!";
+  const onResponse = (response: AxiosResponse): AxiosResponse => {
+    // let caller handle response
+    return response;
+  };
 
-      if (error.response) {
-        errorMessage = error.response.data.message;
+  // TODO switch on error messages (-> for default message)
+  const onResponseError = (error: AxiosError) => {
+    let errorMessage = "Oh no, something went wrong!";
 
-        if (error.response.data?.message === "JWT expired") {
-          logout();
-          Router.push("/");
-        }
+    if (error.response) {
+      errorMessage = error.response.data.message;
+
+      if (error.response.data?.message === "JWT expired") {
+        logout();
+        router.push("/");
       }
-
-      console.log({ error });
-      const toast = createStandaloneToast();
-
-      const id = "test-toast";
-      console.log({ toastId: toast.isActive(id) });
-
-      if (!toast.isActive(id)) {
-        toast({
-          id,
-          title: errorMessage,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
-      return Promise.reject(error);
     }
-  );
+
+    console.log({ error });
+    const toast = createStandaloneToast();
+
+    const id = "test-toast";
+    console.log({ toastId: toast.isActive(id) });
+
+    if (!toast.isActive(id)) {
+      toast({
+        id,
+        title: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    return Promise.reject(error);
+  };
+
+  api.interceptors.response.use(onResponse, onResponseError);
 
   const properties: AuthContextType = {
     user,
-    token,
+    setUser,
     setToken: (token: string) => {
       window.localStorage.setItem("token", token);
       setToken(token);
     },
-    setUser: (user: User) => {
-      setUser(user);
-    },
     logout,
   };
 
-  if (loading) return <Loading />;
-  if (!loading) {
-    return <AuthContext.Provider value={properties} {...props} />;
-  }
+  return <AuthContext.Provider value={properties} {...props} />;
 }
 
-export function useAuthContext() {
+export function useAuth() {
   const data = useContext(AuthContext);
 
   if (!data) {

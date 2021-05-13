@@ -17,20 +17,20 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
-import { useAuthContext } from "../contexts/auth-context";
+import { useAuth } from "../contexts/auth-context";
 import { signup, SignupMutationData } from "../services/mutations/signup";
 
 export default function Signup() {
-  const auth = useAuthContext();
+  const auth = useAuth();
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<SignupMutationData>();
 
   const { isLoading, error, mutate } = useMutation(signup, {
-    onSuccess: ({ data }) => {
-      auth.setToken(data["jwt"]);
-      auth.setUser(data["user"]);
+    onSuccess: async ({ data }) => {
+      auth.setToken(data.token);
+      auth.setUser(data.user);
 
-      router.push("/calendar");
+      await router.push("/calendar");
     },
   });
 

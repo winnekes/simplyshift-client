@@ -35,6 +35,6 @@ export default class LoginController {
     }
 
     const jwt = sign({ id: user.id });
-    return { jwt, user };
+    return { token: jwt, user };
   }
 }
