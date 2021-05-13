@@ -28,17 +28,11 @@ type Props = {
 
 // todo coherent theme usage
 export function AddModelModal({ onClose }: Props) {
-  const {
-    register,
-    handleSubmit,
-    errors,
-    setValue,
-    control,
-  } = useForm<AddShiftModelData>();
+  const { register, handleSubmit, errors, setValue, control } =
+    useForm<AddShiftModelData>();
 
   const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
     onSuccess: ({ data }) => {
-      console.log("yes, added!", data);
       mut("/shift-model");
     },
   });

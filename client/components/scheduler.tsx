@@ -10,12 +10,10 @@ import {
 } from "react-big-calendar";
 import { useMutation } from "react-query";
 import useSWR from "swr";
-import { api, fetcher } from "../services/api";
+import { fetcher } from "../services/api";
 import { addShiftEntryMutation } from "../services/mutations/add-shift-entry";
-import { addShiftModelMutation } from "../services/mutations/add-shift-model";
-import { ShiftEntry, ShiftModel } from "../types";
+import { ShiftEntry } from "../types";
 import { ErrorContainer } from "./error-container";
-import { Loading } from "./loading";
 import { ShiftModelsList } from "./shift-models/shift-models-list";
 
 export const Scheduler = () => {
@@ -24,22 +22,19 @@ export const Scheduler = () => {
 
   const localizer = momentLocalizer(moment);
 
-  const { data, error, mutate: mut } = useSWR<ShiftEntry[]>(
-    `/shift-entry?date=${selectedTimeframe}`,
-    fetcher
-  );
+  const {
+    data,
+    error,
+    mutate: mut,
+  } = useSWR<ShiftEntry[]>(`/shift-entry?date=${selectedTimeframe}`, fetcher);
 
   const { mutate } = useMutation(addShiftEntryMutation, {
     onSuccess: async ({ data }) => {
-      console.log({ data });
-
       await mut();
     },
   });
 
   const onNavigate = async (date: Date, view: View, action: NavigateAction) => {
-    console.log({ date, view, action });
-
     await setSelectedTimeFrame(date);
   };
 
@@ -67,8 +62,6 @@ export const Scheduler = () => {
     end: stringOrDate;
   }) => {
     if (selectedModelId) {
-      console.log(selectedModelId, slot);
-
       const modifiedData = {
         shiftModelId: selectedModelId,
         startsAt: moment(slot.start).toLocaleString(),

@@ -29,14 +29,8 @@ export default class ShiftModelController {
 
   @Authorized()
   @Get("/shift-model")
-  async getAllShiftModels(@CurrentUser() user: User) {
-    const shiftModels = await this.shiftModelRepository.findAllForUser(user);
-
-    if (!shiftModels) {
-      throw new NotFoundError("No shift models were not found.");
-    }
-
-    return shiftModels;
+  getAllShiftModels(@CurrentUser() user: User) {
+    return this.shiftModelRepository.findAllForUser(user);
   }
 
   @Authorized()

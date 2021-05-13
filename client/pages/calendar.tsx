@@ -5,7 +5,6 @@ import { AddModelModal } from "../components/shift-models/add-model-modal";
 import { Page } from "../components/page";
 import { PageWrapper } from "../components/page-wrapper";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ShiftModelsList } from "../components/shift-models/shift-models-list";
 
 // todo optimise usage of arrow functions?
 export default function Calendar() {

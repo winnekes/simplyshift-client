@@ -11,7 +11,6 @@ import { api } from "../services/api";
 
 type AuthContextType = {
   logout: () => void;
-  token: string | null;
   setToken: Dispatch<SetStateAction<string>>;
 };
 
@@ -48,7 +47,6 @@ export function AuthProvider(props) {
       setToken(null);
       delete api.defaults.headers["Authorization"];
     },
-    token,
   };
 
   if (loading) return <Loading />;
