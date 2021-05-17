@@ -31,8 +31,9 @@ export function AddModelModal({ onClose }: Props) {
   const { register, handleSubmit, errors, setValue, control } =
     useForm<AddShiftModelData>();
 
+  // todo use isloading and error
   const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
-    onSuccess: ({ data }) => {
+    onSuccess: () => {
       mut("/shift-model");
     },
   });

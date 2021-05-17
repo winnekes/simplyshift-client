@@ -33,9 +33,8 @@ export function AuthProvider(props) {
     if (window) {
       const token = window.localStorage.getItem("token");
       setToken(token);
-      if (token) {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-      }
+
+      api.defaults.headers.Authorization = `Bearer ${token}`;
     }
   }, [token]);
 
@@ -58,11 +57,13 @@ export function AuthProvider(props) {
   };
 
   const onResponse = (response: AxiosResponse): AxiosResponse => {
-    // let caller handle response
+    // let caller handle response (no need to handle here)
     return response;
   };
 
   // TODO switch on error messages (-> for default message)
+  // JWT expired
+  //
   const onResponseError = async (error: AxiosError) => {
     let errorMessage = "Oh no, something went wrong!";
 
@@ -74,11 +75,9 @@ export function AuthProvider(props) {
       }
     }
 
-    console.log({ error });
     const toast = createStandaloneToast();
 
     const id = "test-toast";
-    console.log({ toastId: toast.isActive(id) });
 
     if (!toast.isActive(id)) {
       toast({
