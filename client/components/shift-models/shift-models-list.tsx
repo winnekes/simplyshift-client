@@ -21,6 +21,7 @@ import { api, fetcher } from "../../services/api";
 import { ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { Loading } from "../common/loading";
+import { ConfirmDeleteModel } from "./confirm-delete-model";
 import { EditModelModal } from "./edit-model-modal";
 
 type Props = {
@@ -32,7 +33,9 @@ export const ShiftModelsList = ({
   selectedModelId,
   setSelectedModelId,
 }: Props) => {
-  const [selectedModelForEdit, setSelectedModelForEdit] =
+  const [selectedModelForEditing, setSelectedModelForEditing] =
+    useState<ShiftModel | null>(null);
+  const [selectedModelForDeleting, setSelectedModelForDeleting] =
     useState<ShiftModel | null>(null);
 
   const { data, error } = useSWR<ShiftModel[]>("/shift-model", fetcher);
@@ -40,18 +43,12 @@ export const ShiftModelsList = ({
   if (error) return <ErrorContainer />;
   if (!data) return <Loading />;
 
-  const deleteModel = async (id: number) => {
-    await api.delete(`/shift-model/${id}`);
-    await mutate("/shift-model");
-  };
-
   const selectModelHandler = (id: number) => {
     if (selectedModelId === id) {
       return setSelectedModelId(null);
     }
     return setSelectedModelId(id);
   };
-  console.log({ data });
 
   return (
     <>
@@ -80,7 +77,7 @@ export const ShiftModelsList = ({
                           variant="ghost"
                           padding="1"
                           size="sm"
-                          onClick={() => deleteModel(model.id)}
+                          onClick={() => setSelectedModelForDeleting(model)}
                         >
                           <DeleteIcon />
                         </Button>
@@ -88,7 +85,7 @@ export const ShiftModelsList = ({
                           variant="ghost"
                           padding="1"
                           size="sm"
-                          onClick={() => setSelectedModelForEdit(model)}
+                          onClick={() => setSelectedModelForEditing(model)}
                         >
                           <EditIcon />
                         </Button>
@@ -107,10 +104,17 @@ export const ShiftModelsList = ({
           </HStack>
         ))}
       </Flex>
-      {selectedModelForEdit && (
+      {selectedModelForEditing && (
         <EditModelModal
-          model={selectedModelForEdit}
-          onClose={() => setSelectedModelForEdit(null)}
+          model={selectedModelForEditing}
+          onClose={() => setSelectedModelForEditing(null)}
+        />
+      )}
+
+      {selectedModelForDeleting && (
+        <ConfirmDeleteModel
+          shiftModel={selectedModelForDeleting}
+          onClose={() => setSelectedModelForDeleting(null)}
         />
       )}
     </>
