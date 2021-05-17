@@ -24,7 +24,6 @@ export function Navbar() {
   const { toggleColorMode } = useColorMode();
   const { colorMode } = useColorMode();
 
-  console.log("nav", user);
   return (
     <Box
       py={2}
