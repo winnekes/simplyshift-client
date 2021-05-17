@@ -3,7 +3,7 @@ import Axios from "axios";
 // todo update when necessary
 const urls = {
   test: `http://localhost:4400`,
-  development: "http://localhost:4400/",
+  development: "https://dcbbfe3d50e6.ngrok.io/",
   production: "http://localhost:4400/",
 };
 
