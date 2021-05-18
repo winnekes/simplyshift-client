@@ -7,7 +7,7 @@ export const DividedSegment: FunctionComponent = ({ children }) => {
 
   return (
     <Stack
-      direction={["column", "row"]}
+      direction={["column", "column", "column", "row"]}
       spacing="24px"
       divider={<StackDivider borderColor={colors[colorMode].ui03} />}
     >

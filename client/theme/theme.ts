@@ -31,4 +31,4 @@ export const theme = extendTheme({
   },
 });
 
-export const width = ["100%", "container.lg"];
+export const width = ["100%", "100%", "100%", "container.lg"];

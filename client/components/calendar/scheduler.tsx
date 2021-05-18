@@ -57,6 +57,16 @@ export const Scheduler = () => {
     };
   }
 
+  function slotPropGetter(date: Date) {
+    return {
+      className: "red-ttest",
+      style: {
+        backgroundColor: "red !important",
+        color: "#ff0000",
+      },
+    };
+  }
+
   const onSelectSlot = async (slot: {
     start: stringOrDate;
     end: stringOrDate;
@@ -95,6 +105,7 @@ export const Scheduler = () => {
         style={{ height: 500 }}
         views={["month"]}
         eventPropGetter={eventStyleGetter}
+        dayPropGetter={slotPropGetter}
         onNavigate={onNavigate}
         // onSelectEvent={onSelectEvent}
         onSelectSlot={onSelectSlot}
