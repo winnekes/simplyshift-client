@@ -1,3 +1,18 @@
+import { CalendarIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Center,
+  Divider,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Spacer,
+  Switch,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
 import {
@@ -10,27 +25,37 @@ import {
 } from "react-big-calendar";
 import { useMutation } from "react-query";
 import useSWR from "swr";
-import { fetcher } from "../../services/api";
 import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry";
-import { ShiftEntry } from "../../types";
+import { ShiftEntry, ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { ShiftModelsList } from "../shift-models/shift-models-list";
+import { Toolbar } from "./toolbar";
 
 export const Scheduler = () => {
   const [selectedTimeframe, setSelectedTimeFrame] = useState(new Date());
+  const [isEditingCalendar, setIsEditingCalendar] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
 
+  moment.locale("nl", {
+    week: {
+      dow: 1,
+      doy: 1,
+    },
+  });
   const localizer = momentLocalizer(moment);
 
   const {
-    data,
-    error,
-    mutate: mut,
-  } = useSWR<ShiftEntry[]>(`/shift-entry?date=${selectedTimeframe}`, fetcher);
+    data: shiftEntries,
+    error: shiftEntriesError,
+    mutate: refetchShiftEntries,
+  } = useSWR<ShiftEntry[]>(`/shift-entry?date=${selectedTimeframe}`);
+
+  const { data: shiftModels, error: shiftModelsError } =
+    useSWR<ShiftModel[]>("/shift-model");
 
   const { mutate } = useMutation(addShiftEntryMutation, {
-    onSuccess: async ({ data }) => {
-      await mut();
+    onSuccess: async () => {
+      await refetchShiftEntries();
     },
   });
 
@@ -81,11 +106,10 @@ export const Scheduler = () => {
     }
   };
 
-  if (error) return <ErrorContainer />;
-  //if (!data) return <Loading />;
+  if (shiftEntriesError || shiftModelsError) return <ErrorContainer />;
 
   const events =
-    data?.map((shift) => ({
+    shiftEntries?.map((shift) => ({
       id: shift.id,
       title: shift.shiftModel.name,
       start: shift.startsAt,
@@ -96,6 +120,34 @@ export const Scheduler = () => {
 
   return (
     <>
+      <VStack align="flex-end">
+        <FormControl
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <FormLabel htmlFor="email-alerts" mb="0">
+            Editing mode is {isEditingCalendar ? "on" : "off"}
+          </FormLabel>
+          <Switch
+            id="email-alerts"
+            colorScheme="green"
+            isChecked={isEditingCalendar}
+            onChange={() => setIsEditingCalendar(!isEditingCalendar)}
+          />
+        </FormControl>
+        {isEditingCalendar ? (
+          <Text fontSize="xs" color="red">
+            <strong>Note</strong>: changes are automatically saved.
+          </Text>
+        ) : (
+          <Text fontSize="xs" color="grey">
+            <strong>Note</strong>: go into <strong>Edit mode</strong> to add and
+            update your shift calendar.
+          </Text>
+        )}
+      </VStack>
+
       <BigCalendar
         localizer={localizer}
         events={events}
@@ -104,6 +156,8 @@ export const Scheduler = () => {
         endAccessor="end"
         style={{ height: 500 }}
         views={["month"]}
+        components={{ toolbar: Toolbar }}
+        onDrillDown={(e) => console.log({ e })}
         eventPropGetter={eventStyleGetter}
         dayPropGetter={slotPropGetter}
         onNavigate={onNavigate}
@@ -112,11 +166,15 @@ export const Scheduler = () => {
         popup
         selectable
       />
-
-      <ShiftModelsList
-        selectedModelId={selectedModelId}
-        setSelectedModelId={setSelectedModelId}
-      />
+      <Center>
+        {isEditingCalendar && (
+          <ShiftModelsList
+            shiftModels={shiftModels}
+            selectedModelId={selectedModelId}
+            setSelectedModelId={setSelectedModelId}
+          />
+        )}
+      </Center>
     </>
   );
 };

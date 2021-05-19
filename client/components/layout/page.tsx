@@ -9,7 +9,7 @@ interface PageSubComponents {
 }
 
 const Title: FunctionComponent = ({ children }) => (
-  <Box paddingX={[6, 6]}>{children}</Box>
+  <Box paddingX={[6, 6, 6, 0]}>{children}</Box>
 );
 
 const Content: FunctionComponent = ({ children }) => {

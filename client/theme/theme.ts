@@ -1,4 +1,4 @@
-import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { theme as testTheme, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { colors } from "./colors";
 import { Button } from "./overrides/button";
 import { Modal } from "./overrides/modal";

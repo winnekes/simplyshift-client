@@ -27,7 +27,7 @@ export function Navbar() {
   return (
     <Box
       py={2}
-      px={[6]}
+      px={[6, 6, 6, 0]}
       bg={colors[colorMode].ui02}
       mb="2rem"
       borderBottom={`1px solid ${colors[colorMode].ui03}`}
@@ -47,7 +47,7 @@ export function Navbar() {
 
           {user && (
             <Link href="/calendar">
-              <Box>Calendar</Box>
+              <Box cursor="pointer">Calendar</Box>
             </Link>
           )}
         </HStack>
@@ -59,13 +59,11 @@ export function Navbar() {
                 <MenuButton
                   as={Button}
                   rounded="full"
-                  variant="link"
+                  variant="ghost"
+                  p={0}
                   cursor="pointer"
                 >
-                  <Avatar
-                    size="sm"
-                    name={`${user.firstName} ${user.lastName}`}
-                  />
+                  <Avatar bg="brand01.100" size="sm" />
                 </MenuButton>
                 <MenuList>
                   <Link href="/profile" passHref>
