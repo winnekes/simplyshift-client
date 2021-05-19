@@ -1,0 +1,25 @@
+$out-of-range-color: rgba(142, 142, 142, 0.13);
+$out-of-range-bg-color: rgba(142, 142, 142, 0.13);
+
+$calendar-border: rgba(0, 0, 0, 0);
+$cell-border: rgba(82, 82, 82, 0.1);
+
+$border-color: rgba(82, 82, 82, 0.1);
+
+$segment-width: percentage(1 / 7);
+
+$time-selection-color: red;
+$time-selection-bg-color: rgba(0, 0, 0, 0.5);
+$date-selection-bg-color: rgba(0, 0, 0, 0.1);
+
+$btn-color: #373a3c;
+$btn-bg: #fff;
+$btn-border: #ccc;
+
+$current-time-color: #74ad31;
+
+$rbc-css-prefix: rbc-i;
+
+$today-highlight-bg: rgba(194, 1, 92, 0);
+
+@import "~react-big-calendar/lib/sass/styles";
