@@ -1,9 +1,9 @@
 import Axios from "axios";
 
-// todo update when necessary
+// todo update when necessary (env variables)
 const urls = {
   test: `http://localhost:4400`,
-  development: "https://dcbbfe3d50e6.ngrok.io/",
+  development: "https://60730d468e47.ngrok.io/",
   production: "http://localhost:4400/",
 };
 
@@ -14,5 +14,3 @@ export const api = Axios.create({
     "Content-Type": "application/json",
   },
 });
-
-export const fetcher = (url) => api.get(url).then((res) => res.data);

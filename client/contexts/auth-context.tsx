@@ -10,7 +10,7 @@ import {
   createContext,
 } from "react";
 import useSWR from "swr";
-import { api, fetcher } from "../services/api";
+import { api } from "../services/api";
 import { User } from "../types";
 
 type AuthContextType = {
@@ -27,7 +27,7 @@ export function AuthProvider(props) {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
-  const { data } = useSWR<User>(token ? "/users/profile" : null, fetcher);
+  const { data } = useSWR<User>(token ? "/users/profile" : null);
 
   useEffect(() => {
     if (window) {
