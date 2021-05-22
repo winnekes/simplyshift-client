@@ -24,6 +24,7 @@ import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry"
 import { ShiftEntry, ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { ShiftModelsList } from "../shift-models/shift-models-list";
+import { EditModeSettings } from "./edit-mode-settings";
 import { Toolbar } from "./toolbar";
 import { ModifiedEvent } from "./modified-event";
 import {
@@ -102,6 +103,15 @@ export const Scheduler = () => {
     await setSelectedTimeFrame(date);
   };
 
+  const onEditMode = () => {
+    if (!isEditingCalendar) {
+      setIsEditingCalendar(true);
+    } else {
+      setIsEditingCalendar(false);
+      setSelectedModelId(null);
+    }
+  };
+
   moment.locale("nl", {
     week: {
       dow: 1,
@@ -112,41 +122,6 @@ export const Scheduler = () => {
   const localizer = momentLocalizer(moment);
   return (
     <>
-      <VStack align="flex-end">
-        <FormControl
-          display="flex"
-          alignItems="center"
-          justifyContent="flex-end"
-        >
-          <FormLabel htmlFor="email-alerts" mb="0">
-            Editing mode is {isEditingCalendar ? "on" : "off"}
-          </FormLabel>
-          <Switch
-            id="email-alerts"
-            colorScheme="green"
-            isChecked={isEditingCalendar}
-            onChange={() => {
-              if (!isEditingCalendar) {
-                setIsEditingCalendar(true);
-              } else {
-                setIsEditingCalendar(false);
-                setSelectedModelId(null);
-              }
-            }}
-          />
-        </FormControl>
-        {isEditingCalendar ? (
-          <Text fontSize="xs" color="red">
-            <strong>Note</strong>: changes are automatically saved.
-          </Text>
-        ) : (
-          <Text fontSize="xs" color="grey">
-            <strong>Note</strong>: go into <strong>Edit mode</strong> to add and
-            update your shift calendar.
-          </Text>
-        )}
-      </VStack>
-
       <Box my={7}>
         <BigCalendar
           localizer={localizer}
@@ -157,7 +132,13 @@ export const Scheduler = () => {
           style={{ height: 500 }}
           views={["month"]}
           components={{
-            toolbar: Toolbar,
+            toolbar: (toolbar) => (
+              <Toolbar
+                toolbar={toolbar}
+                isEditingCalendar={isEditingCalendar}
+                onEditMode={onEditMode}
+              />
+            ),
             event: (
               event: PropsWithChildren<EventProps<ShiftEntryEvent>>,
               title
