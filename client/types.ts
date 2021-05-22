@@ -10,8 +10,8 @@ export type User = {
 export type ShiftModel = {
   id: number;
   name: string;
-  startsAt: Date;
-  endsAt: Date;
+  startsAt: string;
+  endsAt: string;
   color: string;
   createdAt: Date;
   updatedAt: Date;
