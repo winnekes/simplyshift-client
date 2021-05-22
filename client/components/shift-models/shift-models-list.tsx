@@ -14,13 +14,7 @@ import {
   Spacer,
   Icon,
 } from "@chakra-ui/react";
-import {
-  AddIcon,
-  DeleteIcon,
-  EditIcon,
-  PlusSquareIcon,
-  ViewIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 import moment from "moment";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ShiftModel } from "../../types";
