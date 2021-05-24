@@ -12,7 +12,11 @@ export const PopoverContent: ComponentWithAs<"section", PopoverContentProps> = (
   const { colorMode } = useColorMode();
   const { children, ...rest } = props;
   return (
-    <ChakraPopoverContent bg={colors[colorMode].ui02} {...rest}>
+    <ChakraPopoverContent
+      bg={colors[colorMode].ui02}
+      {...rest}
+      color={colorMode === "dark" ? "white" : "gray.900"}
+    >
       {children}
     </ChakraPopoverContent>
   );
