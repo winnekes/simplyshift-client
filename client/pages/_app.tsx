@@ -1,6 +1,7 @@
 import "../theme/calendar.scss";
 import "../theme/globals.scss";
 import type { AppProps } from "next/app";
+import React, { Component, ErrorInfo } from "react";
 import { AuthProvider } from "../contexts/auth-context";
 import {
   Center,
@@ -48,21 +49,23 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <SWRConfig
-          value={{
-            fetcher: (url) => api.get(url).then((res) => res.data),
-            loadingTimeout: 1,
-            onLoadingSlow: showToast,
-            onSuccess: () => toast.close(toastId),
-            onError: () => toast.close(toastId),
-            revalidateOnFocus: true,
-            revalidateOnReconnect: true,
-          }}
-        >
-          <AuthProvider>
-            <Component {...pageProps} />
-          </AuthProvider>
-        </SWRConfig>
+        <ErrorBoundary>
+          <SWRConfig
+            value={{
+              fetcher: (url) => api.get(url).then((res) => res.data),
+              loadingTimeout: 1,
+              onLoadingSlow: showToast,
+              onSuccess: () => toast.close(toastId),
+              onError: () => toast.close(toastId),
+              revalidateOnFocus: true,
+              revalidateOnReconnect: true,
+            }}
+          >
+            <AuthProvider>
+              <Component {...pageProps} />
+            </AuthProvider>
+          </SWRConfig>
+        </ErrorBoundary>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </ChakraProvider>
@@ -70,3 +73,34 @@ function App({ Component, pageProps }: AppProps) {
 }
 
 export default App;
+
+interface Props {
+  children: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+  };
+
+  public static getDerivedStateFromError(_: Error): State {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      return <h1>Sorry.. there was an error</h1>;
+    }
+
+    return this.props.children;
+  }
+}

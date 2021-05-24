@@ -7,7 +7,6 @@ import {
   Calendar as BigCalendar,
   Event,
   EventProps,
-  momentLocalizer,
   NavigateAction,
   stringOrDate,
   View,
@@ -19,7 +18,12 @@ import { ShiftEntry, ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { ShiftModelsList } from "../shift-models/shift-models-list";
 import { ModifiedEvent } from "./modified-event";
-import { createShiftEntryEvent, slotPropGetter } from "./scheduler-utils";
+import {
+  createShiftEntryEvent,
+  isConflictingTimeslot,
+  localizer,
+  slotPropGetter,
+} from "./scheduler-utils";
 import { Toolbar } from "./toolbar";
 import { WeekView } from "./week-view";
 
@@ -32,19 +36,21 @@ export const Scheduler = () => {
   const [isEditingCalendar, setIsEditingCalendar] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
 
-  const { mutate } = useMutation(addShiftEntryMutation, {
-    onSettled: async () => {
-      await refetchShiftEntries();
-    },
-  });
   const {
     data: shiftEntries,
     error: shiftEntriesError,
-    mutate: refetchShiftEntries,
+    mutate: fetchShiftEntries,
   } = useSWR<ShiftEntry[]>(`/shift-entry?date=${selectedTimeframe}`);
 
   const { data: shiftModels, error: shiftModelsError } =
     useSWR<ShiftModel[]>("/shift-model");
+
+  const { mutate } = useMutation(addShiftEntryMutation, {
+    onSettled: async () => {
+      console.log("?");
+      await fetchShiftEntries();
+    },
+  });
 
   useEffect(() => {
     if (shiftEntries) {
@@ -86,8 +92,14 @@ export const Scheduler = () => {
     const shiftModel = shiftModels.find(
       (model) => model.id === selectedModelId
     );
+
     if (!shiftModel) {
       throw new Error("Could not find shift model");
+    }
+
+    // todo ask for override
+    if (isConflictingTimeslot(date.toDate(), shiftModel, shiftEntries)) {
+      console.log("ddd");
     }
 
     const modifiedData = {
@@ -108,12 +120,6 @@ export const Scheduler = () => {
     }
   };
 
-  const onSelectDay = async (day: Date) => {
-    if (selectedModelId) {
-      const startsAt = moment(day);
-      await createShiftEntry(startsAt);
-    }
-  };
   const onNavigate = async (date: Date, view: View, action: NavigateAction) => {
     await setSelectedTimeFrame(date);
   };
@@ -127,27 +133,32 @@ export const Scheduler = () => {
     }
   };
 
-  moment.locale("en-gb", {
-    week: {
-      dow: 1,
-      doy: 1,
-    },
-  });
+  const components = {
+    toolbar: (toolbar) => (
+      <Toolbar
+        toolbar={toolbar}
+        isEditingCalendar={isEditingCalendar}
+        onEditMode={onEditMode}
+      />
+    ),
 
-  const localizer = momentLocalizer(moment);
-  console.log({ events });
-
-  let formats = {
-    dateFormat: "dd",
-
-    eventTimeRangeFormat: (range) =>
-      `${moment(range.start, "HH:mm")} – ${moment(range.end, "HH:mm")}`,
+    event: (event: PropsWithChildren<EventProps<ShiftEntryEvent>>, title) => (
+      <ModifiedEvent
+        shiftEntryId={event.event.id}
+        events={events}
+        setEvents={setEvents}
+        selectedTimeframe={selectedTimeframe}
+        event={event}
+        title={title}
+        isEditingCalendar={isEditingCalendar}
+      />
+    ),
   };
+
   return (
     <>
       <Box my={7}>
         <BigCalendar
-          //formats={formats}
           localizer={localizer}
           events={events}
           date={selectedTimeframe}
@@ -160,38 +171,12 @@ export const Scheduler = () => {
           selectable
           style={{ height: 600 }}
           views={{ week: WeekView, month: true }}
-          components={{
-            toolbar: (toolbar) => (
-              <Toolbar
-                toolbar={toolbar}
-                isEditingCalendar={isEditingCalendar}
-                onEditMode={onEditMode}
-              />
-            ),
-
-            event: (
-              event: PropsWithChildren<EventProps<ShiftEntryEvent>>,
-              title
-            ) => (
-              <ModifiedEvent
-                shiftEntryId={event.event.id}
-                events={events}
-                setEvents={setEvents}
-                selectedTimeframe={selectedTimeframe}
-                event={event}
-                title={title}
-                isEditingCalendar={isEditingCalendar}
-              />
-            ),
-          }}
+          components={components}
           drilldownView="week"
           eventPropGetter={eventStyleGetter}
           dayPropGetter={slotPropGetter}
           onNavigate={onNavigate}
-          // onSelectEvent={onSelectEvent}
           onSelectSlot={onSelectSlot}
-          popup={false}
-          onShowMore={(b, e) => console.log(e)}
         />
       </Box>
 

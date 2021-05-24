@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  JoinColumn,
   RelationId,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";

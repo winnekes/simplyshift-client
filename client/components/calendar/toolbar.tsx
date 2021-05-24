@@ -5,16 +5,12 @@ import {
   ButtonGroup,
   Center,
   Flex,
-  Heading,
-  HStack,
   IconButton,
   Spacer,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { ToolbarProps } from "react-big-calendar";
-import { FaLeaf } from "react-icons/all";
 import { EditModeSettings } from "./edit-mode-settings";
 
 type Props = {
@@ -22,12 +18,12 @@ type Props = {
   isEditingCalendar: boolean;
   onEditMode: () => void;
 };
+
 export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
   const gotToPreviousMonth = () => {
     toolbar.date.setMonth(toolbar.date.getMonth());
     toolbar.onNavigate("PREV");
   };
-
   const goToNextMonth = () => {
     toolbar.date.setMonth(toolbar.date.getMonth());
     toolbar.onNavigate("NEXT");
@@ -43,6 +39,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
   const switchToWeekView = () => {
     toolbar.onView("week");
   };
+
   const switchToMonthView = () => {
     toolbar.onView("month");
   };
@@ -51,7 +48,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
     const date = moment(toolbar.date);
     return (
       <Box>
-        <Text fontWeight="bold" fontSize="3xl">
+        <Text fontWeight="bold" fontSize="3xl" m={0} p={0}>
           {date.format("MMMM")}{" "}
           <Text as="span" color="brand01.100">
             {date.format("YYYY")}
@@ -89,12 +86,16 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
         </ButtonGroup>
       </Center>
       <Center mb={4}>
-        <ButtonGroup size="xs" isAttached color="brand01.100" variant="outline">
+        <ButtonGroup size="xs" isAttached color="brand01.100" variant="ghost">
           <Button mr="-px" onClick={switchToWeekView}>
             Week view
           </Button>
 
-          <Button mr="-px" onClick={switchToMonthView}>
+          <Button
+            mr="-px"
+            onClick={switchToMonthView}
+            textDecoration={toolbar.view === "month" && "underline"}
+          >
             Month view
           </Button>
         </ButtonGroup>

@@ -81,12 +81,13 @@ export default class ShiftEntryController {
         throw new NotFoundError(
           "Could not find the model for this shift entry."
         );
+      // todo find conflicting shift entry
 
       const startDate = moment.parseZone(data.startsAt).startOf("day");
-      const start = moment(startDate)
+      const startsAt = moment(startDate)
         .add(moment.duration(model.startsAt))
         .toDate();
-      const end =
+      const endsAt =
         model.startsAt > model.endsAt
           ? moment(startDate)
               .add(moment.duration(model.endsAt))
@@ -94,11 +95,21 @@ export default class ShiftEntryController {
               .toDate()
           : moment(startDate).add(moment.duration(model.endsAt)).toDate();
 
+      const conflictingShiftEntries =
+        await this.shiftEntryRepository.findConflictingEntriesForUser(user, {
+          startsAt,
+          endsAt,
+        });
+
+      if (conflictingShiftEntries.length > 0) {
+        await this.shiftEntryRepository.softRemove(conflictingShiftEntries);
+      }
+
       const shiftEntry = this.shiftEntryRepository.create();
       shiftEntry.user = user;
       shiftEntry.note = "";
-      shiftEntry.startsAt = start;
-      shiftEntry.endsAt = end;
+      shiftEntry.startsAt = startsAt;
+      shiftEntry.endsAt = endsAt;
       shiftEntry.shiftModel = model;
 
       const calendar = await this.calendarRepository.findActiveOneForUser(user);

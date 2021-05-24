@@ -1,6 +1,16 @@
 import moment from "moment";
+import { momentLocalizer } from "react-big-calendar";
 import { ShiftEntry, ShiftModel } from "../../types";
 import { ShiftEntryEvent } from "./scheduler";
+
+moment.locale("nl", {
+  week: {
+    dow: 1,
+    doy: 1,
+  },
+});
+
+export const localizer = momentLocalizer(moment);
 
 export const slotPropGetter = (date: Date) => {
   return {
@@ -15,7 +25,15 @@ export const createShiftEntryEvent = (
   shiftModel: ShiftModel,
   startsAt: Date
 ): ShiftEntryEvent => {
-  const startDate = moment.parseZone(startsAt).startOf("day");
+  const { start, end } = getTimesForShiftEntryFromModel(startsAt, shiftModel);
+  return { id: 0, title: shiftModel.name, color: shiftModel.color, start, end };
+};
+
+export const getTimesForShiftEntryFromModel = (
+  date: Date,
+  shiftModel: ShiftModel
+) => {
+  const startDate = moment.parseZone(date).startOf("day");
   const start = moment(startDate)
     .add(moment.duration(shiftModel.startsAt))
     .toDate();
@@ -27,5 +45,21 @@ export const createShiftEntryEvent = (
           .toDate()
       : moment(startDate).add(moment.duration(shiftModel.endsAt)).toDate();
 
-  return { id: 0, title: shiftModel.name, color: shiftModel.color, start, end };
+  return { start, end };
+};
+
+export const isConflictingTimeslot = (
+  date: Date,
+  shiftModel: ShiftModel,
+  shiftEntries: ShiftEntry[]
+) => {
+  const { start, end } = getTimesForShiftEntryFromModel(date, shiftModel);
+
+  const conflictingShiftEntry = shiftEntries?.find(
+    (entry) =>
+      moment(entry.startsAt) <= moment(end) &&
+      moment(entry.endsAt) >= moment(start)
+  );
+
+  return !!conflictingShiftEntry;
 };
