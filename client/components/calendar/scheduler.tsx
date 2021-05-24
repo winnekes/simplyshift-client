@@ -77,7 +77,9 @@ export const Scheduler = () => {
     }
   }, [shiftEntries]);
 
-  if (shiftEntriesError || shiftModelsError) return <ErrorContainer />;
+  if (shiftEntriesError || shiftModelsError) {
+    return <ErrorContainer />;
+  }
 
   const eventStyleGetter = (
     event: ShiftEntryEvent,

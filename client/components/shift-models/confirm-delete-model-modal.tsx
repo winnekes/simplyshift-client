@@ -48,7 +48,7 @@ export const ConfirmDeleteModelModal = ({ shiftModel, onClose }: Props) => {
           <Button ref={cancelRef} onClick={onClose}>
             No
           </Button>
-          <Button colorScheme="red" ml={3} onClick={deleteModel}>
+          <Button colorScheme="brand01" ml={3} onClick={deleteModel}>
             Yes
           </Button>
         </AlertDialogFooter>

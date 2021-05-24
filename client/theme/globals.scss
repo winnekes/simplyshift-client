@@ -3,13 +3,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Condensed&display=swap");
 
 /* Override seems necessary, Next.js/Chakra UI is not caching fonts, this is to avoid font flashing */
+
+body {
+  overflow-y: scroll !important;
+}
 html,
 body {
   height: 100%;
   padding: 0;
   margin: 0;
   font-family: Roboto, sans-serif !important;
-  scroll-behavior: smooth !important;
 }
 
 h1,
@@ -19,13 +22,6 @@ h4,
 h5,
 h6 {
   font-family: "Roboto Condensed", sans-serif !important;
-}
-
-@media screen and (min-width: 960px) {
-  html {
-    margin-left: calc(100vw - 100%);
-    margin-right: 0;
-  }
 }
 
 /* Override Chakra UI focus color to align with brand color */
