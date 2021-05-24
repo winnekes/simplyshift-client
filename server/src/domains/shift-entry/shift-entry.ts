@@ -20,11 +20,11 @@ export default class ShiftEntry extends BaseEntity {
   id!: number;
 
   @IsDate()
-  @Column("timestamp")
+  @Column("timestamptz")
   startsAt!: Date;
 
   @IsDate()
-  @Column("timestamp")
+  @Column("timestamptz")
   endsAt!: Date;
 
   @IsString()
@@ -43,12 +43,12 @@ export default class ShiftEntry extends BaseEntity {
   @ManyToOne(() => Calendar, (calendar) => calendar.shiftEntries)
   calendar!: Calendar;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt?: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: "timestamptz" })
   deletedAt?: Date;
 }

@@ -3,9 +3,7 @@ import {
   FindConditions,
   FindOneOptions,
   LessThan,
-  LessThanOrEqual,
   MoreThan,
-  MoreThanOrEqual,
   Repository,
 } from "typeorm";
 import User from "../identity-access/user";

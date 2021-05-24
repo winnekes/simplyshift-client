@@ -16,7 +16,7 @@ export const connectToDb = async () => {
     url: process.env.DATABASE_URL,
     entities: [User, ShiftModel, ShiftEntry, Calendar],
     synchronize: true,
-    logging: ["query"],
+    logging: true,
     namingStrategy: new CustomNamingStrategy(),
   });
 

@@ -13,15 +13,19 @@ import LoginController from "./domains/identity-access/login-controller";
 import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
 import ShiftModelController from "./domains/shift-model/shift-model-controller";
 import SpecController from "./domains/specs/spec-controller";
+import moment from "moment";
 import logger from "koa-logger";
+import "moment-timezone";
 
 dotenv.config();
+
+moment.tz.setDefault("Europe/Amsterdam");
+moment.locale("nl");
 
 const port = process.env.PORT;
 
 Sentry.init({
-  dsn:
-    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  dsn: "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
   logLevel: LogLevel.Error,
 });
 

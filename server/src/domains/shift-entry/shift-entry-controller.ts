@@ -105,6 +105,7 @@ export default class ShiftEntryController {
         await this.shiftEntryRepository.softRemove(conflictingShiftEntries);
       }
 
+      console.log({ test: new Date() });
       const shiftEntry = this.shiftEntryRepository.create();
       shiftEntry.user = user;
       shiftEntry.note = "";

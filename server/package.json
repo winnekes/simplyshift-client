@@ -29,6 +29,7 @@
     "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "pg": "^8.5.1",
     "routing-controllers": "^0.8.1",
     "routing-controllers-openapi": "^1.8.1",
