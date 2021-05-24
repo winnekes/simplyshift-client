@@ -1,7 +1,6 @@
 import {
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -12,6 +11,7 @@ import {
   InputGroup,
   Input,
   FormHelperText,
+  useColorMode,
 } from "@chakra-ui/react";
 import { CirclePicker } from "react-color";
 import { useForm, Controller } from "react-hook-form";
@@ -21,14 +21,16 @@ import {
   addShiftModelMutation,
 } from "../../services/mutations/add-shift-model";
 import { mutate as fetch } from "swr";
+import { colors } from "../../theme/colors";
+import { ModalContent } from "../common/overrides/modal";
 
 type Props = {
   onClose: () => void;
 };
 
-// todo coherent theme usage
 // todo extract form for edit and add model
 export function AddModelModal({ onClose }: Props) {
+  const { colorMode } = useColorMode();
   const { register, handleSubmit, errors, setValue, control } =
     useForm<AddShiftModelData>();
 
@@ -43,7 +45,7 @@ export function AddModelModal({ onClose }: Props) {
   return (
     <Modal isOpen onClose={onClose} isCentered size="sm">
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={colors[colorMode].ui02}>
         <form onSubmit={onSubmit}>
           <ModalHeader>Add a new shift</ModalHeader>
           <ModalCloseButton />

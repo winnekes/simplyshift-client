@@ -7,7 +7,6 @@ import {
   Popover,
   PopoverArrow,
   PopoverBody,
-  PopoverContent,
   PopoverHeader,
   PopoverTrigger,
   Spacer,
@@ -20,8 +19,9 @@ import {
 import moment from "moment";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ShiftModel } from "../../types";
+import { PopoverContent } from "../common/overrides/popover";
 import { AddModelModal } from "./add-model-modal";
-import { ConfirmDeleteModel } from "./confirm-delete-model";
+import { ConfirmDeleteModelModal } from "./confirm-delete-model-modal";
 import { EditModelModal } from "./edit-model-modal";
 
 type Props = {
@@ -61,17 +61,22 @@ export const ShiftModelsList = ({
                 mt={1}
                 border={`1px solid ${model.color}`}
                 bg={isActiveModel && model.color}
-                color={!isActiveModel && model.color}
                 boxShadow="none"
                 borderRadius="20px"
                 cursor="pointer"
                 onClick={() => selectModelHandler(model.id)}
                 variant={isActiveModel ? "solid" : "outline"}
               >
-                <TagLabel mr={5}>{model.name}</TagLabel>
+                <TagLabel color={!isActiveModel && model.color} mr={5}>
+                  {model.name}
+                </TagLabel>
                 <Popover gutter={12} placement="top" isLazy>
                   <PopoverTrigger>
-                    <TagRightIcon boxSize="12px" as={ViewIcon} />
+                    <TagRightIcon
+                      boxSize="12px"
+                      as={ViewIcon}
+                      color={!isActiveModel && model.color}
+                    />
                   </PopoverTrigger>
                   <PopoverContent maxWidth="250px">
                     <PopoverArrow />
@@ -138,7 +143,7 @@ export const ShiftModelsList = ({
         />
       )}
       {selectedModelForDeleting && (
-        <ConfirmDeleteModel
+        <ConfirmDeleteModelModal
           shiftModel={selectedModelForDeleting}
           onClose={() => setSelectedModelForDeleting(null)}
         />

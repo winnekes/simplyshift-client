@@ -1,7 +1,6 @@
 import {
   Modal,
   ModalOverlay,
-  ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -20,13 +19,13 @@ import { AddShiftModelData } from "../../services/mutations/add-shift-model";
 import { mutate as fetch } from "swr";
 import { editShiftModelMutation } from "../../services/mutations/edit-shift-model";
 import { ShiftModel } from "../../types";
+import { ModalContent } from "../common/overrides/modal";
 
 type Props = {
   model: ShiftModel;
   onClose: () => void;
 };
 
-// todo coherent theme usage
 export function EditModelModal({ model, onClose }: Props) {
   const { id, ...rest } = model;
   const { register, handleSubmit, errors, setValue, control } =

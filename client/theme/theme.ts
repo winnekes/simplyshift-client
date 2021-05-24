@@ -21,7 +21,10 @@ export const theme = extendTheme({
     body: "Roboto",
     heading: "Roboto Condensed",
   },
-  components: { Button, Modal },
+  components: {
+    Button,
+    Modal,
+  },
   styles: {
     global: (props) => ({
       body: {

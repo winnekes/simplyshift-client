@@ -2,7 +2,6 @@ import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogCloseButton,
-  AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
@@ -13,6 +12,7 @@ import { useMutation } from "react-query";
 import { mutate as fetch } from "swr";
 import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry";
 import { ShiftModel } from "../../types";
+import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
 type Props = {
   newShiftEntryData: { shiftModel: ShiftModel; date: Date };

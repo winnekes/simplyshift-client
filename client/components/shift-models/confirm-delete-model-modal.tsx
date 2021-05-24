@@ -2,7 +2,6 @@ import {
   AlertDialog,
   AlertDialogBody,
   AlertDialogCloseButton,
-  AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
@@ -13,13 +12,14 @@ import { useMutation } from "react-query";
 import { mutate as fetch } from "swr";
 import { deleteShiftModelMutation } from "../../services/mutations/delete-shift-model";
 import { ShiftModel } from "../../types";
+import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
 type Props = {
   shiftModel: ShiftModel;
   onClose: () => void;
 };
 
-export const ConfirmDeleteModel = ({ shiftModel, onClose }: Props) => {
+export const ConfirmDeleteModelModal = ({ shiftModel, onClose }: Props) => {
   const cancelRef = useRef();
 
   const { isLoading, error, mutate } = useMutation(deleteShiftModelMutation, {
@@ -38,7 +38,6 @@ export const ConfirmDeleteModel = ({ shiftModel, onClose }: Props) => {
       onClose={onClose}
     >
       <AlertDialogOverlay />
-
       <AlertDialogContent>
         <AlertDialogHeader>Delete shift model?</AlertDialogHeader>
         <AlertDialogCloseButton />
