@@ -1,6 +1,7 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Flex, Spacer, Text } from "@chakra-ui/react";
-import { Dispatch, SetStateAction } from "react";
+import { Flex, Spacer, Text, Tooltip } from "@chakra-ui/react";
+import moment from "moment";
+import { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import { EventProps } from "react-big-calendar";
 import { useMutation } from "react-query";
 import { mutate as fetch } from "swr";
@@ -8,6 +9,7 @@ import { deleteShiftEntryMutation } from "../../services/mutations/delete-shift-
 import { ShiftEntryEvent } from "./scheduler";
 
 type Props = EventProps & {
+  event: PropsWithChildren<EventProps<ShiftEntryEvent>>;
   shiftEntryId: number;
   events: ShiftEntryEvent[];
   setEvents: Dispatch<SetStateAction<ShiftEntryEvent[]>>;
@@ -37,10 +39,23 @@ export const ModifiedEvent = ({
   };
 
   return (
-    <Flex align="center" p={1}>
-      <Text fontSize="sm">{event.title}</Text>
-      <Spacer />
-      {isEditingCalendar && <CloseIcon boxSize="10px" onClick={deleteEvent} />}
-    </Flex>
+    <Tooltip
+      label={
+        <>
+          {moment(event.event.start, "HH:mm").format("HH:mm")} -{" "}
+          {moment(event.event.end, "HH:mm").format("HH:mm")}
+        </>
+      }
+    >
+      <Flex align="center" px={1}>
+        <Text fontSize="xs" isTruncated>
+          {event.title}
+        </Text>
+        <Spacer />
+        {isEditingCalendar && (
+          <CloseIcon boxSize="10px" onClick={deleteEvent} />
+        )}
+      </Flex>
+    </Tooltip>
   );
 };

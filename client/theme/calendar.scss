@@ -8,7 +8,7 @@ $border-color: rgba(82, 82, 82, 0.1);
 
 $segment-width: percentage(1 / 7);
 
-$time-selection-color: red;
+$time-selection-color: blue;
 $time-selection-bg-color: rgba(0, 0, 0, 0.5);
 $date-selection-bg-color: rgba(0, 0, 0, 0.1);
 
@@ -22,4 +22,13 @@ $rbc-css-prefix: rbc-i;
 
 $today-highlight-bg: rgba(194, 1, 92, 0);
 
+$event-bg: rgba(0, 0, 0, 0) !default;
+$event-border: darken(#3174ad, 10%) !default;
+$event-outline: #3b99fc !default;
+$event-color: #fff !default;
+
 @import "~react-big-calendar/lib/sass/styles";
+
+.rbc-header {
+  color:  rgba(153, 153, 153, 0.92) !important;
+}

@@ -1,16 +1,17 @@
 import {
   AlertDialog,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogContent,
-  AlertDialogCloseButton,
-  AlertDialogOverlay,
   AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
   Button,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { mutate } from "swr";
-import { api } from "../../services/api";
+import { useMutation } from "react-query";
+import { mutate as fetch } from "swr";
+import { deleteShiftModelMutation } from "../../services/mutations/delete-shift-model";
 import { ShiftModel } from "../../types";
 
 type Props = {
@@ -19,12 +20,15 @@ type Props = {
 };
 
 export const ConfirmDeleteModel = ({ shiftModel, onClose }: Props) => {
-  const deleteModel = async () => {
-    await api.delete(`/shift-model/${shiftModel.id}`);
-    await mutate("/shift-model");
-  };
-
   const cancelRef = useRef();
+
+  const { isLoading, error, mutate } = useMutation(deleteShiftModelMutation, {
+    onSuccess: () => onClose(),
+    onSettled: () => fetch("/shift-model"),
+  });
+
+  const deleteModel = () => mutate({ shiftModelId: shiftModel.id });
+
   return (
     <AlertDialog
       motionPreset="slideInBottom"

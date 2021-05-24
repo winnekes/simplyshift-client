@@ -40,6 +40,13 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
     toolbar.onNavigate("TODAY");
   };
 
+  const switchToWeekView = () => {
+    toolbar.onView("week");
+  };
+  const switchToMonthView = () => {
+    toolbar.onView("month");
+  };
+
   const SelectedMonthLabel = () => {
     const date = moment(toolbar.date);
     return (
@@ -64,7 +71,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
           onChange={onEditMode}
         />
       </Flex>
-      <Center my={5}>
+      <Center mt={5}>
         <ButtonGroup size="lg" isAttached variant="ghost" color="brand01.100">
           <IconButton
             aria-label="Add to friends"
@@ -79,6 +86,17 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
             icon={<ArrowRightIcon />}
             onClick={goToNextMonth}
           />
+        </ButtonGroup>
+      </Center>
+      <Center mb={4}>
+        <ButtonGroup size="xs" isAttached color="brand01.100" variant="outline">
+          <Button mr="-px" onClick={switchToWeekView}>
+            Week view
+          </Button>
+
+          <Button mr="-px" onClick={switchToMonthView}>
+            Month view
+          </Button>
         </ButtonGroup>
       </Center>
     </>

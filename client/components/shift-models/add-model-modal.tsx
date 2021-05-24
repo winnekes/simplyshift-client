@@ -20,26 +20,25 @@ import {
   AddShiftModelData,
   addShiftModelMutation,
 } from "../../services/mutations/add-shift-model";
-import { mutate as mut } from "swr";
+import { mutate as fetch } from "swr";
 
 type Props = {
   onClose: () => void;
 };
 
 // todo coherent theme usage
+// todo extract form for edit and add model
 export function AddModelModal({ onClose }: Props) {
   const { register, handleSubmit, errors, setValue, control } =
     useForm<AddShiftModelData>();
 
   // todo use isloading and error
   const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
-    onSuccess: () => {
-      mut("/shift-model");
-    },
+    onSuccess: () => onClose(),
+    onSettled: () => fetch("/shift-model"),
   });
-  const onSubmit = handleSubmit(async (data) => {
-    mutate(data);
-  });
+
+  const onSubmit = handleSubmit((data) => mutate(data));
 
   return (
     <Modal isOpen onClose={onClose} isCentered size="sm">

@@ -2,25 +2,6 @@ import moment from "moment";
 import { ShiftEntry, ShiftModel } from "../../types";
 import { ShiftEntryEvent } from "./scheduler";
 
-export const eventStyleGetter = (
-  event: ShiftEntryEvent,
-  start: string | Date,
-  end: string | Date,
-  isSelected: boolean
-) => {
-  return {
-    style: {
-      backgroundColor: event.color,
-      borderRadius: "20px",
-      opacity: 0.8,
-      color: "black",
-      border: "0px",
-      paddingLeft: "10px",
-      display: "block",
-    },
-  };
-};
-
 export const slotPropGetter = (date: Date) => {
   return {
     style: {

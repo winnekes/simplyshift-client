@@ -6,6 +6,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  JoinColumn,
+  RelationId,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, IsDate } from "class-validator";
@@ -35,6 +37,9 @@ export default class ShiftEntry extends BaseEntity {
 
   @ManyToOne(() => ShiftModel, (shiftModel) => shiftModel.shiftEntries)
   shiftModel!: ShiftModel;
+
+  @RelationId((shiftEntry: ShiftEntry) => shiftEntry.shiftModel)
+  public shiftModelId!: number;
 
   @ManyToOne(() => Calendar, (calendar) => calendar.shiftEntries)
   calendar!: Calendar;

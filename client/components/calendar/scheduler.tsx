@@ -1,22 +1,16 @@
-import {
-  Box,
-  Center,
-  FormControl,
-  FormLabel,
-  Switch,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import moment from "moment";
+import { Box, useColorMode } from "@chakra-ui/react";
+import moment, { Moment } from "moment";
+import "moment-timezone";
+import "moment/locale/en-gb";
 import { PropsWithChildren, useEffect, useState } from "react";
 import {
   Calendar as BigCalendar,
-  momentLocalizer,
   Event,
-  View,
+  EventProps,
+  momentLocalizer,
   NavigateAction,
   stringOrDate,
-  EventProps,
+  View,
 } from "react-big-calendar";
 import { useMutation } from "react-query";
 import useSWR from "swr";
@@ -24,24 +18,22 @@ import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry"
 import { ShiftEntry, ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { ShiftModelsList } from "../shift-models/shift-models-list";
-import { EditModeSettings } from "./edit-mode-settings";
-import { Toolbar } from "./toolbar";
 import { ModifiedEvent } from "./modified-event";
-import {
-  createShiftEntryEvent,
-  eventStyleGetter,
-  slotPropGetter,
-} from "./scheduler-utils";
+import { createShiftEntryEvent, slotPropGetter } from "./scheduler-utils";
+import { Toolbar } from "./toolbar";
+import { WeekView } from "./week-view";
 
 export type ShiftEntryEvent = Event & { id: number; color: string };
 
 export const Scheduler = () => {
+  const { colorMode } = useColorMode();
   const [events, setEvents] = useState<ShiftEntryEvent[]>([]);
   const [selectedTimeframe, setSelectedTimeFrame] = useState(new Date());
   const [isEditingCalendar, setIsEditingCalendar] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
+
   const { mutate } = useMutation(addShiftEntryMutation, {
-    onSuccess: async () => {
+    onSettled: async () => {
       await refetchShiftEntries();
     },
   });
@@ -54,51 +46,74 @@ export const Scheduler = () => {
   const { data: shiftModels, error: shiftModelsError } =
     useSWR<ShiftModel[]>("/shift-model");
 
-  if (shiftEntriesError || shiftModelsError) return <ErrorContainer />;
-
   useEffect(() => {
     if (shiftEntries) {
       setEvents(
         shiftEntries.map((shift) => ({
           id: shift.id,
           title: shift.shiftModel.name,
-          start: shift.startsAt,
-          end: shift.endsAt,
+          start: moment(shift.startsAt).toDate(),
+          end: moment(shift.endsAt).toDate(),
           note: shift.note,
-          color: shift.shiftModel.color,
+          color: `${shift.shiftModel.color}aa`,
         }))
       );
     }
   }, [shiftEntries]);
 
-  const onSelectSlot = async (slot: {
-    start: stringOrDate;
-    end: stringOrDate;
-  }) => {
+  if (shiftEntriesError || shiftModelsError) return <ErrorContainer />;
+
+  const eventStyleGetter = (
+    event: ShiftEntryEvent,
+    start: string | Date,
+    end: string | Date,
+    isSelected: boolean
+  ) => {
+    return {
+      style: {
+        backgroundColor: event.color,
+        borderRadius: "20px",
+        color: `${colorMode === "dark" ? "white" : "black"}`,
+        fontSize: "12px",
+        border: "0px",
+        paddingLeft: "10px",
+        display: "block",
+      },
+    };
+  };
+
+  const createShiftEntry = async (date: Moment) => {
+    const shiftModel = shiftModels.find(
+      (model) => model.id === selectedModelId
+    );
+    if (!shiftModel) {
+      throw new Error("Could not find shift model");
+    }
+
+    const modifiedData = {
+      shiftModelId: shiftModel.id,
+      startsAt: date.toLocaleString(),
+    };
+
+    await mutate(modifiedData);
+
+    const newShiftEntry = createShiftEntryEvent(shiftModel, date.toDate());
+    setEvents([...events, newShiftEntry]);
+  };
+
+  const onSelectSlot = async (slot: { start: stringOrDate }) => {
     if (selectedModelId) {
       const startsAt = moment(slot.start);
-      const shiftModel = shiftModels.find(
-        (model) => model.id === selectedModelId
-      );
-      if (!shiftModel) {
-        throw new Error("Could not find shift model");
-      }
-
-      const modifiedData = {
-        shiftModelId: shiftModel.id,
-        startsAt: startsAt.toLocaleString(),
-      };
-
-      await mutate(modifiedData);
-
-      const newShiftEntry = createShiftEntryEvent(
-        shiftModel,
-        startsAt.toDate()
-      );
-      setEvents([...events, newShiftEntry]);
+      await createShiftEntry(startsAt);
     }
   };
 
+  const onSelectDay = async (day: Date) => {
+    if (selectedModelId) {
+      const startsAt = moment(day);
+      await createShiftEntry(startsAt);
+    }
+  };
   const onNavigate = async (date: Date, view: View, action: NavigateAction) => {
     await setSelectedTimeFrame(date);
   };
@@ -112,7 +127,7 @@ export const Scheduler = () => {
     }
   };
 
-  moment.locale("nl", {
+  moment.locale("en-gb", {
     week: {
       dow: 1,
       doy: 1,
@@ -120,17 +135,31 @@ export const Scheduler = () => {
   });
 
   const localizer = momentLocalizer(moment);
+  console.log({ events });
+
+  let formats = {
+    dateFormat: "dd",
+
+    eventTimeRangeFormat: (range) =>
+      `${moment(range.start, "HH:mm")} – ${moment(range.end, "HH:mm")}`,
+  };
   return (
     <>
       <Box my={7}>
         <BigCalendar
+          //formats={formats}
           localizer={localizer}
           events={events}
           date={selectedTimeframe}
           startAccessor="start"
           endAccessor="end"
-          style={{ height: 500 }}
-          views={["month"]}
+          tooltipAccessor={null}
+          showMultiDayTimes={true}
+          culture="en-gb"
+          timeslots={1}
+          selectable
+          style={{ height: 600 }}
+          views={{ week: WeekView, month: true }}
           components={{
             toolbar: (toolbar) => (
               <Toolbar
@@ -139,6 +168,7 @@ export const Scheduler = () => {
                 onEditMode={onEditMode}
               />
             ),
+
             event: (
               event: PropsWithChildren<EventProps<ShiftEntryEvent>>,
               title
@@ -154,25 +184,24 @@ export const Scheduler = () => {
               />
             ),
           }}
-          onDrillDown={(e) => console.log({ e })}
+          drilldownView="week"
           eventPropGetter={eventStyleGetter}
           dayPropGetter={slotPropGetter}
           onNavigate={onNavigate}
           // onSelectEvent={onSelectEvent}
           onSelectSlot={onSelectSlot}
-          popup
-          selectable
+          popup={false}
+          onShowMore={(b, e) => console.log(e)}
         />
       </Box>
-      <Center>
-        {isEditingCalendar && (
-          <ShiftModelsList
-            shiftModels={shiftModels}
-            selectedModelId={selectedModelId}
-            setSelectedModelId={setSelectedModelId}
-          />
-        )}
-      </Center>
+
+      {isEditingCalendar && (
+        <ShiftModelsList
+          shiftModels={shiftModels}
+          selectedModelId={selectedModelId}
+          setSelectedModelId={setSelectedModelId}
+        />
+      )}
     </>
   );
 };

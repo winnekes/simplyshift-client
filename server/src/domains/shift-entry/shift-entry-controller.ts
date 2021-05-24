@@ -32,7 +32,7 @@ export default class ShiftEntryController {
 
   @Authorized()
   @Get("/shift-entry")
-  getAllShiftEntries(
+  async getAllShiftEntries(
     @CurrentUser() user: User,
     @QueryParam("date", { required: false }) date: Date
   ): Promise<ShiftEntry[]> {
@@ -40,14 +40,26 @@ export default class ShiftEntryController {
       ? moment().startOf("month")
       : moment(date).startOf("month");
 
-    return this.shiftEntryRepository.find({
-      where: {
-        user: user,
-        startsAt: MoreThanOrEqual(selectedMonth),
-        endsAt: LessThan(moment(selectedMonth).add(1, "month")),
-      },
-      relations: ["shiftModel"],
+    const shiftEntries = await this.shiftEntryRepository.findAllForUser(user, {
+      startsAt: MoreThanOrEqual(selectedMonth),
+      endsAt: LessThan(moment(selectedMonth).add(1, "month")),
     });
+
+    const shiftModels = await this.shiftModelRepository
+      .createQueryBuilder()
+      .where("user_id = :userId", { userId: user.id })
+      .withDeleted()
+      .getMany();
+
+    const shiftEntriesWithShiftModels = shiftEntries.map((shiftEntry) => ({
+      ...shiftEntry,
+      shiftModel:
+        shiftModels.find(
+          (shiftModel) => shiftModel.id === shiftEntry.shiftModelId
+        ) || null,
+    }));
+
+    return shiftEntriesWithShiftModels as ShiftEntry[];
   }
 
   @Authorized()
