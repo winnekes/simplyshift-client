@@ -1,3 +1,4 @@
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -5,6 +6,7 @@ import {
   Flex,
   Heading,
   HStack,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
@@ -21,8 +23,7 @@ import { width } from "../../theme/theme";
 
 export function Navbar() {
   const { user, logout } = useAuth();
-  const { toggleColorMode } = useColorMode();
-  const { colorMode } = useColorMode();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box
@@ -41,9 +42,9 @@ export function Navbar() {
         maxWidth={width}
       >
         <HStack spacing={4} alignItems="center">
-          <Heading size="1xl" onClick={toggleColorMode}>
-            SimplyShift
-          </Heading>
+          <Link href="/" passHref>
+            <Heading size="1xl">SimplyShift</Heading>
+          </Link>
 
           {user && (
             <Link href="/calendar">
@@ -53,6 +54,14 @@ export function Navbar() {
         </HStack>
 
         <Flex alignItems="center">
+          <IconButton
+            size="lg"
+            color="gray.500"
+            aria-label="Switch color mode"
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            variant="ghost"
+            onClick={toggleColorMode}
+          />
           <Menu>
             {user && (
               <>
