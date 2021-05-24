@@ -53,7 +53,7 @@ export const ConfirmOverrideShiftEntryModal = ({
             No
           </Button>
           <Button
-            colorScheme="red"
+            colorScheme="brand01"
             ml={3}
             onClick={() => onConfirm(shiftModel, date)}
           >

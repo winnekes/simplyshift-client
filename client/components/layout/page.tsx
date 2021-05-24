@@ -18,8 +18,7 @@ const Content: FunctionComponent = ({ children }) => {
   return (
     <Box
       bg={colors[colorMode].ui02}
-      px={6}
-      pb={6}
+      p={6}
       marginY={4}
       borderRadius={5}
       border={[null, `1px solid ${colors[colorMode].ui03}`]}

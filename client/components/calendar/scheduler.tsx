@@ -175,7 +175,7 @@ export const Scheduler = () => {
 
   return (
     <>
-      <Box my={7}>
+      <Box mb={7}>
         <BigCalendar
           localizer={localizer}
           events={events}
