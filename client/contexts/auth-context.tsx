@@ -26,8 +26,9 @@ export function AuthProvider(props) {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [canFetchProfile, setCanFetchProfile] = useState(false);
 
-  const { data } = useSWR<User>(token ? "/users/profile" : null);
+  const { data } = useSWR<User>(canFetchProfile && "/users/profile");
 
   useEffect(() => {
     if (window) {
@@ -35,6 +36,10 @@ export function AuthProvider(props) {
       setToken(token);
 
       api.defaults.headers.Authorization = `Bearer ${token}`;
+
+      if (api.defaults.headers.Authorization && token) {
+        setCanFetchProfile(true);
+      }
     }
   }, [token]);
 
@@ -51,6 +56,7 @@ export function AuthProvider(props) {
 
     setUser(null);
     setToken(null);
+    setCanFetchProfile(false);
 
     delete api.defaults.headers["Authorization"];
     await router.push("/");
