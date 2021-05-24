@@ -11,23 +11,26 @@ import {
 import { useRef } from "react";
 import { useMutation } from "react-query";
 import { mutate as fetch } from "swr";
-import { deleteShiftModelMutation } from "../../services/mutations/delete-shift-model";
+import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry";
 import { ShiftModel } from "../../types";
 
 type Props = {
-  shiftModel: ShiftModel;
+  newShiftEntryData: { shiftModel: ShiftModel; date: Date };
+  onConfirm: (shiftModel: ShiftModel, date: Date) => Promise<void>;
   onClose: () => void;
 };
 
-export const ConfirmDeleteModel = ({ shiftModel, onClose }: Props) => {
+export const ConfirmOverrideShiftEntryModal = ({
+  newShiftEntryData: { shiftModel, date },
+  onConfirm,
+  onClose,
+}: Props) => {
   const cancelRef = useRef();
 
-  const { isLoading, error, mutate } = useMutation(deleteShiftModelMutation, {
+  const { isLoading, error, mutate } = useMutation(addShiftEntryMutation, {
     onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),
   });
-
-  const deleteModel = () => mutate({ shiftModelId: shiftModel.id });
 
   return (
     <AlertDialog
@@ -49,7 +52,11 @@ export const ConfirmDeleteModel = ({ shiftModel, onClose }: Props) => {
           <Button ref={cancelRef} onClick={onClose}>
             No
           </Button>
-          <Button colorScheme="red" ml={3} onClick={deleteModel}>
+          <Button
+            colorScheme="red"
+            ml={3}
+            onClick={() => onConfirm(shiftModel, date)}
+          >
             Yes
           </Button>
         </AlertDialogFooter>

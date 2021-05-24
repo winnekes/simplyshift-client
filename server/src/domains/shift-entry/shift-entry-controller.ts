@@ -20,6 +20,9 @@ import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { MoreThanOrEqual, LessThan, getCustomRepository } from "typeorm";
 import { ShiftEntryRepository } from "./shift-entry-repository";
+import "moment-timezone";
+moment.tz.setDefault("Europe/Amsterdam");
+moment.locale("nl");
 
 @JsonController()
 @OpenAPI({
@@ -67,7 +70,7 @@ export default class ShiftEntryController {
   async createShiftEntry(
     @CurrentUser()
     user: User,
-    @Body() data: { shiftModelId: number; startsAt: Date },
+    @Body() data: { shiftModelId: number; date: Date },
     @Res() response: any
   ): Promise<ShiftEntry> {
     try {
@@ -83,7 +86,7 @@ export default class ShiftEntryController {
         );
       // todo find conflicting shift entry
 
-      const startDate = moment.parseZone(data.startsAt).startOf("day");
+      const startDate = moment(data.date).startOf("day");
       const startsAt = moment(startDate)
         .add(moment.duration(model.startsAt))
         .toDate();
@@ -105,7 +108,6 @@ export default class ShiftEntryController {
         await this.shiftEntryRepository.softRemove(conflictingShiftEntries);
       }
 
-      console.log({ test: new Date() });
       const shiftEntry = this.shiftEntryRepository.create();
       shiftEntry.user = user;
       shiftEntry.note = "";

@@ -21,7 +21,7 @@ export const slotPropGetter = (date: Date) => {
   };
 };
 
-export const createShiftEntryEvent = (
+export const createLocalShiftEntryEvent = (
   shiftModel: ShiftModel,
   startsAt: Date
 ): ShiftEntryEvent => {

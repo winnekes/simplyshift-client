@@ -1,7 +1,15 @@
 import * as bcrypt from "bcrypt";
 import { Exclude } from "class-transformer";
 import { IsEmail, IsString, MinLength } from "class-validator";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import ShiftEntry from "../shift-entry/shift-entry";
 import ShiftModel from "../shift-model/shift-model";
@@ -42,4 +50,13 @@ export default class User extends BaseEntity {
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.user)
   shiftEntries!: ShiftEntry[];
+
+  @CreateDateColumn({ type: "timestamptz" })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ type: "timestamptz" })
+  updatedAt?: Date;
+
+  @DeleteDateColumn({ type: "timestamptz" })
+  deletedAt?: Date;
 }

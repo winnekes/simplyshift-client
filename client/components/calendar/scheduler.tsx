@@ -17,9 +17,10 @@ import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry"
 import { ShiftEntry, ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { ShiftModelsList } from "../shift-models/shift-models-list";
+import { ConfirmOverrideShiftEntryModal } from "./confirm-override-shift-entry-modal";
 import { ModifiedEvent } from "./modified-event";
 import {
-  createShiftEntryEvent,
+  createLocalShiftEntryEvent,
   isConflictingTimeslot,
   localizer,
   slotPropGetter,
@@ -35,6 +36,16 @@ export const Scheduler = () => {
   const [selectedTimeframe, setSelectedTimeFrame] = useState(new Date());
   const [isEditingCalendar, setIsEditingCalendar] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
+  const [newShiftEntryData, setNewShiftEntryData] =
+    useState<{
+      shiftModel: ShiftModel;
+      date: Date;
+    }>();
+
+  const [
+    showConfirmOverrideShiftEntryModal,
+    setShowConfirmOverrideShiftEntryModal,
+  ] = useState(false);
 
   const {
     data: shiftEntries,
@@ -47,7 +58,6 @@ export const Scheduler = () => {
 
   const { mutate } = useMutation(addShiftEntryMutation, {
     onSettled: async () => {
-      console.log("?");
       await fetchShiftEntries();
     },
   });
@@ -88,7 +98,14 @@ export const Scheduler = () => {
     };
   };
 
-  const createShiftEntry = async (date: Moment) => {
+  async function sendToServer(shiftModel: ShiftModel, date: Date) {
+    await mutate({ shiftModelId: shiftModel.id, date: date.toLocaleString() });
+
+    const newShiftEntry = createLocalShiftEntryEvent(shiftModel, date);
+    setEvents([...events, newShiftEntry]);
+  }
+
+  const createShiftEntry = async (date: Date) => {
     const shiftModel = shiftModels.find(
       (model) => model.id === selectedModelId
     );
@@ -97,25 +114,24 @@ export const Scheduler = () => {
       throw new Error("Could not find shift model");
     }
 
-    // todo ask for override
-    if (isConflictingTimeslot(date.toDate(), shiftModel, shiftEntries)) {
-      console.log("ddd");
+    //  ask for override and save to server conditionally
+    if (isConflictingTimeslot(date, shiftModel, shiftEntries)) {
+      setNewShiftEntryData({
+        shiftModel,
+        date,
+      });
+
+      setShowConfirmOverrideShiftEntryModal(true);
+      return;
     }
 
-    const modifiedData = {
-      shiftModelId: shiftModel.id,
-      startsAt: date.toLocaleString(),
-    };
-
-    await mutate(modifiedData);
-
-    const newShiftEntry = createShiftEntryEvent(shiftModel, date.toDate());
-    setEvents([...events, newShiftEntry]);
+    //
+    await sendToServer(shiftModel, date);
   };
 
   const onSelectSlot = async (slot: { start: stringOrDate }) => {
     if (selectedModelId) {
-      const startsAt = moment(slot.start);
+      const startsAt = moment(slot.start).toDate();
       await createShiftEntry(startsAt);
     }
   };
@@ -185,6 +201,14 @@ export const Scheduler = () => {
           shiftModels={shiftModels}
           selectedModelId={selectedModelId}
           setSelectedModelId={setSelectedModelId}
+        />
+      )}
+
+      {showConfirmOverrideShiftEntryModal && (
+        <ConfirmOverrideShiftEntryModal
+          newShiftEntryData={newShiftEntryData}
+          onConfirm={sendToServer}
+          onClose={() => setShowConfirmOverrideShiftEntryModal(false)}
         />
       )}
     </>
