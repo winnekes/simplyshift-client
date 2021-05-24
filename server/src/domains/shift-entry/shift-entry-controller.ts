@@ -44,8 +44,8 @@ export default class ShiftEntryController {
       : moment(date).startOf("month");
 
     const shiftEntries = await this.shiftEntryRepository.findAllForUser(user, {
-      startsAt: MoreThanOrEqual(selectedMonth),
-      endsAt: LessThan(moment(selectedMonth).add(1, "month")),
+      startsAt: MoreThanOrEqual(moment(selectedMonth).subtract(7, "days")),
+      endsAt: LessThan(moment(selectedMonth).add(1, "month").add(7, "days")),
     });
 
     const shiftModels = await this.shiftModelRepository
