@@ -10,6 +10,7 @@ import {
   Delete,
   QueryParam,
 } from "routing-controllers";
+import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { ShiftEntryService } from "./shift-entry-service";
 import ShiftEntry from "./shift-entry";
@@ -89,7 +90,10 @@ export default class ShiftEntryController {
 
   @Authorized()
   @Delete("/shift-entry/:id")
-  async deleteShiftEntry(@Param("id") id: number, @CurrentUser() user: User) {
+  async deleteShiftEntry(
+    @Param("id") id: number,
+    @CurrentUser() user: User
+  ): Promise<UpdateResult> {
     const shiftEntry = await this.shiftEntryRepository.findOneForUser(user, {
       where: { id },
     });
@@ -102,7 +106,7 @@ export default class ShiftEntryController {
     }
 
     try {
-      await this.shiftEntryRepository.softRemove(shiftEntry);
+      return this.shiftEntryRepository.softDelete({ id: shiftEntry.id });
     } catch (error) {
       console.log({ error });
       throw new ExtendedHttpError(

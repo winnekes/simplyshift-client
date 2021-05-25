@@ -13,14 +13,11 @@ import LoginController from "./domains/identity-access/login-controller";
 import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
 import ShiftModelController from "./domains/shift-model/shift-model-controller";
 import SpecController from "./domains/specs/spec-controller";
-import moment from "moment";
 import logger from "koa-logger";
 import "moment-timezone";
-
-dotenv.config();
-
+import moment from "moment";
 moment.tz.setDefault("Europe/Amsterdam");
-moment.locale("nl");
+dotenv.config();
 
 const port = process.env.PORT;
 
@@ -44,8 +41,6 @@ const app = createKoaServer({
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
-
-      // todo better Auth check (is decoded ID a user)
       try {
         const userId = verify(token).data;
         return !!(await User.findOne(userId));
@@ -58,7 +53,6 @@ const app = createKoaServer({
     return false;
   },
   currentUserChecker: async (action: Action) => {
-    // probably send userId as header?
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");

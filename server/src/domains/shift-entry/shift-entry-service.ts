@@ -104,9 +104,7 @@ export class ShiftEntryService {
     newShiftEntry.calendar = calendar;
 
     await getManager().transaction(async (transactionalEntityManager) => {
-      if (conflictingShiftEntries.length > 0) {
-        await transactionalEntityManager.softRemove(conflictingShiftEntries);
-      }
+      await transactionalEntityManager.softRemove(conflictingShiftEntries);
 
       await transactionalEntityManager.save(newShiftEntry);
     });

@@ -73,7 +73,7 @@ export const ShiftModelsList = ({
                 <Popover gutter={12} placement="top" isLazy>
                   <PopoverTrigger>
                     <TagRightIcon
-                      boxSize="12px"
+                      boxSize="16px"
                       as={ViewIcon}
                       color={!isActiveModel && model.color}
                     />
