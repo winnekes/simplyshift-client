@@ -5,64 +5,35 @@ import {
   Post,
   Authorized,
   CurrentUser,
-  NotFoundError,
-  Res,
   Put,
   Param,
   Delete,
   QueryParam,
 } from "routing-controllers";
-import moment from "moment";
-import { CalendarRepository } from "../calendar/calendar-repository";
-import { ShiftModelRepository } from "../shift-model/shift-model-repository";
+import { ExtendedHttpError } from "../../utils/extended-http-error";
+import { ShiftEntryService } from "./shift-entry-service";
 import ShiftEntry from "./shift-entry";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
-import { MoreThanOrEqual, LessThan, getCustomRepository } from "typeorm";
+import { getCustomRepository } from "typeorm";
 import { ShiftEntryRepository } from "./shift-entry-repository";
 import "moment-timezone";
-moment.tz.setDefault("Europe/Amsterdam");
-moment.locale("nl");
 
 @JsonController()
 @OpenAPI({
   security: [{ bearerAuth: [] }],
 })
 export default class ShiftEntryController {
-  private shiftModelRepository = getCustomRepository(ShiftModelRepository);
   private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
-  private calendarRepository = getCustomRepository(CalendarRepository);
+  private shiftEntryService = new ShiftEntryService();
 
   @Authorized()
   @Get("/shift-entry")
   async getAllShiftEntries(
     @CurrentUser() user: User,
-    @QueryParam("date", { required: false }) date: Date
+    @QueryParam("date") date: Date
   ): Promise<ShiftEntry[]> {
-    const selectedMonth = !date
-      ? moment().startOf("month")
-      : moment(date).startOf("month");
-
-    const shiftEntries = await this.shiftEntryRepository.findAllForUser(user, {
-      startsAt: MoreThanOrEqual(moment(selectedMonth).subtract(7, "days")),
-      endsAt: LessThan(moment(selectedMonth).add(1, "month").add(7, "days")),
-    });
-
-    const shiftModels = await this.shiftModelRepository
-      .createQueryBuilder()
-      .where("user_id = :userId", { userId: user.id })
-      .withDeleted()
-      .getMany();
-
-    const shiftEntriesWithShiftModels = shiftEntries.map((shiftEntry) => ({
-      ...shiftEntry,
-      shiftModel:
-        shiftModels.find(
-          (shiftModel) => shiftModel.id === shiftEntry.shiftModelId
-        ) || null,
-    }));
-
-    return shiftEntriesWithShiftModels as ShiftEntry[];
+    return this.shiftEntryService.getShiftEntriesForSingleMonth(user, date);
   }
 
   @Authorized()
@@ -70,66 +41,16 @@ export default class ShiftEntryController {
   async createShiftEntry(
     @CurrentUser()
     user: User,
-    @Body() data: { shiftModelId: number; date: Date },
-    @Res() response: any
+    @Body() data: { shiftModelId: number; date: Date }
   ): Promise<ShiftEntry> {
     try {
-      const { shiftModelId } = data;
-
-      const model = await this.shiftModelRepository.findOneForUser(user, {
-        where: { id: shiftModelId },
-      });
-
-      if (!model)
-        throw new NotFoundError(
-          "Could not find the model for this shift entry."
-        );
-      // todo find conflicting shift entry
-
-      const startDate = moment(data.date).startOf("day");
-      const startsAt = moment(startDate)
-        .add(moment.duration(model.startsAt))
-        .toDate();
-      const endsAt =
-        model.startsAt > model.endsAt
-          ? moment(startDate)
-              .add(moment.duration(model.endsAt))
-              .add("1", "day")
-              .toDate()
-          : moment(startDate).add(moment.duration(model.endsAt)).toDate();
-
-      const conflictingShiftEntries =
-        await this.shiftEntryRepository.findConflictingEntriesForUser(user, {
-          startsAt,
-          endsAt,
-        });
-
-      if (conflictingShiftEntries.length > 0) {
-        await this.shiftEntryRepository.softRemove(conflictingShiftEntries);
-      }
-
-      const shiftEntry = this.shiftEntryRepository.create();
-      shiftEntry.user = user;
-      shiftEntry.note = "";
-      shiftEntry.startsAt = startsAt;
-      shiftEntry.endsAt = endsAt;
-      shiftEntry.shiftModel = model;
-
-      const calendar = await this.calendarRepository.findActiveOneForUser(user);
-      if (!calendar) {
-        throw new Error("No calendar found");
-      }
-
-      shiftEntry.calendar = calendar;
-
-      return await shiftEntry.save();
-    } catch (err) {
-      console.log(err);
-      response.status = 400;
-      response.body = {
-        message: "Unable to save shift entry.",
-      };
-      return response;
+      return this.shiftEntryService.createNewShiftEntry(user, data);
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError(
+        "Could not create new entry",
+        "CREATE_SHIFT_ENTRY_FAILED"
+      );
     }
   }
 
@@ -138,42 +59,56 @@ export default class ShiftEntryController {
   async updateShiftEntry(
     @Param("id") id: number,
     @CurrentUser() user: User,
-    @Body() update: Partial<ShiftEntry>
+    @Body() data: Partial<ShiftEntry>
   ) {
-    const entity = await this.shiftEntryRepository.findOne(id, {
+    const shiftEntry = await this.shiftEntryRepository.findOne(id, {
       where: { user },
     });
-    if (!entity) throw new NotFoundError("Cannot find the shift entry.");
-    const updatedEntity = await this.shiftEntryRepository.merge(entity, update);
+    if (!shiftEntry) {
+      throw new ExtendedHttpError(
+        "Cannot find the shift entry.",
+        "SHIFT_ENTRY_NOT_FOUND"
+      );
+    }
 
-    return await this.shiftEntryRepository.save(updatedEntity);
+    try {
+      const updatedEntity = await this.shiftEntryRepository.merge(
+        shiftEntry,
+        data
+      );
+
+      return await this.shiftEntryRepository.save(updatedEntity);
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError(
+        "Could not update shift entry",
+        "UPDATE_SHIFT_ENTRY_FAILED"
+      );
+    }
   }
 
   @Authorized()
   @Delete("/shift-entry/:id")
-  async deleteShiftEntry(
-    @Param("id") id: number,
-    @CurrentUser() user: User,
-    @Res() response: any
-  ) {
-    try {
-      if (
-        (await this.shiftEntryRepository.delete({ id, user })).affected === 0
-      ) {
-        throw new NotFoundError("Could not find shift entry to delete.");
-      }
-      response.body = {
-        message: "Successfully deleted the entry model.",
-      };
-      return response;
-    } catch (err) {
-      console.log(err);
-      response.status = 404;
-      response.body = {
-        message: "Could not find shift entry to delete.",
-      };
+  async deleteShiftEntry(@Param("id") id: number, @CurrentUser() user: User) {
+    const shiftEntry = await this.shiftEntryRepository.findOneForUser(user, {
+      where: { id },
+    });
 
-      return response;
+    if (!shiftEntry) {
+      throw new ExtendedHttpError(
+        "Cannot find the shift entry.",
+        "SHIFT_ENTRY_NOT_FOUND"
+      );
+    }
+
+    try {
+      await this.shiftEntryRepository.softRemove(shiftEntry);
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError(
+        "Could not delete shift entry",
+        "DELETE_SHIFT_ENTRY_FAILED"
+      );
     }
   }
 }

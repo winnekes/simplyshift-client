@@ -76,6 +76,8 @@ export function AuthProvider(props) {
     if (error.response) {
       errorMessage = error.response.data.message;
 
+      // switch on errors
+      // only allow certain error messages
       if (error.response.data?.message === "JWT expired") {
         await logout();
       }

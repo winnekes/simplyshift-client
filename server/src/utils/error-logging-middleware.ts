@@ -14,6 +14,7 @@ export class ErrorLoggingMiddleware implements KoaMiddlewareInterface {
       ctx.status = err.statusCode || err.status || 500;
       ctx.body = {
         message: err.message,
+        code: err.code,
       };
       Sentry.withScope(function (scope) {
         scope.addEventProcessor(function (event) {
