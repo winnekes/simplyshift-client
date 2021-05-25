@@ -1,3 +1,4 @@
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -5,6 +6,7 @@ import {
   Flex,
   Heading,
   HStack,
+  IconButton,
   Menu,
   MenuButton,
   MenuDivider,
@@ -15,26 +17,24 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
-import { useAuthContext } from "../contexts/auth-context";
-import { useUser } from "../hooks/use-user";
-import { colors } from "../theme/colors";
-import { width } from "../theme/theme";
+import { useAuth } from "../../contexts/auth-context";
+import { colors } from "../../theme/colors";
+import { width } from "../../theme/theme";
 
 export function Navbar() {
-  const auth = useAuthContext();
-  const { user, error, loading } = useUser();
-  const { toggleColorMode } = useColorMode();
-  const { colorMode } = useColorMode();
+  const { user, logout } = useAuth();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box
       py={2}
+      px={[6, 6, 6, 0]}
       bg={colors[colorMode].ui02}
       mb="2rem"
       borderBottom={`1px solid ${colors[colorMode].ui03}`}
     >
       <Flex
-        mx={[4, "auto"]}
+        mx={[0, "auto"]}
         my={[0, "0"]}
         h={16}
         alignItems="center"
@@ -42,31 +42,37 @@ export function Navbar() {
         maxWidth={width}
       >
         <HStack spacing={4} alignItems="center">
-          <Heading size="1xl" onClick={toggleColorMode}>
-            SimplyShift
-          </Heading>
+          <Link href="/" passHref>
+            <Heading size="1xl">SimplyShift</Heading>
+          </Link>
 
           {user && (
             <Link href="/calendar">
-              <Box>Calendar</Box>
+              <Box cursor="pointer">Calendar</Box>
             </Link>
           )}
         </HStack>
 
         <Flex alignItems="center">
+          <IconButton
+            size="lg"
+            color="gray.500"
+            aria-label="Switch color mode"
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            variant="ghost"
+            onClick={toggleColorMode}
+          />
           <Menu>
             {user && (
               <>
                 <MenuButton
                   as={Button}
                   rounded="full"
-                  variant="link"
+                  variant="ghost"
+                  p={0}
                   cursor="pointer"
                 >
-                  <Avatar
-                    size="sm"
-                    name={`${user.firstName} ${user.lastName}`}
-                  />
+                  <Avatar bg="brand01.100" size="sm" />
                 </MenuButton>
                 <MenuList>
                   <Link href="/profile" passHref>
@@ -74,7 +80,7 @@ export function Navbar() {
                   </Link>
                   <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={() => auth.logout()}>Logout</MenuItem>
+                  <MenuItem onClick={() => logout()}>Logout</MenuItem>
                 </MenuList>
               </>
             )}

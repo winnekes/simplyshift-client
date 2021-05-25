@@ -14,18 +14,21 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
-import { DividedSegment } from "../components/divided-segment";
-import { Page } from "../components/page";
-import { PageWrapper } from "../components/page-wrapper";
+import { DividedSegment } from "../components/layout/divided-segment";
+import { Page } from "../components/layout/page";
+import { PageWrapper } from "../components/layout/page-wrapper";
+import { useAuth } from "../contexts/auth-context";
 import { login, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
+  const auth = useAuth();
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<LoginMutationData>();
 
   const { isLoading, error, mutate } = useMutation(login, {
     onSuccess: async ({ data }) => {
-      window.localStorage.setItem("token", data["jwt"]);
+      auth.setToken(data.token);
+      auth.setUser(data.user);
       await router.push("/calendar");
     },
   });

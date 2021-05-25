@@ -52,7 +52,7 @@ export default class UserController {
       await this.calendarRepository.save(calendar);
       const jwt = sign({ id: user.id });
 
-      return { jwt, user };
+      return { token: jwt, user };
     } catch (err) {
       throw new BadRequestError("Something went wrong");
     }

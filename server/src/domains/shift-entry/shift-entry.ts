@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  RelationId,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, IsDate } from "class-validator";
@@ -19,11 +20,11 @@ export default class ShiftEntry extends BaseEntity {
   id!: number;
 
   @IsDate()
-  @Column("timestamp")
+  @Column("timestamptz")
   startsAt!: Date;
 
   @IsDate()
-  @Column("timestamp")
+  @Column("timestamptz")
   endsAt!: Date;
 
   @IsString()
@@ -36,15 +37,18 @@ export default class ShiftEntry extends BaseEntity {
   @ManyToOne(() => ShiftModel, (shiftModel) => shiftModel.shiftEntries)
   shiftModel!: ShiftModel;
 
+  @RelationId((shiftEntry: ShiftEntry) => shiftEntry.shiftModel)
+  public shiftModelId!: number;
+
   @ManyToOne(() => Calendar, (calendar) => calendar.shiftEntries)
   calendar!: Calendar;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt?: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: "timestamptz" })
   deletedAt?: Date;
 }

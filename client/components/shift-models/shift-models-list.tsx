@@ -1,51 +1,45 @@
+import { AddIcon, DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 import {
+  Button,
+  Divider,
   Flex,
   HStack,
   Popover,
   PopoverArrow,
   PopoverBody,
-  Button,
-  PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  Spacer,
   Tag,
   TagLabel,
+  TagLeftIcon,
   TagRightIcon,
-  Spacer,
+  Text,
 } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon, ViewIcon } from "@chakra-ui/icons";
 import moment from "moment";
 import { Dispatch, SetStateAction, useState } from "react";
-import useSWR, { mutate } from "swr";
-import { api, fetcher } from "../../services/api";
 import { ShiftModel } from "../../types";
-import { ErrorContainer } from "../error-container";
-import { Loading } from "../loading";
+import { PopoverContent } from "../common/overrides/popover";
+import { AddModelModal } from "./add-model-modal";
+import { ConfirmDeleteModelModal } from "./confirm-delete-model-modal";
 import { EditModelModal } from "./edit-model-modal";
 
 type Props = {
+  shiftModels: ShiftModel[];
   selectedModelId: number;
   setSelectedModelId: Dispatch<SetStateAction<number>>;
 };
 
 export const ShiftModelsList = ({
+  shiftModels,
   selectedModelId,
   setSelectedModelId,
 }: Props) => {
-  const [
-    selectedModelForEdit,
-    setSelectedModelForEdit,
-  ] = useState<ShiftModel | null>(null);
-
-  const { data, error } = useSWR<ShiftModel[]>("/shift-model", fetcher);
-
-  if (error) return <ErrorContainer />;
-  if (!data) return <Loading />;
-
-  const deleteModel = async (id: number) => {
-    await api.delete(`/shift-model/${id}`);
-    await mutate("/shift-model");
-  };
+  const [showAddModelModal, setShowAddModelModal] = useState(false);
+  const [selectedModelForEditing, setSelectedModelForEditing] =
+    useState<ShiftModel | null>(null);
+  const [selectedModelForDeleting, setSelectedModelForDeleting] =
+    useState<ShiftModel | null>(null);
 
   const selectModelHandler = (id: number) => {
     if (selectedModelId === id) {
@@ -56,20 +50,33 @@ export const ShiftModelsList = ({
 
   return (
     <>
-      <Flex align="stretch">
-        {data.map((model) => (
-          <HStack spacing={4} key={model.id}>
-            <Tag
-              bg={model.color}
-              borderRadius="full"
-              as="button"
-              onClick={() => selectModelHandler(model.id)}
-            >
-              <TagLabel>
-                {model.name}
+      <Divider my={5} />
+      <Flex wrap="wrap" align="center">
+        {shiftModels.map((model) => {
+          const isActiveModel = selectedModelId === model.id;
+          return (
+            <HStack key={model.id}>
+              <Tag
+                mr={1}
+                mt={1}
+                border={`1px solid ${model.color}`}
+                bg={isActiveModel && model.color}
+                boxShadow="none"
+                borderRadius="20px"
+                cursor="pointer"
+                onClick={() => selectModelHandler(model.id)}
+                variant={isActiveModel ? "solid" : "outline"}
+              >
+                <TagLabel color={!isActiveModel && model.color} mr={5}>
+                  {model.name}
+                </TagLabel>
                 <Popover gutter={12} placement="top" isLazy>
                   <PopoverTrigger>
-                    <TagRightIcon boxSize="12px" margin="2px" as={ViewIcon} />
+                    <TagRightIcon
+                      boxSize="16px"
+                      as={ViewIcon}
+                      color={!isActiveModel && model.color}
+                    />
                   </PopoverTrigger>
                   <PopoverContent maxWidth="250px">
                     <PopoverArrow />
@@ -81,7 +88,7 @@ export const ShiftModelsList = ({
                           variant="ghost"
                           padding="1"
                           size="sm"
-                          onClick={() => deleteModel(model.id)}
+                          onClick={() => setSelectedModelForDeleting(model)}
                         >
                           <DeleteIcon />
                         </Button>
@@ -89,7 +96,7 @@ export const ShiftModelsList = ({
                           variant="ghost"
                           padding="1"
                           size="sm"
-                          onClick={() => setSelectedModelForEdit(model)}
+                          onClick={() => setSelectedModelForEditing(model)}
                         >
                           <EditIcon />
                         </Button>
@@ -103,16 +110,46 @@ export const ShiftModelsList = ({
                     </PopoverBody>
                   </PopoverContent>
                 </Popover>
-              </TagLabel>
-            </Tag>
-          </HStack>
-        ))}
+              </Tag>
+            </HStack>
+          );
+        })}
+
+        <Tag
+          color="brand01.100"
+          boxShadow="none"
+          borderRadius="20px"
+          cursor="pointer"
+          mr={1}
+          mt={1}
+          variant="ghost"
+          onClick={() => setShowAddModelModal(true)}
+        >
+          <TagLeftIcon boxSize="12px" as={AddIcon} />{" "}
+          <TagLabel>create a new model</TagLabel>
+        </Tag>
       </Flex>
-      {selectedModelForEdit && (
+      <Divider my={5} />
+      <Text fontSize="sm" color="grey">
+        <strong>How to</strong>: select a model and click (long press for
+        mobile) on a day in the calendar to add a shift or to update an existing
+        shift.
+      </Text>
+      <br />
+      {selectedModelForEditing && (
         <EditModelModal
-          model={selectedModelForEdit}
-          onClose={() => setSelectedModelForEdit(null)}
+          model={selectedModelForEditing}
+          onClose={() => setSelectedModelForEditing(null)}
         />
+      )}
+      {selectedModelForDeleting && (
+        <ConfirmDeleteModelModal
+          shiftModel={selectedModelForDeleting}
+          onClose={() => setSelectedModelForDeleting(null)}
+        />
+      )}
+      {showAddModelModal && (
+        <AddModelModal onClose={() => setShowAddModelModal(false)} />
       )}
     </>
   );

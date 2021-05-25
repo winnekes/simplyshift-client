@@ -14,14 +14,15 @@ import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
 import ShiftModelController from "./domains/shift-model/shift-model-controller";
 import SpecController from "./domains/specs/spec-controller";
 import logger from "koa-logger";
-
+import "moment-timezone";
+import moment from "moment";
+moment.tz.setDefault("Europe/Amsterdam");
 dotenv.config();
 
 const port = process.env.PORT;
 
 Sentry.init({
-  dsn:
-    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  dsn: "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
   logLevel: LogLevel.Error,
 });
 
@@ -40,8 +41,6 @@ const app = createKoaServer({
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
-
-      // todo better Auth check (is decoded ID a user)
       try {
         const userId = verify(token).data;
         return !!(await User.findOne(userId));
@@ -54,7 +53,6 @@ const app = createKoaServer({
     return false;
   },
   currentUserChecker: async (action: Action) => {
-    // probably send userId as header?
     const header: string = action.request.headers.authorization;
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");

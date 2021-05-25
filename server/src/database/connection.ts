@@ -15,7 +15,6 @@ export const connectToDb = async () => {
     type: "postgres",
     url: process.env.DATABASE_URL,
     entities: [User, ShiftModel, ShiftEntry, Calendar],
-    logger: "debug",
     synchronize: true,
     logging: true,
     namingStrategy: new CustomNamingStrategy(),

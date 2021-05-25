@@ -48,12 +48,12 @@ export default class ShiftModel extends BaseEntity {
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)
   shiftEntries!: ShiftEntry[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: "timestamptz" })
   updatedAt?: Date;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ type: "timestamptz" })
   deletedAt?: Date;
 }

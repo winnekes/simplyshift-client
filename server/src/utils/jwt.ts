@@ -1,7 +1,8 @@
 import * as jwt from "jsonwebtoken";
 
+// todo env only
 const secret = process.env.JWT_SECRET || "i love robots";
-const ttl = 3600;
+const ttl = "1 day";
 
 interface JwtPayload {
   id: number;

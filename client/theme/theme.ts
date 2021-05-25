@@ -1,4 +1,4 @@
-import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { theme as testTheme, extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { colors } from "./colors";
 import { Button } from "./overrides/button";
 import { Modal } from "./overrides/modal";
@@ -21,14 +21,18 @@ export const theme = extendTheme({
     body: "Roboto",
     heading: "Roboto Condensed",
   },
-  components: { Button, Modal },
+  components: {
+    Button,
+    Modal,
+  },
   styles: {
     global: (props) => ({
       body: {
+        color: props.colorMode === "dark" ? "white" : "gray.900",
         bg: props.colorMode === "dark" ? colors.dark.ui01 : colors.light.ui01,
       },
     }),
   },
 });
 
-export const width = ["100%", "container.lg"];
+export const width = ["100%", "100%", "100%", "container.lg"];
