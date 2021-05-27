@@ -27,10 +27,10 @@ h6 {
 /* Override Chakra UI focus color to align with brand color */
 @mixin focus-color {
   body.chakra-ui-light & {
-    box-shadow: 0 0 5px rgb(219, 14, 107) !important;
+    box-shadow: 0 0 5px rgb(72, 187, 120) !important;
   }
   body.chakra-ui-dark & {
-    box-shadow: 0 0 5px rgb(38, 3, 19) !important;
+    box-shadow: 0 0 5px rgb(72, 187, 120) !important;
   }
 }
 
