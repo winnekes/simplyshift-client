@@ -14,12 +14,14 @@ import {
   MenuList,
   Stack,
   useColorMode,
+  Badge,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
 import { useAuth } from "../../contexts/auth-context";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
+import { CtaButton } from "../common/overrides/cta-button";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -43,7 +45,14 @@ export function Navbar() {
       >
         <HStack spacing={4} alignItems="center">
           <Link href="/" passHref>
-            <Heading size="1xl">SimplyShift</Heading>
+            <>
+              <Heading size="1xl" mr={0}>
+                SimplyShift
+              </Heading>
+              <Badge ml={0} colorScheme="green">
+                Alpha
+              </Badge>
+            </>
           </Link>
 
           {user && (
@@ -72,7 +81,7 @@ export function Navbar() {
                   p={0}
                   cursor="pointer"
                 >
-                  <Avatar bg="brand01.100" size="sm" />
+                  <Avatar bg="green.400" size="sm" />
                 </MenuButton>
                 <MenuList>
                   <Link href="/profile" passHref>
@@ -97,17 +106,9 @@ export function Navbar() {
                   </Button>
                 </RouteLink>
                 <RouteLink href="/signup" passHref>
-                  <Button
-                    fontSize="sm"
-                    fontWeight={600}
-                    color="white"
-                    bg="brand01.100"
-                    _hover={{
-                      bg: "brand01.200",
-                    }}
-                  >
+                  <CtaButton fontSize="sm" fontWeight={600}>
                     Sign Up
-                  </Button>
+                  </CtaButton>
                 </RouteLink>
               </Stack>
             )}

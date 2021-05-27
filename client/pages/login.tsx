@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
+import { CtaButton } from "../components/common/overrides/cta-button";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
@@ -50,7 +51,7 @@ export default function Login() {
                 <FormLabel>Email address</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaEnvelope} color="brand01.100" />
+                    <Icon as={FaEnvelope} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="email"
@@ -68,7 +69,7 @@ export default function Login() {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaKey} color="brand01.100" />
+                    <Icon as={FaKey} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="password"
@@ -82,9 +83,13 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <Button isLoading={isLoading} type="submit" variant="secondary">
-                Submit
-              </Button>
+              <CtaButton
+                isLoading={isLoading}
+                type="submit"
+                variant="secondary"
+              >
+                Sign in
+              </CtaButton>
             </form>
 
             <Image src="/images/illustration-login.svg" />

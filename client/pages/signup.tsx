@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
+import { CtaButton } from "../components/common/overrides/cta-button";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
@@ -53,7 +54,7 @@ export default function Signup() {
                 <FormLabel>Email address</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaEnvelope} color="brand01.100" />
+                    <Icon as={FaEnvelope} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="email"
@@ -102,7 +103,7 @@ export default function Signup() {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaKey} color="brand01.100" />
+                    <Icon as={FaKey} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="password"
@@ -123,7 +124,7 @@ export default function Signup() {
                 <FormLabel>Confirm your password</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaKey} color="brand01.100" />
+                    <Icon as={FaKey} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="password"
@@ -140,9 +141,9 @@ export default function Signup() {
                 </FormHelperText>
               </FormControl>
 
-              <Button isLoading={isLoading} variant="primary" type="submit">
+              <CtaButton isLoading={isLoading} variant="primary" type="submit">
                 Setup your calendar now!
-              </Button>
+              </CtaButton>
             </form>
           </DividedSegment>
         </Page.Content>

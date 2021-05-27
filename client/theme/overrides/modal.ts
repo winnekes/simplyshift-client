@@ -4,7 +4,7 @@ export const Modal = {
   },
   variants: {
     primary: {
-      bg: "brand01.100",
+      bg: "green.400",
       color: "white",
     },
     secondary: {

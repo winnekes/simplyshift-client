@@ -116,7 +116,7 @@ export const ShiftModelsList = ({
         })}
 
         <Tag
-          color="brand01.100"
+          color="green.400"
           boxShadow="none"
           borderRadius="20px"
           cursor="pointer"
