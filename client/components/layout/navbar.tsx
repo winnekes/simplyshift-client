@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { MoonIcon, SettingsIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -15,13 +15,16 @@ import {
   Stack,
   useColorMode,
   Badge,
+  LinkOverlay,
+  LinkBox,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
+import { BiExit } from "react-icons/bi";
 import { useAuth } from "../../contexts/auth-context";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
-import { CtaButton } from "../common/overrides/cta-button";
+import { CtaButton } from "../common/cta-button";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -44,16 +47,20 @@ export function Navbar() {
         maxWidth={width}
       >
         <HStack spacing={4} alignItems="center">
-          <Link href="/" passHref>
-            <>
-              <Heading size="1xl" mr={0}>
-                SimplyShift
-              </Heading>
-              <Badge ml={0} colorScheme="green">
-                Alpha
-              </Badge>
-            </>
-          </Link>
+          <LinkBox>
+            <Link href="/" passHref>
+              <LinkOverlay>
+                <HStack px={2}>
+                  <Heading size="1xl" mr={0}>
+                    SimplyShift
+                  </Heading>
+                  <Badge ml={0} colorScheme="green">
+                    Alpha
+                  </Badge>
+                </HStack>
+              </LinkOverlay>
+            </Link>
+          </LinkBox>
 
           {user && (
             <Link href="/calendar">
@@ -83,13 +90,14 @@ export function Navbar() {
                 >
                   <Avatar bg="green.400" size="sm" />
                 </MenuButton>
-                <MenuList>
-                  <Link href="/profile" passHref>
-                    <MenuItem>Profile</MenuItem>
+                <MenuList bg={colors[colorMode].ui02}>
+                  <Link href="/settings" passHref>
+                    <MenuItem icon={<SettingsIcon />}>Settings</MenuItem>
                   </Link>
-                  <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={() => logout()}>Logout</MenuItem>
+                  <MenuItem icon={<BiExit />} onClick={() => logout()}>
+                    Logout
+                  </MenuItem>
                 </MenuList>
               </>
             )}

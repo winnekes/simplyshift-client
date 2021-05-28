@@ -2,7 +2,7 @@ import { api } from "../api";
 
 export type AddShiftEntryData = {
   shiftModelId: number;
-  date: string;
+  date: Date;
 };
 
 export const addShiftEntryMutation = (data: AddShiftEntryData) => {

@@ -100,8 +100,9 @@ export const Scheduler = () => {
     };
   };
 
-  async function sendToServer(shiftModel: ShiftModel, date: Date) {
-    await mutate({ shiftModelId: shiftModel.id, date: date.toLocaleString() });
+  function sendToServer(shiftModel: ShiftModel, date: Date) {
+    alert(date);
+    mutate({ shiftModelId: shiftModel.id, date });
 
     const newShiftEntry = createLocalShiftEntryEvent(shiftModel, date);
     setEvents([...events, newShiftEntry]);
@@ -129,6 +130,8 @@ export const Scheduler = () => {
 
     //
     await sendToServer(shiftModel, date);
+    console.log({ shiftModel, date });
+    alert(date);
   };
 
   const onSelectSlot = async (slot: { start: stringOrDate }) => {

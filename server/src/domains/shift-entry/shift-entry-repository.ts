@@ -24,6 +24,7 @@ export class ShiftEntryRepository extends Repository<ShiftEntry> {
     time: { startsAt: Date; endsAt: Date },
     options?: FindConditions<ShiftEntry>
   ) {
+    console.log({ time });
     return this.find({
       where: [
         {

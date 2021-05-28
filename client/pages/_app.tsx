@@ -24,11 +24,13 @@ const showToast = () => {
       position: "top",
       duration: 5000,
       isClosable: false,
-      render: () => (
-        <Center color="brand01" p={3}>
-          <Spinner speed="0.65s" size="xl" />
-        </Center>
-      ),
+      render() {
+        return (
+          <Center color="green.400" p={3}>
+            <Spinner speed="0.65s" size="xl" />
+          </Center>
+        );
+      },
     });
   }
 };

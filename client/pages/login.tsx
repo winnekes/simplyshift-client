@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
-import { CtaButton } from "../components/common/overrides/cta-button";
+import { CtaButton } from "../components/common/cta-button";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";

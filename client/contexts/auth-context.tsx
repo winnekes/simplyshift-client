@@ -59,7 +59,7 @@ export function AuthProvider(props) {
     setCanFetchProfile(false);
 
     delete api.defaults.headers["Authorization"];
-    await router.push("/");
+    await router.push("/login");
   };
 
   const onResponse = (response: AxiosResponse): AxiosResponse => {

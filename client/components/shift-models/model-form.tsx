@@ -29,8 +29,9 @@ export const ModelForm = () => {
           {errors.name && errors.name.message} &nbsp;
         </FormHelperText>
       </FormControl>
+      `
       <FormControl>
-        <FormLabel>Starts at</FormLabel>
+        `<FormLabel>Starts at</FormLabel>
         <Input
           type="time"
           name="startsAt"
@@ -40,7 +41,6 @@ export const ModelForm = () => {
           {errors.startsAt && errors.startsAt.message} &nbsp;
         </FormHelperText>
       </FormControl>
-
       <FormControl>
         <FormLabel>Ends at</FormLabel>
         <Input
