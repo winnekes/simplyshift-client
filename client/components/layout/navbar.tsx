@@ -24,7 +24,6 @@ import { BiExit } from "react-icons/bi";
 import { useAuth } from "../../contexts/auth-context";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
-import { CtaButton } from "../common/cta-button";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -114,9 +113,9 @@ export function Navbar() {
                   </Button>
                 </RouteLink>
                 <RouteLink href="/signup" passHref>
-                  <CtaButton fontSize="sm" fontWeight={600}>
+                  <Button variant="primary" fontSize="sm" fontWeight={600}>
                     Sign Up
-                  </CtaButton>
+                  </Button>
                 </RouteLink>
               </Stack>
             )}

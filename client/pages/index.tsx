@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { BlobIcon } from "../components/common/blob-icon";
 import { BrandText } from "../components/common/brand-text";
-import { CtaButton } from "../components/common/cta-button";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
@@ -78,9 +77,15 @@ export default function Home() {
             direction={{ base: "column", sm: "row" }}
           >
             <Link href="/signup">
-              <CtaButton rounded="full" size="lg" fontWeight="normal" px={6}>
+              <Button
+                rounded="full"
+                size="lg"
+                fontWeight="normal"
+                px={6}
+                variant="primary"
+              >
                 Try it out now!
-              </CtaButton>
+              </Button>
             </Link>
             <Link href="/signup">
               <Button

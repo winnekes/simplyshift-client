@@ -8,6 +8,7 @@ import { connectToDb } from "./database/connection";
 import UserController from "./domains/identity-access/user-controller";
 import User from "./domains/identity-access/user";
 import { ErrorLoggingMiddleware } from "./utils/error-logging-middleware";
+import { ExtendedHttpError } from "./utils/extended-http-error";
 import { verify } from "./utils/jwt";
 import LoginController from "./domains/identity-access/login-controller";
 import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
@@ -46,7 +47,7 @@ const app = createKoaServer({
         return !!(await User.findOne(userId));
       } catch (e) {
         if (e instanceof JsonWebTokenError) {
-          throw new BadRequestError("JWT expired");
+          throw new ExtendedHttpError("JWT expired", "SESSION_EXPIRED");
         }
       }
     }

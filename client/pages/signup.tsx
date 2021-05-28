@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
-import { CtaButton } from "../components/common/cta-button";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
@@ -141,9 +140,9 @@ export default function Signup() {
                 </FormHelperText>
               </FormControl>
 
-              <CtaButton isLoading={isLoading} variant="primary" type="submit">
+              <Button isLoading={isLoading} variant="primary" type="submit">
                 Setup your calendar now!
-              </CtaButton>
+              </Button>
             </form>
           </DividedSegment>
         </Page.Content>
