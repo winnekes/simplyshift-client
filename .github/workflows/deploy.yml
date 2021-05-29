@@ -1,22 +1,34 @@
-name: Deploy
-on: [push]
+name: testitest
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 jobs:
-  build:
+  build-server:
+
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Copy repository contents via scp
-        uses: appleboy/scp-action@master
+      - name: Copy built server via SCP
+      - uses: appleboy/scp-action@master
+
+      - run: npm i
+      - run: npm build
+
         env:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "."
-          target: "/var/www/mywebsite"
+          source: "./server/lib"
+          target: "/home/simona/webapps/simplyshift/server"
 
       - name: Executing remote command
         uses: appleboy/ssh-action@master
