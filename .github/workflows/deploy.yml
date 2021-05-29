@@ -17,11 +17,14 @@ jobs:
 
       - name: build the server
         run: |
+          cd server
           npm i
           npm build
 
       - name: List output files
-        run: ls
+        run: |
+          cd server
+          ls
 #
 #      - name: deploy built server
 #        uses: appleboy/scp-action@master
