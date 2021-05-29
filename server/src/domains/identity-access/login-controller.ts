@@ -1,12 +1,7 @@
-import {
-  JsonController,
-  Body,
-  Post,
-  BadRequestError,
-  NotFoundError,
-} from "routing-controllers";
+import { JsonController, Body, Post } from "routing-controllers";
 import { IsBoolean, IsString } from "class-validator";
 import { getCustomRepository } from "typeorm";
+import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { sign } from "../../utils/jwt";
 import { UserRepository } from "./user-repository";
 
@@ -30,14 +25,20 @@ export default class LoginController {
       where: { email: data.email },
     });
     if (!user) {
-      throw new NotFoundError("That email address does not exist");
+      throw new ExtendedHttpError(
+        "That email address does not exist",
+        "USER_NOT_FOUND"
+      );
     }
 
     if (!(await user.checkPassword(data.password))) {
-      throw new BadRequestError("Incorrect email or password.");
+      throw new ExtendedHttpError(
+        "Incorrect email or password.",
+        "INCORRECT_EMAIL_OR_PASSWORD"
+      );
     }
 
-    const tokenExpiresIn = data.stayLoggedIn ? "3 months" : "1 day";
+    const tokenExpiresIn = data.stayLoggedIn ? "30d" : "1h";
 
     const token = sign({ id: user.id }, tokenExpiresIn);
     return { token, user };

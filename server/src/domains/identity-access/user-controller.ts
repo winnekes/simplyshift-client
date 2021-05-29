@@ -9,7 +9,8 @@ import {
   BadRequestError,
 } from "routing-controllers";
 import { routingControllersToSpec } from "routing-controllers-openapi";
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, getManager } from "typeorm";
+import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { sign } from "../../utils/jwt";
 import { CalendarRepository } from "../calendar/calendar-repository";
 import User from "./user";
@@ -32,29 +33,40 @@ export default class UserController {
       where: { email: data.email },
     });
     if (existingUser) {
-      throw new BadRequestError("A user with that email already exists.");
+      throw new ExtendedHttpError(
+        "A user with that email already exists.",
+        "USER_ALREADY_EXISTS"
+      );
     }
 
     const { password, passwordRepeated, ...rest } = data;
 
     if (password !== passwordRepeated) {
-      throw new BadRequestError("Passwords do not match.");
+      throw new ExtendedHttpError(
+        "Passwords do not match.",
+        "NO_MATCH_PASSWORD"
+      );
     }
 
-    try {
-      const user = this.userRepository.create(rest);
-      await user.setPassword(password);
-      await this.userRepository.save(user);
+    const user = this.userRepository.create(rest);
+    await user.setPassword(password);
 
-      const calendar = this.calendarRepository.create();
-      calendar.user = user;
-      calendar.isDefault = true;
-      await this.calendarRepository.save(calendar);
+    const calendar = this.calendarRepository.create();
+    calendar.user = user;
+    calendar.isDefault = true;
+
+    try {
+      await getManager().transaction(async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(user);
+        await transactionalEntityManager.save(calendar);
+      });
+
       const jwt = sign({ id: user.id }, "7 days");
 
       return { token: jwt, user };
-    } catch (err) {
-      throw new BadRequestError("Something went wrong");
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
     }
   }
 
