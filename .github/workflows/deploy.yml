@@ -21,23 +21,21 @@ jobs:
           npm i
           npm run build
 
-      - name: List output files
+      - name: list output files
         run: |
           cd server
           ls
-#
-#      - name: deploy built server
-#        uses: appleboy/scp-action@master
-#        env:
-#          HOST: ${{ secrets.HOST }}
-#          USERNAME: ${{ secrets.USERNAME }}
-#          PORT: ${{ secrets.PORT }}
-#          KEY: ${{ secrets.SSH_KEY }}
 
-
-#        with:
-#          source: "./server/lib"
-#          target: "/home/simona/webapps/simplyshift/server"
+      - name: deploy built server
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
+        with:
+          source: "./server/lib"
+          target: "/home/simona/webapps/simplyshift/server"
 #
 #      - name: Executing remote command
 #        uses: appleboy/ssh-action@master
