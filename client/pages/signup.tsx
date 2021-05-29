@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
-import { DividedSegment } from "../components/divided-segment";
-import { Page } from "../components/page";
-import { PageWrapper } from "../components/page-wrapper";
+import { ExternalLogin } from "../components/external-login";
+import { DividedSegment } from "../components/layout/divided-segment";
+import { Page } from "../components/layout/page";
+import { PageWrapper } from "../components/layout/page-wrapper";
 import {
   FormControl,
   FormHelperText,
@@ -11,25 +12,31 @@ import {
   Button,
   InputGroup,
   InputLeftElement,
+  Box,
   Icon,
   Heading,
   Stack,
+  Divider,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
-import { useAuthContext } from "../contexts/auth-context";
-import { signup, SignupMutationData } from "../services/mutations/signup";
+import { useAuth } from "../contexts/auth-context";
+import {
+  signupMutation,
+  SignupMutationData,
+} from "../services/mutations/signup";
 
 export default function Signup() {
-  const auth = useAuthContext();
+  const auth = useAuth();
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<SignupMutationData>();
 
-  const { isLoading, error, mutate } = useMutation(signup, {
-    onSuccess: ({ data }) => {
-      auth.setToken(data["jwt"]);
+  const { isLoading, error, mutate } = useMutation(signupMutation, {
+    onSuccess: async ({ data }) => {
+      auth.setToken(data.token);
+      auth.setUser(data.user);
 
-      router.push("/calendar");
+      await router.push("/calendar");
     },
   });
 
@@ -47,102 +54,109 @@ export default function Signup() {
           <DividedSegment>
             <img src="/images/illustration-signup.svg" />
 
-            <form onSubmit={onSubmit}>
-              <FormControl isRequired>
-                <FormLabel>Email address</FormLabel>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={FaEnvelope} color="brand01.100" />
-                  </InputLeftElement>
-                  <Input
-                    type="email"
-                    name="email"
-                    placeholder="simply@shift.com"
-                    ref={register({
-                      required: "This field is required",
-                    })}
-                  />
-                </InputGroup>
-                <FormHelperText>
-                  {errors.email && errors.email.message} &nbsp;
-                </FormHelperText>
-              </FormControl>
-
-              <Stack direction={["column", "row"]} spacing={1}>
-                <FormControl isRequired>
-                  <FormLabel>First name</FormLabel>
-                  <Input
-                    placeholder="First name"
-                    name="firstName"
-                    ref={register({
-                      required: "This field is required",
-                    })}
-                  />
+            <Box>
+              <form onSubmit={onSubmit}>
+                <FormControl isRequired id="email">
+                  <FormLabel>Email address</FormLabel>
+                  <InputGroup>
+                    <InputLeftElement pointerEvents="none">
+                      <Icon as={FaEnvelope} color="green.400" />
+                    </InputLeftElement>
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="simply@shift.com"
+                      ref={register({
+                        required: "This field is required",
+                      })}
+                    />
+                  </InputGroup>
                   <FormHelperText>
-                    {errors.firstName && errors.firstName.message}
+                    {errors.email && errors.email.message} &nbsp;
                   </FormHelperText>
                 </FormControl>
+                <Stack direction={["column", "row"]} spacing={1}>
+                  <FormControl isRequired id="firstName">
+                    <FormLabel>First name</FormLabel>
+                    <Input
+                      placeholder="First name"
+                      name="firstName"
+                      ref={register({
+                        required: "This field is required",
+                      })}
+                    />
+                    <FormHelperText>
+                      {errors.firstName && errors.firstName.message}
+                    </FormHelperText>
+                  </FormControl>
 
-                <FormControl isRequired>
-                  <FormLabel>Last name</FormLabel>
-                  <Input
-                    name="lastName"
-                    placeholder="Last name"
-                    ref={register({
-                      required: "This field is required",
-                    })}
-                  />
+                  <FormControl isRequired id="lastName">
+                    <FormLabel>Last name</FormLabel>
+                    <Input
+                      name="lastName"
+                      placeholder="Last name"
+                      ref={register({
+                        required: "This field is required",
+                      })}
+                    />
+                    <FormHelperText>
+                      {errors.lastName && errors.lastName.message}
+                    </FormHelperText>
+                  </FormControl>
+                </Stack>
+                <FormControl isRequired id="password">
+                  <FormLabel>Password</FormLabel>
+                  <InputGroup>
+                    <InputLeftElement pointerEvents="none">
+                      <Icon as={FaKey} color="green.400" />
+                    </InputLeftElement>
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      name="password"
+                      ref={register({
+                        required: "This field is required",
+                        min: 8,
+                      })}
+                    />
+                  </InputGroup>
                   <FormHelperText>
-                    {errors.lastName && errors.lastName.message}
+                    {errors.password && errors.password.message}
                   </FormHelperText>
                 </FormControl>
-              </Stack>
-              <FormControl isRequired>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={FaKey} color="brand01.100" />
-                  </InputLeftElement>
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    ref={register({
-                      required: "This field is required",
-                      min: 8,
-                    })}
-                  />
-                </InputGroup>
-                <FormHelperText>
-                  {errors.password && errors.password.message}
-                </FormHelperText>
-              </FormControl>
+                <FormControl isRequired id="passwordRepeated">
+                  <FormLabel>Confirm your password</FormLabel>
+                  <InputGroup>
+                    <InputLeftElement pointerEvents="none">
+                      <Icon as={FaKey} color="green.400" />
+                    </InputLeftElement>
+                    <Input
+                      type="password"
+                      placeholder="Confirm your password"
+                      name="passwordRepeated"
+                      ref={register({
+                        required: "This field is required",
+                        min: 8,
+                      })}
+                    />
+                  </InputGroup>
+                  <FormHelperText>
+                    {errors.password && errors.password.message}
+                  </FormHelperText>
+                </FormControl>
+                <Button
+                  w="full"
+                  isLoading={isLoading}
+                  variant="primary"
+                  type="submit"
+                >
+                  Setup your calendar now!
+                </Button>
+              </form>
+              <Divider my="25px" />
 
-              <FormControl isRequired>
-                <FormLabel>Confirm your password</FormLabel>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={FaKey} color="brand01.100" />
-                  </InputLeftElement>
-                  <Input
-                    type="password"
-                    placeholder="Confirm your password"
-                    name="passwordRepeated"
-                    ref={register({
-                      required: "This field is required",
-                      min: 8,
-                    })}
-                  />
-                </InputGroup>
-                <FormHelperText>
-                  {errors.password && errors.password.message}
-                </FormHelperText>
-              </FormControl>
-
-              <Button isLoading={isLoading} variant="primary" type="submit">
-                Setup your calendar now!
-              </Button>
-            </form>
+              <ExternalLogin />
+            </Box>
           </DividedSegment>
         </Page.Content>
       </Page>

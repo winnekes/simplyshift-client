@@ -6,9 +6,16 @@ import {
   OneToMany,
   Unique,
   DeleteDateColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
-import { IsString, MinLength, IsMilitaryTime } from "class-validator";
+import {
+  IsString,
+  MinLength,
+  IsMilitaryTime,
+  IsHexColor,
+} from "class-validator";
 import User from "../identity-access/user";
 import ShiftEntry from "../shift-entry/shift-entry";
 
@@ -16,7 +23,7 @@ import ShiftEntry from "../shift-entry/shift-entry";
 @Unique("UNQ_NAME_USER", ["name", "user"])
 export default class ShiftModel extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id!: number;
 
   @IsString()
   @MinLength(2)
@@ -31,7 +38,7 @@ export default class ShiftModel extends BaseEntity {
   @Column("time")
   endsAt!: string;
 
-  @IsString()
+  @IsHexColor()
   @Column("text")
   color!: string;
 
@@ -41,6 +48,12 @@ export default class ShiftModel extends BaseEntity {
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)
   shiftEntries!: ShiftEntry[];
 
-  @DeleteDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ type: "timestamptz" })
+  updatedAt?: Date;
+
+  @DeleteDateColumn({ type: "timestamptz" })
   deletedAt?: Date;
 }

@@ -1,9 +1,5 @@
 // todo
 export const colors = {
-  brand01: {
-    100: "#c2015c",
-  },
-  brand02: "",
   light: {
     ui01: "#f5f5f5",
     ui02: "#ffffff",

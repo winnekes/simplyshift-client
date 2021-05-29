@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { createConnection } from "typeorm";
+import Calendar from "../domains/calendar/calendar";
 import User from "../domains/identity-access/user";
 import ShiftEntry from "../domains/shift-entry/shift-entry";
 import ShiftModel from "../domains/shift-model/shift-model";
@@ -13,7 +14,7 @@ export const connectToDb = async () => {
   await createConnection({
     type: "postgres",
     url: process.env.DATABASE_URL,
-    entities: [User, ShiftModel, ShiftEntry],
+    entities: [User, ShiftModel, ShiftEntry, Calendar],
     synchronize: true,
     logging: true,
     namingStrategy: new CustomNamingStrategy(),

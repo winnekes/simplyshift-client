@@ -5,53 +5,36 @@ import {
   Post,
   Authorized,
   CurrentUser,
-  NotFoundError,
-  Res,
   Put,
   Param,
   Delete,
   QueryParam,
 } from "routing-controllers";
-import moment from "moment";
-import ShiftModel from "../shift-model/shift-model";
+import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
+import { ExtendedHttpError } from "../../utils/extended-http-error";
+import { ShiftEntryService } from "./shift-entry-service";
 import ShiftEntry from "./shift-entry";
 import User from "../identity-access/user";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
-import { MoreThanOrEqual, LessThan } from "typeorm";
+import { getCustomRepository } from "typeorm";
+import { ShiftEntryRepository } from "./shift-entry-repository";
+import "moment-timezone";
 
 @JsonController()
 @OpenAPI({
-  security: [{ bearerAuth: [] }], // Applied to each method
+  security: [{ bearerAuth: [] }],
 })
 export default class ShiftEntryController {
+  private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
+  private shiftEntryService = new ShiftEntryService();
+
   @Authorized()
   @Get("/shift-entry")
   async getAllShiftEntries(
     @CurrentUser() user: User,
-    @QueryParam("date", { required: false }) date: string
-  ) {
-    var selectedMonth;
-
-    if (!date || date === "null") {
-      selectedMonth = moment().startOf("month");
-    } else {
-      selectedMonth = moment(date).startOf("month");
-    }
-    console.log(selectedMonth);
-    const shiftEntries = await ShiftEntry.find({
-      where: {
-        user: user,
-        startsAt: MoreThanOrEqual(selectedMonth),
-        endsAt: LessThan(moment(selectedMonth).add(1, "month")),
-      },
-      relations: ["shiftModel"],
-    });
-
-    if (!shiftEntries) {
-      throw new NotFoundError("No shift entries were not found.");
-    }
-    console.log({ shiftEntries });
-    return shiftEntries;
+    @QueryParam("date") date: Date
+  ): Promise<ShiftEntry[]> {
+    return this.shiftEntryService.getShiftEntriesForSingleMonth(user, date);
   }
 
   @Authorized()
@@ -59,48 +42,16 @@ export default class ShiftEntryController {
   async createShiftEntry(
     @CurrentUser()
     user: User,
-    @Body() shiftEntry: { shiftModelId: number; startsAt: Date },
-    @Res() response: any
-  ) {
+    @Body() data: { shiftModelId: number; date: Date }
+  ): Promise<ShiftEntry> {
     try {
-      const { shiftModelId } = shiftEntry;
-      const model = await ShiftModel.findOne(shiftModelId, {
-        where: { user },
-      });
-      if (!model)
-        throw new NotFoundError(
-          "Could not find the model for this shift entry."
-        );
-
-      const startDate = moment.parseZone(shiftEntry.startsAt).startOf("day");
-      const start = moment(startDate)
-        .add(moment.duration(model.startsAt))
-        .toDate();
-      const end =
-        model.startsAt > model.endsAt
-          ? moment(startDate)
-              .add(moment.duration(model.endsAt))
-              .add("1", "day")
-              .toDate()
-          : moment(startDate).add(moment.duration(model.endsAt)).toDate();
-
-      const entity = ShiftEntry.create();
-      entity.user = user;
-      entity.note = "";
-      entity.startsAt = start;
-
-      entity.endsAt = end;
-
-      entity.shiftModel = model;
-
-      return await entity.save();
-    } catch (err) {
-      console.log(err);
-      response.status = 400;
-      response.body = {
-        message: "Unable to save shift entry.",
-      };
-      return response;
+      return this.shiftEntryService.createNewShiftEntry(user, data);
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError(
+        "Could not create new entry",
+        "CREATE_SHIFT_ENTRY_FAILED"
+      );
     }
   }
 
@@ -109,36 +60,59 @@ export default class ShiftEntryController {
   async updateShiftEntry(
     @Param("id") id: number,
     @CurrentUser() user: User,
-    @Body() update: Partial<ShiftEntry>
+    @Body() data: Partial<ShiftEntry>
   ) {
-    const entity = await ShiftEntry.findOne(id, { where: { user } });
-    if (!entity) throw new NotFoundError("Cannot find the shift entry.");
-    return await ShiftEntry.merge(entity, update).save();
+    const shiftEntry = await this.shiftEntryRepository.findOne(id, {
+      where: { user },
+    });
+    if (!shiftEntry) {
+      throw new ExtendedHttpError(
+        "Cannot find the shift entry.",
+        "SHIFT_ENTRY_NOT_FOUND"
+      );
+    }
+
+    try {
+      const updatedEntity = await this.shiftEntryRepository.merge(
+        shiftEntry,
+        data
+      );
+
+      return await this.shiftEntryRepository.save(updatedEntity);
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError(
+        "Could not update shift entry",
+        "UPDATE_SHIFT_ENTRY_FAILED"
+      );
+    }
   }
 
   @Authorized()
   @Delete("/shift-entry/:id")
   async deleteShiftEntry(
     @Param("id") id: number,
-    @CurrentUser() user: User,
-    @Res() response: any
-  ) {
-    try {
-      if ((await ShiftEntry.delete({ id, user })).affected === 0) {
-        throw new NotFoundError("Could not find shift entry to delete.");
-      }
-      response.body = {
-        message: "Successfully deleted the entry model.",
-      };
-      return response;
-    } catch (err) {
-      console.log(err);
-      response.status = 404;
-      response.body = {
-        message: "Could not find shift entry to delete.",
-      };
+    @CurrentUser() user: User
+  ): Promise<UpdateResult> {
+    const shiftEntry = await this.shiftEntryRepository.findOneForUser(user, {
+      where: { id },
+    });
 
-      return response;
+    if (!shiftEntry) {
+      throw new ExtendedHttpError(
+        "Cannot find the shift entry.",
+        "SHIFT_ENTRY_NOT_FOUND"
+      );
+    }
+
+    try {
+      return this.shiftEntryRepository.softDelete({ id: shiftEntry.id });
+    } catch (error) {
+      console.log({ error });
+      throw new ExtendedHttpError(
+        "Could not delete shift entry",
+        "DELETE_SHIFT_ENTRY_FAILED"
+      );
     }
   }
 }

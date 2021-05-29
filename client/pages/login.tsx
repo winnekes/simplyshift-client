@@ -1,5 +1,7 @@
 import {
   Button,
+  Checkbox,
+  Divider,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -9,33 +11,36 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
-import { DividedSegment } from "../components/divided-segment";
-import { Page } from "../components/page";
-import { PageWrapper } from "../components/page-wrapper";
-import { useAuthContext } from "../contexts/auth-context";
+import { ExternalLogin } from "../components/external-login";
+import { DividedSegment } from "../components/layout/divided-segment";
+import { Page } from "../components/layout/page";
+import { PageWrapper } from "../components/layout/page-wrapper";
+import { useAuth } from "../contexts/auth-context";
 import { login, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
-  const auth = useAuthContext();
+  const auth = useAuth();
   const router = useRouter();
-  const { register, handleSubmit, errors } = useForm<LoginMutationData>();
+  const { register, handleSubmit, errors, control, setValue } =
+    useForm<LoginMutationData>({
+      defaultValues: { stayLoggedIn: false },
+    });
 
   const { isLoading, error, mutate } = useMutation(login, {
-    onSuccess: ({ data }) => {
-      auth.setToken(data["jwt"]);
-
-      router.push("/calendar");
+    onSuccess: async ({ data }) => {
+      auth.setToken(data.token);
+      auth.setUser(data.user);
+      await router.push("/calendar");
     },
   });
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    mutate({ email, password });
+  const onSubmit = handleSubmit(async ({ email, password, stayLoggedIn }) => {
+    mutate({ email, password, stayLoggedIn });
   });
 
   return (
@@ -47,11 +52,11 @@ export default function Login() {
         <Page.Content>
           <DividedSegment>
             <form onSubmit={onSubmit}>
-              <FormControl>
+              <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaEnvelope} color="brand01.100" />
+                    <Icon as={FaEnvelope} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="email"
@@ -65,11 +70,11 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl>
+              <FormControl id="password">
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
-                    <Icon as={FaKey} color="brand01.100" />
+                    <Icon as={FaKey} color="green.400" />
                   </InputLeftElement>
                   <Input
                     type="password"
@@ -83,9 +88,41 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <Button isLoading={isLoading} type="submit" variant="secondary">
-                Submit
+              <FormControl id="stayLoggedIn">
+                <Controller
+                  control={control}
+                  name="stayLoggedIn"
+                  render={({ value, ref }) => (
+                    <Checkbox
+                      colorScheme="green"
+                      onChange={({ target }) => {
+                        setValue("stayLoggedIn", target.checked);
+                      }}
+                      checked={value}
+                      ref={ref}
+                    >
+                      Keep me signed in
+                    </Checkbox>
+                  )}
+                />
+
+                <FormHelperText color="red">
+                  {errors.stayLoggedIn && errors.stayLoggedIn.message} &nbsp;
+                </FormHelperText>
+              </FormControl>
+
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                variant="primary"
+                w="full"
+              >
+                Sign in
               </Button>
+
+              <Divider my="25px" />
+
+              <ExternalLogin />
             </form>
 
             <Image src="/images/illustration-login.svg" />

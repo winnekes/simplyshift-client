@@ -10,25 +10,24 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
-const themeColors = {
-  brand01: colors.brand01,
-};
-
 export const theme = extendTheme({
   config,
-  colors: themeColors,
   fonts: {
     body: "Roboto",
     heading: "Roboto Condensed",
   },
-  components: { Button, Modal },
+  components: {
+    Button,
+    Modal,
+  },
   styles: {
     global: (props) => ({
       body: {
+        color: props.colorMode === "dark" ? "white" : "gray.900",
         bg: props.colorMode === "dark" ? colors.dark.ui01 : colors.light.ui01,
       },
     }),
   },
 });
 
-export const width = ["100%", "container.lg"];
+export const width = ["100%", "100%", "100%", "container.lg"];

@@ -1,38 +1,29 @@
-import { Button, Heading } from "@chakra-ui/react";
-import { useState } from "react";
-import { Scheduler } from "../components/scheduler";
-import { AddModelModal } from "../components/shift-models/add-model-modal";
-import { Page } from "../components/page";
-import { PageWrapper } from "../components/page-wrapper";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ShiftModelsList } from "../components/shift-models/shift-models-list";
+import { Heading } from "@chakra-ui/react";
+import { Scheduler } from "../components/calendar/scheduler";
+import { Page } from "../components/layout/page";
+import { PageWrapper } from "../components/layout/page-wrapper";
+import { useAuth } from "../contexts/auth-context";
+import Login from "./login";
 
 // todo optimise usage of arrow functions?
 export default function Calendar() {
-  const [showAddModelModal, setShowModelModal] = useState(false);
+  const { user } = useAuth();
+
+  // todo try to handle globally (so we don't have to add this check on every protected page)
+  if (!user) {
+    return <Login />;
+  }
 
   return (
-    <>
-      <PageWrapper title="Calendar" isProtectedPage>
-        <Page>
-          <Page.Title>
-            <Heading>My calendar</Heading>
-          </Page.Title>
-          <Page.Content>
-            <Scheduler />
-            <Button
-              colorScheme="teal"
-              variant="solid"
-              onClick={() => setShowModelModal(true)}
-            >
-              Add shift
-            </Button>
-          </Page.Content>
-        </Page>
-      </PageWrapper>
-      {showAddModelModal && (
-        <AddModelModal onClose={() => setShowModelModal(false)} />
-      )}
-    </>
+    <PageWrapper title="Calendar" isProtectedPage>
+      <Page>
+        <Page.Title>
+          <Heading>My calendar</Heading>
+        </Page.Title>
+        <Page.Content>
+          <Scheduler />
+        </Page.Content>
+      </Page>
+    </PageWrapper>
   );
 }
