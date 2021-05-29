@@ -24,7 +24,7 @@ import { login, LoginMutationData } from "../services/mutations/login";
 export default function Login() {
   const auth = useAuth();
   const router = useRouter();
-  const { register, handleSubmit, errors, control } =
+  const { register, handleSubmit, errors, control, setValue } =
     useForm<LoginMutationData>({
       defaultValues: { stayLoggedIn: false },
     });
@@ -91,10 +91,12 @@ export default function Login() {
                 <Controller
                   control={control}
                   name="stayLoggedIn"
-                  render={(onBlur, onChange, value, ref) => (
+                  render={({ value, ref }) => (
                     <Checkbox
-                      onBlur={onBlur}
-                      onChange={onChange}
+                      colorScheme="green"
+                      onChange={({ target }) => {
+                        setValue("stayLoggedIn", target.checked);
+                      }}
                       checked={value}
                       inputRef={ref}
                     >
