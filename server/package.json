@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "rm -rf ./lib/ && tsc --project . --watch",
     "start:services": "docker-compose --project-name=simplyshift up",
-    "start": "./node_modules/.bin/nodemon --watch ./lib --exec node --inspect lib/index.js, ./node_modules/.bin/nodemon --watch ./lib --exec \"node --inspect lib/index.js\"",
-    "compile": "npx tsc",
+    "start:dev": "./node_modules/.bin/nodemon --watch ./lib --exec node --inspect lib/index.js, ./node_modules/.bin/nodemon --watch ./lib --exec \"node --inspect lib/index.js\"",
+    "start": "node lib/index.js",
+    "build": "npx tsc",
     "doc": "npx typedoc src/index.ts"
   },
   "author": "",
