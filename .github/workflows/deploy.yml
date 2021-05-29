@@ -35,7 +35,7 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
         with:
           source: "./server/lib/"
-          target: "/home/simona/webapps/simplyshift/server/"
+          target: "/home/simona/webapps/simplyshift"
 #
 #      - name: Executing remote command
 #        uses: appleboy/ssh-action@master
