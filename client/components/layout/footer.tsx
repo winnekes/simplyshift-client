@@ -31,7 +31,7 @@ export function Footer() {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Box
-      mt="100px"
+      mt="200px"
       pb="50px"
       bg={colors[colorMode].ui02}
       color={useColorModeValue("gray.700", "gray.200")}

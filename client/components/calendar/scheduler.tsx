@@ -1,5 +1,5 @@
 import { Box, useColorMode } from "@chakra-ui/react";
-import moment, { Moment } from "moment";
+import moment from "moment";
 import "moment-timezone";
 import "moment/locale/en-gb";
 import { PropsWithChildren, useEffect, useState } from "react";
@@ -100,14 +100,6 @@ export const Scheduler = () => {
     };
   };
 
-  function sendToServer(shiftModel: ShiftModel, date: Date) {
-    alert(date);
-    mutate({ shiftModelId: shiftModel.id, date });
-
-    const newShiftEntry = createLocalShiftEntryEvent(shiftModel, date);
-    setEvents([...events, newShiftEntry]);
-  }
-
   const createShiftEntry = async (date: Date) => {
     const shiftModel = shiftModels.find(
       (model) => model.id === selectedModelId
@@ -123,20 +115,22 @@ export const Scheduler = () => {
         shiftModel,
         date,
       });
-
+      console.log({ mutatef: date });
       setShowConfirmOverrideShiftEntryModal(true);
       return;
     }
 
-    //
-    await sendToServer(shiftModel, date);
-    console.log({ shiftModel, date });
-    alert(date);
+    mutate({ shiftModelId: shiftModel.id, date });
+
+    console.log({ mutate: date });
+    const newShiftEntry = createLocalShiftEntryEvent(shiftModel, date);
+    setEvents([...events, newShiftEntry]);
   };
 
   const onSelectSlot = async (slot: { start: stringOrDate }) => {
     if (selectedModelId) {
       const startsAt = moment(slot.start).toDate();
+      console.log({ onSelect: startsAt });
       await createShiftEntry(startsAt);
     }
   };
@@ -212,7 +206,6 @@ export const Scheduler = () => {
       {showConfirmOverrideShiftEntryModal && (
         <ConfirmOverrideShiftEntryModal
           newShiftEntryData={newShiftEntryData}
-          onConfirm={sendToServer}
           onClose={() => setShowConfirmOverrideShiftEntryModal(false)}
         />
       )}
