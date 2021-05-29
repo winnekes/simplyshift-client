@@ -44,7 +44,8 @@ const app = createKoaServer({
       const [, token] = header.split(" ");
       try {
         const userId = verify(token).data;
-        return !!(await User.findOne(userId));
+        const user = await User.findOne(userId);
+        return !!user;
       } catch (e) {
         if (e instanceof JsonWebTokenError) {
           throw new ExtendedHttpError("JWT expired", "SESSION_EXPIRED");

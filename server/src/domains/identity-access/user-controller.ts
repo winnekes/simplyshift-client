@@ -3,11 +3,9 @@ import {
   Get,
   Body,
   Post,
-  getMetadataArgsStorage,
   Authorized,
   CurrentUser,
 } from "routing-controllers";
-import { routingControllersToSpec } from "routing-controllers-openapi";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { sign } from "../../utils/jwt";
@@ -93,11 +91,5 @@ export default class UserController {
     } catch (error) {
       throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
     }
-  }
-
-  @Get("/spec")
-  getSpec() {
-    const storage = getMetadataArgsStorage();
-    return routingControllersToSpec(storage);
   }
 }
