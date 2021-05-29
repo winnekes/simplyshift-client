@@ -6,20 +6,21 @@ import {
   getMetadataArgsStorage,
   Authorized,
   CurrentUser,
-  BadRequestError,
 } from "routing-controllers";
 import { routingControllersToSpec } from "routing-controllers-openapi";
-import { getCustomRepository, getManager } from "typeorm";
+import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { sign } from "../../utils/jwt";
-import { CalendarRepository } from "../calendar/calendar-repository";
 import User from "./user";
 import { UserRepository } from "./user-repository";
+import { UserService } from "./user-service";
+const { OAuth2Client } = require("google-auth-library");
 
 @JsonController()
 export default class UserController {
   private userRepository = getCustomRepository(UserRepository);
-  private calendarRepository = getCustomRepository(CalendarRepository);
+  private userService = new UserService();
+  private googleClient = new OAuth2Client(process.env.CLIENT_ID);
 
   @Authorized()
   @Get("/users/profile")
@@ -39,7 +40,7 @@ export default class UserController {
       );
     }
 
-    const { password, passwordRepeated, ...rest } = data;
+    const { password, passwordRepeated, ...remainingUserData } = data;
 
     if (password !== passwordRepeated) {
       throw new ExtendedHttpError(
@@ -48,17 +49,10 @@ export default class UserController {
       );
     }
 
-    const user = this.userRepository.create(rest);
-    await user.setPassword(password);
-
-    const calendar = this.calendarRepository.create();
-    calendar.user = user;
-    calendar.isDefault = true;
-
     try {
-      await getManager().transaction(async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(user);
-        await transactionalEntityManager.save(calendar);
+      const user = await this.userService.createUser({
+        ...remainingUserData,
+        password,
       });
 
       const jwt = sign({ id: user.id }, "7 days");
@@ -66,6 +60,37 @@ export default class UserController {
       return { token: jwt, user };
     } catch (error) {
       console.log({ error });
+      throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
+    }
+  }
+
+  @Post("/users/google")
+  async createUserViaGoogle(@Body() data: { tokenId: string }) {
+    try {
+      const ticket = await this.googleClient.verifyIdToken({
+        idToken: data.tokenId,
+        audience: process.env.CLIENT_ID,
+      });
+
+      const { given_name, family_name, email } = ticket.getPayload();
+
+      let user = await this.userRepository.findOne({
+        where: { email },
+      });
+
+      if (!user) {
+        const password = Math.random().toString(36).substr(2, 8);
+        user = await this.userService.createUser({
+          firstName: given_name,
+          lastName: family_name,
+          email,
+          password,
+        });
+      }
+
+      const jwt = sign({ id: user.id }, "7 days");
+      return { token: jwt, user };
+    } catch (error) {
       throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
     }
   }

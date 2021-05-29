@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Divider,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -15,6 +16,7 @@ import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
+import { ExternalLogin } from "../components/external-login";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
@@ -51,7 +53,7 @@ export default function Login() {
         <Page.Content>
           <DividedSegment>
             <form onSubmit={onSubmit}>
-              <FormControl>
+              <FormControl id="email">
                 <FormLabel>Email address</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
@@ -69,7 +71,7 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl>
+              <FormControl id="password">
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
@@ -87,7 +89,7 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl>
+              <FormControl id="stayLoggedIn">
                 <Controller
                   control={control}
                   name="stayLoggedIn"
@@ -98,7 +100,7 @@ export default function Login() {
                         setValue("stayLoggedIn", target.checked);
                       }}
                       checked={value}
-                      inputRef={ref}
+                      ref={ref}
                     >
                       Keep me signed in
                     </Checkbox>
@@ -110,9 +112,18 @@ export default function Login() {
                 </FormHelperText>
               </FormControl>
 
-              <Button isLoading={isLoading} type="submit" variant="primary">
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                variant="primary"
+                w="full"
+              >
                 Sign in
               </Button>
+
+              <Divider my="25px" />
+
+              <ExternalLogin />
             </form>
 
             <Image src="/images/illustration-login.svg" />

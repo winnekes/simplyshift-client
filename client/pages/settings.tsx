@@ -14,7 +14,7 @@ import { Scheduler } from "../components/calendar/scheduler";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../contexts/auth-context";
-import { SignupMutationData } from "../services/mutations/signup";
+import { SignupMutationData } from "../services/mutations/signupMutation";
 import Login from "./login";
 
 // todo optimise usage of arrow functions?
