@@ -48,7 +48,7 @@ export function AuthProvider(props) {
       setUser(data);
     }
   }, [data]);
-  console.log({ user });
+
   const logout = async () => {
     if (window) {
       window.localStorage.removeItem("token");

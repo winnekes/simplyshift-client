@@ -28,10 +28,10 @@ import { width } from "../../theme/theme";
 
 export function Navbar() {
   const { user, logout } = useAuth();
-  const { signOut, loaded } = useGoogleLogout({
+  const { signOut } = useGoogleLogout({
     clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-    onLogoutSuccess: () => console.log("a"),
-    onFailure: () => console.log("ee"),
+    onLogoutSuccess: () => {},
+    onFailure: () => {},
   });
 
   const { colorMode, toggleColorMode } = useColorMode();

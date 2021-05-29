@@ -40,7 +40,6 @@ export default function Login() {
   });
 
   const onSubmit = handleSubmit(async ({ email, password, stayLoggedIn }) => {
-    console.log({ stayLoggedIn });
     mutate({ email, password, stayLoggedIn });
   });
 

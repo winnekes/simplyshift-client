@@ -115,14 +115,13 @@ export const Scheduler = () => {
         shiftModel,
         date,
       });
-      console.log({ mutatef: date });
+
       setShowConfirmOverrideShiftEntryModal(true);
       return;
     }
 
     mutate({ shiftModelId: shiftModel.id, date });
 
-    console.log({ mutate: date });
     const newShiftEntry = createLocalShiftEntryEvent(shiftModel, date);
     setEvents([...events, newShiftEntry]);
   };
@@ -130,7 +129,6 @@ export const Scheduler = () => {
   const onSelectSlot = async (slot: { start: stringOrDate }) => {
     if (selectedModelId) {
       const startsAt = moment(slot.start).toDate();
-      console.log({ onSelect: startsAt });
       await createShiftEntry(startsAt);
     }
   };
