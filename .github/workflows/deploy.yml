@@ -19,7 +19,7 @@ jobs:
         run: |
           cd server
           npm i
-          npm build
+          npm run build
 
       - name: List output files
         run: |
