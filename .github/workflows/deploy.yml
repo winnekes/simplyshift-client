@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
 
       - name: build the server
-
-      - run: npm i
-      - run: npm build
+        uses: actions/checkout@v1
+        run: |
+          npm i
+          npm build
 
       - name: List output files
         run: ls
