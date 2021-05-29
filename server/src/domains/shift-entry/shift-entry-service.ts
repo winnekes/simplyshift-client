@@ -22,7 +22,7 @@ export class ShiftEntryService {
     date: Date
   ): Promise<ShiftEntry[]> {
     const selectedMonth = moment(date).startOf("month");
-
+    console.log({ selectedMonth });
     const shiftEntries = await this.shiftEntryRepository.findAllForUser(user, {
       startsAt: MoreThanOrEqual(moment(selectedMonth).subtract(7, "days")),
       endsAt: LessThan(moment(selectedMonth).add(1, "month").add(7, "days")),
@@ -60,6 +60,7 @@ export class ShiftEntryService {
       where: { id: data.shiftModelId },
     });
 
+    console.log({ data });
     if (!shiftModel) {
       throw new ExtendedHttpError(
         "Could not find the model for this shift entry.",
@@ -77,6 +78,7 @@ export class ShiftEntryService {
 
     // map the military time of the shift model to the selected day of the shift
     const startDate = moment(data.date).startOf("day");
+    console.log({ startDate });
     const startsAt = moment(startDate)
       .add(moment.duration(shiftModel.startsAt))
       .toDate();
@@ -88,6 +90,7 @@ export class ShiftEntryService {
             .toDate()
         : moment(startDate).add(moment.duration(shiftModel.endsAt)).toDate();
 
+    console.log({ startsAt, endsAt });
     // we cannot allow overlapping shift entries, we find potential conflicting ones and delete them
     const conflictingShiftEntries =
       await this.shiftEntryRepository.findConflictingEntriesForUser(user, {

@@ -13,13 +13,13 @@ export function EditModeSettings({ isEditingCalendar, onChange }: Props) {
         </FormLabel>
         <Switch
           id="email-alerts"
-          colorScheme="pink"
+          colorScheme="green"
           isChecked={isEditingCalendar}
           onChange={onChange}
         />
       </FormControl>
       {isEditingCalendar ? (
-        <Text fontSize="xs" color="pink">
+        <Text fontSize="xs" color="green.300">
           <strong>Note</strong>: changes are automatically saved.
         </Text>
       ) : (

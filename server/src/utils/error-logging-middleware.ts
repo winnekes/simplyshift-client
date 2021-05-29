@@ -13,7 +13,7 @@ export class ErrorLoggingMiddleware implements KoaMiddlewareInterface {
       console.dir(err, { depth: null });
       ctx.status = err.statusCode || err.status || 500;
       ctx.body = {
-        message: err.message,
+        message: err.message || " Something went wrong",
         code: err.code,
       };
       Sentry.withScope(function (scope) {

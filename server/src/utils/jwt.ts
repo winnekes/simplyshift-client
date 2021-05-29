@@ -1,15 +1,18 @@
+import dotenv from "dotenv";
 import * as jwt from "jsonwebtoken";
+import { assert } from "./assert";
 
-// todo env only
-const secret = process.env.JWT_SECRET || "i love robots";
-const ttl = "1 day";
+dotenv.config();
 
-interface JwtPayload {
+const secret = process.env.JWT_SECRET;
+assert(secret, "No environment variables set.");
+
+interface TokenPayload {
   id: number;
 }
 
-export const sign = (data: JwtPayload) =>
-  jwt.sign({ data }, secret, { expiresIn: ttl });
+export const sign = (data: TokenPayload, expiresIn: string | number) =>
+  jwt.sign({ data }, secret, { expiresIn });
 
-export const verify = (token: string): { data: JwtPayload } =>
-  jwt.verify(token, secret) as { data: JwtPayload };
+export const verify = (token: string): { data: TokenPayload } =>
+  jwt.verify(token, secret) as { data: TokenPayload };

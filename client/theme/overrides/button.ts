@@ -1,11 +1,11 @@
 export const Button = {
-  // baseStyle: {
-  //   bg: "#ff0",
-  // },
   variants: {
     primary: {
-      bg: "brand01.100",
       color: "white",
+      bg: "green.400",
+      _hover: {
+        bg: "green.500",
+      },
     },
     secondary: {
       bg: "lightgray",

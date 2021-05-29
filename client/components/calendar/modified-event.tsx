@@ -52,7 +52,7 @@ export const ModifiedEvent = ({
           {event.title}
         </Text>
         <Spacer />
-        {isEditingCalendar && (
+        {isEditingCalendar && event.event.id !== 0 && (
           <CloseIcon boxSize="10px" onClick={deleteEvent} />
         )}
       </Flex>

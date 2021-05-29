@@ -59,7 +59,7 @@ export function AuthProvider(props) {
     setCanFetchProfile(false);
 
     delete api.defaults.headers["Authorization"];
-    await router.push("/");
+    await router.push("/login");
   };
 
   const onResponse = (response: AxiosResponse): AxiosResponse => {
@@ -74,12 +74,15 @@ export function AuthProvider(props) {
     let errorMessage = "Oh no, something went wrong!";
 
     if (error.response) {
-      errorMessage = error.response.data.message;
+      const errorCode = error.response.data?.code;
 
       // switch on errors
       // only allow certain error messages
-      if (error.response.data?.message === "JWT expired") {
-        await logout();
+      switch (errorCode) {
+        case "SESSION_EXPIRED":
+          errorMessage = "Your session expired. Please log in again!";
+          await logout();
+          break;
       }
     }
 
@@ -91,6 +94,7 @@ export function AuthProvider(props) {
       toast({
         id,
         title: errorMessage,
+
         status: "error",
         duration: 5000,
         isClosable: true,

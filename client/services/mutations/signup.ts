@@ -11,6 +11,14 @@ export type SignupMutationData = {
 
 export type SignupMutationResponse = { token: string; user: User };
 
-export const signup = (data: SignupMutationData) => {
+export const signupMutation = (data: SignupMutationData) => {
   return api.post<SignupMutationResponse>("users", data);
+};
+
+export type GoogleSignupMutationData = {
+  tokenId: string;
+};
+
+export const googleSignUpMutation = (data: GoogleSignupMutationData) => {
+  return api.post<SignupMutationResponse>("users/google", data);
 };

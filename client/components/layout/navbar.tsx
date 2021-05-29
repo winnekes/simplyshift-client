@@ -1,4 +1,4 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { MoonIcon, SettingsIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -14,15 +14,26 @@ import {
   MenuList,
   Stack,
   useColorMode,
+  Badge,
+  LinkOverlay,
+  LinkBox,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
+import { useGoogleLogout } from "react-google-login";
+import { BiExit } from "react-icons/bi";
 import { useAuth } from "../../contexts/auth-context";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
 
 export function Navbar() {
   const { user, logout } = useAuth();
+  const { signOut } = useGoogleLogout({
+    clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    onLogoutSuccess: () => {},
+    onFailure: () => {},
+  });
+
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -42,9 +53,20 @@ export function Navbar() {
         maxWidth={width}
       >
         <HStack spacing={4} alignItems="center">
-          <Link href="/" passHref>
-            <Heading size="1xl">SimplyShift</Heading>
-          </Link>
+          <LinkBox>
+            <Link href="/" passHref>
+              <LinkOverlay>
+                <HStack px={2}>
+                  <Heading size="1xl" mr={0}>
+                    SimplyShift
+                  </Heading>
+                  <Badge ml={0} colorScheme="green">
+                    Alpha
+                  </Badge>
+                </HStack>
+              </LinkOverlay>
+            </Link>
+          </LinkBox>
 
           {user && (
             <Link href="/calendar">
@@ -72,15 +94,22 @@ export function Navbar() {
                   p={0}
                   cursor="pointer"
                 >
-                  <Avatar bg="brand01.100" size="sm" />
+                  <Avatar bg="green.400" size="sm" />
                 </MenuButton>
-                <MenuList>
-                  <Link href="/profile" passHref>
-                    <MenuItem>Profile</MenuItem>
+                <MenuList bg={colors[colorMode].ui02}>
+                  <Link href="/settings" passHref>
+                    <MenuItem icon={<SettingsIcon />}>Settings</MenuItem>
                   </Link>
-                  <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
-                  <MenuItem onClick={() => logout()}>Logout</MenuItem>
+                  <MenuItem
+                    icon={<BiExit />}
+                    onClick={() => {
+                      signOut();
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
                 </MenuList>
               </>
             )}
@@ -97,15 +126,7 @@ export function Navbar() {
                   </Button>
                 </RouteLink>
                 <RouteLink href="/signup" passHref>
-                  <Button
-                    fontSize="sm"
-                    fontWeight={600}
-                    color="white"
-                    bg="brand01.100"
-                    _hover={{
-                      bg: "brand01.200",
-                    }}
-                  >
+                  <Button variant="primary" fontSize="sm" fontWeight={600}>
                     Sign Up
                   </Button>
                 </RouteLink>

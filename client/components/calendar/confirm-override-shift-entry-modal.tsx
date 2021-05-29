@@ -16,13 +16,11 @@ import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
 type Props = {
   newShiftEntryData: { shiftModel: ShiftModel; date: Date };
-  onConfirm: (shiftModel: ShiftModel, date: Date) => Promise<void>;
   onClose: () => void;
 };
 
 export const ConfirmOverrideShiftEntryModal = ({
   newShiftEntryData: { shiftModel, date },
-  onConfirm,
   onClose,
 }: Props) => {
   const cancelRef = useRef();
@@ -53,9 +51,10 @@ export const ConfirmOverrideShiftEntryModal = ({
             No
           </Button>
           <Button
-            colorScheme="brand01"
+            isLoading={isLoading}
+            colorScheme="green"
             ml={3}
-            onClick={() => onConfirm(shiftModel, date)}
+            onClick={() => mutate({ shiftModelId: shiftModel.id, date })}
           >
             Yes
           </Button>

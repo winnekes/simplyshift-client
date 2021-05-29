@@ -1,4 +1,4 @@
-import { theme as testTheme, extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { colors } from "./colors";
 import { Button } from "./overrides/button";
 import { Modal } from "./overrides/modal";
@@ -10,13 +10,8 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
-const themeColors = {
-  brand01: colors.brand01,
-};
-
 export const theme = extendTheme({
   config,
-  colors: themeColors,
   fonts: {
     body: "Roboto",
     heading: "Roboto Condensed",
