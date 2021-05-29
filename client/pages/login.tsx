@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -11,7 +12,7 @@ import {
   InputLeftElement,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
 import { DividedSegment } from "../components/layout/divided-segment";
@@ -23,7 +24,10 @@ import { login, LoginMutationData } from "../services/mutations/login";
 export default function Login() {
   const auth = useAuth();
   const router = useRouter();
-  const { register, handleSubmit, errors } = useForm<LoginMutationData>();
+  const { register, handleSubmit, errors, control } =
+    useForm<LoginMutationData>({
+      defaultValues: { stayLoggedIn: false },
+    });
 
   const { isLoading, error, mutate } = useMutation(login, {
     onSuccess: async ({ data }) => {
@@ -33,8 +37,9 @@ export default function Login() {
     },
   });
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
-    mutate({ email, password });
+  const onSubmit = handleSubmit(async ({ email, password, stayLoggedIn }) => {
+    console.log({ stayLoggedIn });
+    mutate({ email, password, stayLoggedIn });
   });
 
   return (
@@ -79,6 +84,27 @@ export default function Login() {
                 </InputGroup>
                 <FormHelperText color="red">
                   {errors.password && errors.password.message} &nbsp;
+                </FormHelperText>
+              </FormControl>
+
+              <FormControl>
+                <Controller
+                  control={control}
+                  name="stayLoggedIn"
+                  render={(onBlur, onChange, value, ref) => (
+                    <Checkbox
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      checked={value}
+                      inputRef={ref}
+                    >
+                      Keep me signed in
+                    </Checkbox>
+                  )}
+                />
+
+                <FormHelperText color="red">
+                  {errors.stayLoggedIn && errors.stayLoggedIn.message} &nbsp;
                 </FormHelperText>
               </FormControl>
 

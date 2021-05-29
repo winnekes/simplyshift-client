@@ -4,6 +4,7 @@ import { api } from "../api";
 export type LoginMutationData = {
   email: string;
   password: string;
+  stayLoggedIn: boolean;
 };
 
 export type LoginMutationResponse = { token: string; user: User };

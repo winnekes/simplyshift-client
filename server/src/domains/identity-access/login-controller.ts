@@ -5,7 +5,7 @@ import {
   BadRequestError,
   NotFoundError,
 } from "routing-controllers";
-import { IsString } from "class-validator";
+import { IsBoolean, IsString } from "class-validator";
 import { getCustomRepository } from "typeorm";
 import { sign } from "../../utils/jwt";
 import { UserRepository } from "./user-repository";
@@ -16,6 +16,9 @@ class AuthenticationPayload {
 
   @IsString()
   password!: string;
+
+  @IsBoolean()
+  stayLoggedIn!: string;
 }
 
 @JsonController()
@@ -34,7 +37,9 @@ export default class LoginController {
       throw new BadRequestError("Incorrect email or password.");
     }
 
-    const jwt = sign({ id: user.id });
-    return { token: jwt, user };
+    const tokenExpiresIn = data.stayLoggedIn ? "3 months" : "1 day";
+
+    const token = sign({ id: user.id }, tokenExpiresIn);
+    return { token, user };
   }
 }

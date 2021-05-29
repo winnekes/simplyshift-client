@@ -50,7 +50,7 @@ export default class UserController {
       calendar.user = user;
       calendar.isDefault = true;
       await this.calendarRepository.save(calendar);
-      const jwt = sign({ id: user.id });
+      const jwt = sign({ id: user.id }, "7 days");
 
       return { token: jwt, user };
     } catch (err) {
