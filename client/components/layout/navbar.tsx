@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
+import { useGoogleLogout } from "react-google-login";
 import { BiExit } from "react-icons/bi";
 import { useAuth } from "../../contexts/auth-context";
 import { colors } from "../../theme/colors";
@@ -27,6 +28,12 @@ import { width } from "../../theme/theme";
 
 export function Navbar() {
   const { user, logout } = useAuth();
+  const { signOut, loaded } = useGoogleLogout({
+    clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    onLogoutSuccess: () => console.log("a"),
+    onFailure: () => console.log("ee"),
+  });
+
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
@@ -94,7 +101,13 @@ export function Navbar() {
                     <MenuItem icon={<SettingsIcon />}>Settings</MenuItem>
                   </Link>
                   <MenuDivider />
-                  <MenuItem icon={<BiExit />} onClick={() => logout()}>
+                  <MenuItem
+                    icon={<BiExit />}
+                    onClick={() => {
+                      signOut();
+                      logout();
+                    }}
+                  >
                     Logout
                   </MenuItem>
                 </MenuList>

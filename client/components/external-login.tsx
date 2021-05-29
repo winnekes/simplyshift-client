@@ -1,18 +1,26 @@
-import { Button, Center, Text, VStack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import {
-  ReactFacebookFailureResponse,
-  ReactFacebookLoginInfo,
-} from "react-facebook-login";
-import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import { FaFacebook } from "react-icons/fa";
+  Alert,
+  AlertIcon,
+  Button,
+  Center,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import GoogleLogin, {
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from "react-google-login";
+
 import { FcGoogle } from "react-icons/fc";
 import { useMutation } from "react-query";
 import { useAuth } from "../contexts/auth-context";
 import { googleSignUpMutation } from "../services/mutations/signup";
 
 export const ExternalLogin = () => {
+  const [error, setError] = useState("");
+
   const auth = useAuth();
   const router = useRouter();
 
@@ -29,15 +37,24 @@ export const ExternalLogin = () => {
     },
   });
 
-  const handleGoogleResponse = (response: GoogleLoginResponse) => {
-    googleSignUp({ tokenId: response.tokenId });
+  const handleGoogleResponse = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
+    if ("tokenId" in response && response.tokenId) {
+      return googleSignUp({ tokenId: response.tokenId });
+    }
+
+    setError("Something went wrong. Please try again later.");
   };
 
-  // todo facebook login
-  const handleFacebookResponse = (
-    response: ReactFacebookLoginInfo | ReactFacebookFailureResponse
-  ) => {
-    console.log(response);
+  // TODO Facebook login
+
+  const handleGoogleError = () => {
+    setError("Something went wrong. Try again later.");
+  };
+
+  const handleGoogleRequest = () => {
+    setError("");
   };
 
   return (
@@ -59,12 +76,16 @@ export const ExternalLogin = () => {
         )}
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
         onSuccess={handleGoogleResponse}
-        onFailure={(e) => {
-          console.log({ e });
-        }}
+        onRequest={handleGoogleRequest}
+        onFailure={handleGoogleError}
         cookiePolicy="single_host_origin"
       />
-
+      {error && (
+        <Alert status="error" variant="left-accent">
+          <AlertIcon />
+          {error}
+        </Alert>
+      )}
       {/*<FacebookLogin*/}
       {/*  appId="1088597931155576"*/}
       {/*  autoLoad={true}*/}
