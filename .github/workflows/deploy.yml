@@ -13,23 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
 
       - name: build the server
-        uses: actions/checkout@v1
         run: |
           npm i
           npm build
 
       - name: List output files
         run: ls
-
-      - name: deploy built server
-        uses: appleboy/scp-action@master
-        env:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.SSH_KEY }}
+#
+#      - name: deploy built server
+#        uses: appleboy/scp-action@master
+#        env:
+#          HOST: ${{ secrets.HOST }}
+#          USERNAME: ${{ secrets.USERNAME }}
+#          PORT: ${{ secrets.PORT }}
+#          KEY: ${{ secrets.SSH_KEY }}
 
 
 #        with:
