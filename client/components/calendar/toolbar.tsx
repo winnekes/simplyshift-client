@@ -87,7 +87,11 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
       </Center>
       <Center mb={4}>
         <ButtonGroup size="xs" isAttached color="green.400" variant="ghost">
-          <Button mr="-px" onClick={switchToWeekView}>
+          <Button
+            mr="-px"
+            onClick={switchToWeekView}
+            textDecoration={toolbar.view === "week" && "underline"}
+          >
             Week view
           </Button>
 

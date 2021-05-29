@@ -19,7 +19,7 @@ export function EditModeSettings({ isEditingCalendar, onChange }: Props) {
         />
       </FormControl>
       {isEditingCalendar ? (
-        <Text fontSize="xs" color="green.100">
+        <Text fontSize="xs" color="green.300">
           <strong>Note</strong>: changes are automatically saved.
         </Text>
       ) : (
