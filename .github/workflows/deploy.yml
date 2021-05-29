@@ -15,16 +15,21 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Copy built server via SCP
-        uses: appleboy/scp-action@master
-        env:
-                HOST: ${{ secrets.HOST }}
-                USERNAME: ${{ secrets.USERNAME }}
-                PORT: ${{ secrets.PORT }}
-                KEY: ${{ secrets.SSH_KEY }}
+      - name: build the server
 
       - run: npm i
       - run: npm build
+
+      - name: List output files
+        run: ls
+
+      - name: deploy built server
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
 
 
 #        with:
