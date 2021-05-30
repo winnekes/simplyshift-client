@@ -22,7 +22,7 @@ jobs:
         run: |
           cd server
           npm i
-          echo "${{secretss}}"
+          echo "${{secrets}}"
       - name: compile server
         run: npm run build
 
