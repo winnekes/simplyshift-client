@@ -1,9 +1,6 @@
-name: testitest
+name: Build and deploy SimplyShift
 on:
   push:
-    branches:
-      - master
-  pull_request:
     branches:
       - master
 
