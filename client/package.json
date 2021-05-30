@@ -19,6 +19,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "axios": "^0.21.1",
+    "date-arithmetic": "^4.1.0",
+    "dotenv": "^10.0.0",
     "framer-motion": "^4.1.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
@@ -35,6 +37,7 @@
     "swr": "^0.5.5"
   },
   "devDependencies": {
+    "@types/date-arithmetic": "^4.1.1",
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@types/react-big-calendar": "^0.31.0",

@@ -11,6 +11,7 @@ jobs:
   build-server:
 
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
       - name: list output files
         run: |
           cd server
-          ls
+          node lib/utils/create-environment.file > .env
 
       - name: deploy built server
         uses: appleboy/scp-action@master
@@ -41,34 +42,34 @@ jobs:
           target: "/home/simona/webapps/simplyshift"
 
 
-  build-client:
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
-      - name: build the client
-        run: |
-          cd client
-          npm i
-          npm run export
-
-      - name: list output files
-        run: |
-          cd client
-          ls
-
-#      - name: deploy built server
-#        uses: appleboy/scp-action@master
-#        env:
-#          HOST: ${{ secrets.HOST }}
-#          USERNAME: ${{ secrets.USERNAME }}
-#          PORT: ${{ secrets.PORT }}
-#          KEY: ${{ secrets.SSH_KEY }}
+#  build-client:
+#
+#    runs-on: ubuntu-latest
+#    environment: production
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-node@v2
 #        with:
-#          source: "./client/"
-#          target: "/home/simona/webapps/simplyshift"
+#          node-version: '14'
+#
+#      - name: build the client
+#        run: |
+#          cd client
+#          npm i
+#
+#      - name: list output files
+#        run: |
+#          cd client
+#          ls
+#
+##      - name: deploy built server
+##        uses: appleboy/scp-action@master
+##        env:
+##          HOST: ${{ secrets.HOST }}
+##          USERNAME: ${{ secrets.USERNAME }}
+##          PORT: ${{ secrets.PORT }}
+##          KEY: ${{ secrets.SSH_KEY }}
+##        with:
+##          source: "./client/"
+##          target: "/home/simona/webapps/simplyshift"
