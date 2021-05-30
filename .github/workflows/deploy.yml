@@ -25,12 +25,6 @@ jobs:
           npm i
           npm run build
 
-      - name: list output files
-        run: |
-          cd server
-          node lib/utils/create-environment-file.js > .env
-          ls
-
       - name: deploy built server
         uses: appleboy/scp-action@master
         env:
@@ -42,35 +36,16 @@ jobs:
           source: "./server/lib/"
           target: "/home/simona/webapps/simplyshift"
 
-
-#  build-client:
-#
-#    runs-on: ubuntu-latest
-#    environment: production
-#
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-node@v2
-#        with:
-#          node-version: '14'
-#
-#      - name: build the client
-#        run: |
-#          cd client
-#          npm i
-#
-#      - name: list output files
-#        run: |
-#          cd client
-#          ls
-#
-##      - name: deploy built server
-##        uses: appleboy/scp-action@master
-##        env:
-##          HOST: ${{ secrets.HOST }}
-##          USERNAME: ${{ secrets.USERNAME }}
-##          PORT: ${{ secrets.PORT }}
-##          KEY: ${{ secrets.SSH_KEY }}
-##        with:
-##          source: "./client/"
-##          target: "/home/simona/webapps/simplyshift"
+  - name: deploy environment file
+      uses: appleboy/scp-action@master
+      run: |
+        cd server
+        node lib/utils/create-environment-file.js > .env
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+      with:
+        source: "./server/.env"
+        target: "/home/simona/webapps/simplyshift/server"
