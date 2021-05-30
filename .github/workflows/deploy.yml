@@ -22,7 +22,7 @@ jobs:
         run: |
           cd server
           npm i
-          echo "$(GOOGLE_CLIENT_ID)"
+          echo "${{secretss}}"
       - name: compile server
         run: npm run build
 
