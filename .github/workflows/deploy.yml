@@ -64,11 +64,11 @@ jobs:
           source: "./client"
           target: "/home/simona/webapps/simplyshift"
 
-      - name: Executing remote command
+      - name: build client
         uses: appleboy/ssh-action@master
         with:
           HOST: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd home/simona/webapps/simplyshift/client && npm run build
+          script: cd /home/simona/webapps/simplyshift/client && npm run build
