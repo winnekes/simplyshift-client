@@ -68,4 +68,4 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/client && npm run build
+          script: cd /home/simona/webapps/simplyshift/client && npm rebuild node-sass && npm run build
