@@ -39,6 +39,7 @@ jobs:
         run: |
           cd server
           node lib/utils/create-environment-file.js > .env
+          echo node lib/utils/create-environment-file.js
 
       - name: deploy environment file
         uses: appleboy/scp-action@master
@@ -49,4 +50,4 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
         with:
           source: "./server/.env"
-          target: "/home/simona/webapps/simplyshift/server"
+          target: "/home/simona/webapps/simplyshift"
