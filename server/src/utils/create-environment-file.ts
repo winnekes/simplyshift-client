@@ -20,4 +20,6 @@ for (const variable of environmentVariables) {
   }
 }
 
+console.log({ modifiedEnvironmentVariables });
+
 process.stdout.write(modifiedEnvironmentVariables.join("\n"));

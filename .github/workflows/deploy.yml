@@ -36,6 +36,7 @@ jobs:
           target: "/home/simona/webapps/simplyshift"
 
       - name: create environment file
+
         run: |
           cd server
           node lib/utils/create-environment-file.js > .env
