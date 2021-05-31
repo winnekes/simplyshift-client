@@ -2,14 +2,14 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.js", "type":"module",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "rm -rf ./lib/ && tsc --project . --watch",
     "start:services": "docker-compose --project-name=simplyshift up",
     "start:dev": "./node_modules/.bin/nodemon --watch ./lib --exec node --inspect lib/index.js, ./node_modules/.bin/nodemon --watch ./lib --exec \"node --inspect lib/index.js\"",
     "start": "node lib/index.js",
-    "build": "npx tsc",
+    "prestart": "npx tsc",
     "doc": "npx typedoc src/index.ts"
   },
   "author": "",
