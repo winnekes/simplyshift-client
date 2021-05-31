@@ -9,7 +9,7 @@
     "start:services": "docker-compose --project-name=simplyshift up",
     "start:dev": "./node_modules/.bin/nodemon --watch ./lib --exec node --inspect lib/index.js, ./node_modules/.bin/nodemon --watch ./lib --exec \"node --inspect lib/index.js\"",
     "start": "node lib/index.js",
-    "prestart": "npx tsc",
+    "build": "npx tsc",
     "doc": "npx typedoc src/index.ts"
   },
   "author": "",
