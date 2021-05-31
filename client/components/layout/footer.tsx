@@ -1,4 +1,3 @@
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Box,
   Container,
@@ -6,29 +5,16 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Input,
-  IconButton,
   useColorModeValue,
   useColorMode,
-  HStack,
-  VStack,
-  FormControl,
 } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import { BiMailSend } from "react-icons/bi";
 import { colors } from "../../theme/colors";
 import { BrandText } from "../common/brand-text";
-
-const ListHeader = ({ children }: { children: ReactNode }) => {
-  return (
-    <Text fontWeight="500" fontSize="lg" mb={2}>
-      {children}
-    </Text>
-  );
-};
+import { NewsletterSubscribe } from "../form/newsletter-subscribe";
 
 export function Footer() {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
+
   return (
     <Box
       mt="200px"
@@ -42,44 +28,18 @@ export function Footer() {
           spacing={8}
         >
           <Stack spacing={6}>
-            {/*<Box>*/}
-            {/*  /!*<Logo color={useColorModeValue("gray.700", "white")} />*!/*/}
-            {/*</Box>*/}
             <Text fontSize="sm">
               © 2021 <BrandText>SimplyShift</BrandText>
             </Text>
           </Stack>
           <Stack align="flex-start">
-            <ListHeader>About SimplyShift</ListHeader>
+            <Text fontWeight="500" fontSize="lg" mb={2}>
+              About SimplyShift
+            </Text>
             <Link href="#">Privacy Policy</Link>
             <Link href="#">Found an issue?</Link>
           </Stack>
-
-          <VStack align="flex-start">
-            <ListHeader>
-              Follow us! Be the first to hear about new features
-            </ListHeader>
-            <Stack direction="row">
-              <Input
-                alignSelf="stretch"
-                placeholder="Your email address"
-                bg={useColorModeValue("gray.100", "whiteAlpha.100")}
-                border={0}
-                _focus={{
-                  bg: "whiteAlpha.300",
-                }}
-              />
-              <IconButton
-                color="white"
-                bg="green.400"
-                _hover={{
-                  bg: "green.500",
-                }}
-                aria-label="Subscribe"
-                icon={<BiMailSend />}
-              />
-            </Stack>
-          </VStack>
+          <NewsletterSubscribe />
         </SimpleGrid>
       </Container>
     </Box>
