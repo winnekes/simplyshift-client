@@ -32,7 +32,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./server/lib,./server/package.json"
+          source: "./server"
           target: "/home/simona/webapps/simplyshift"
 
       - name: install server dependencies
