@@ -35,6 +35,14 @@ jobs:
           source: "./server/lib,./server/package.json"
           target: "/home/simona/webapps/simplyshift"
 
+      - name: install server dependencies
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
+          script: cd /home/simona/webapps/simplyshift/server && npm install
 
   build-client:
     runs-on: ubuntu-latest
