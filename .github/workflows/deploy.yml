@@ -32,7 +32,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./server/lib/"
+          source: "./server/lib/,./package.json"
           target: "/home/simona/webapps/simplyshift"
 
   build-client:
