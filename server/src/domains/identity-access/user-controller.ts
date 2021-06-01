@@ -5,6 +5,7 @@ import {
   Post,
   Authorized,
   CurrentUser,
+  Put,
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
@@ -60,6 +61,23 @@ export default class UserController {
       console.log({ error });
       throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
     }
+  }
+
+  @Authorized()
+  @Put("/users/profile/change-password")
+  async changePassword(
+    @CurrentUser() user: User,
+    @Body() data: { password: string; passwordRepeated: string }
+  ) {
+    if (data.password !== data.passwordRepeated) {
+      throw new ExtendedHttpError(
+        "Passwords do not match.",
+        "NO_MATCH_PASSWORD"
+      );
+    }
+
+    await user.setPassword(data.password);
+    return this.userRepository.save(user);
   }
 
   @Post("/users/google")
