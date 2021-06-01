@@ -115,6 +115,6 @@ export default class UserController {
   @Authorized()
   @Delete("/users")
   async deleteUser(@CurrentUser() user: User) {
-    return this.userRepository.delete(user.id);
+    return (await this.userRepository.delete(user.id)).affected === 0;
   }
 }
