@@ -15,7 +15,7 @@ on:  [push]
       - name: check client
         run: |
           cd client
-          npm i
+          npm ci
           npm run lint
           npm run build
 
@@ -32,8 +32,7 @@ on:  [push]
       - name: check client
         run: |
           cd client
-          npm i
+          npm ci
           npm run lint
-          npm run build
 
 
