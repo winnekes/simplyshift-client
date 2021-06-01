@@ -26,53 +26,50 @@ export const NewsletterSubscribe = () => {
 
       <MailchimpSubscribe
         url={url}
-        render={({ subscribe, status, message }) => {
-          console.log({ status, message });
-          return (
-            <>
-              <Flex>
-                <Input
-                  type="email"
-                  placeholder="Your email address"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value as string)}
-                  bg={colorMode === "light" ? "gray.100" : "whiteAlpha.100"}
-                  border={0}
-                  _focus={{
-                    bg: "whiteAlpha.300",
-                  }}
-                />
-                <IconButton
-                  onClick={() => subscribe({ EMAIL: email })}
-                  isLoading={status === "sending"}
-                  icon={<BiMailSend />}
-                  color="white"
-                  bg="green.400"
-                  _hover={{
-                    bg: "green.500",
-                  }}
-                  aria-label="Subscribe"
-                  ml={2}
-                />
-              </Flex>
-              {status === "success" && (
-                <Alert status="success" variant="left-accent">
-                  <AlertIcon />
-                  Thank you for subscribing and talk to you soon!
-                </Alert>
-              )}
+        render={({ subscribe, status, message }) => (
+          <>
+            <Flex>
+              <Input
+                type="email"
+                placeholder="Your email address"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value as string)}
+                bg={colorMode === "light" ? "gray.100" : "whiteAlpha.100"}
+                border={0}
+                _focus={{
+                  bg: "whiteAlpha.300",
+                }}
+              />
+              <IconButton
+                onClick={() => subscribe({ EMAIL: email })}
+                isLoading={status === "sending"}
+                icon={<BiMailSend />}
+                color="white"
+                bg="green.400"
+                _hover={{
+                  bg: "green.500",
+                }}
+                aria-label="Subscribe"
+                ml={2}
+              />
+            </Flex>
+            {status === "success" && (
+              <Alert status="success" variant="left-accent">
+                <AlertIcon />
+                Thank you for subscribing and talk to you soon!
+              </Alert>
+            )}
 
-              {status === "error" && (
-                <Alert status="warning" variant="left-accent">
-                  <AlertIcon />
-                  {!email && <>Please enter a valid email address.</>}
-                  {email && <>Something went wrong. Please try again later!</>}
-                </Alert>
-              )}
-            </>
-          );
-        }}
+            {status === "error" && (
+              <Alert status="warning" variant="left-accent">
+                <AlertIcon />
+                {!email && <>Please enter a valid email address.</>}
+                {email && <>Something went wrong. Please try again later!</>}
+              </Alert>
+            )}
+          </>
+        )}
       />
     </VStack>
   );
