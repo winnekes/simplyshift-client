@@ -57,6 +57,7 @@ jobs:
       - name: install dependencies
         run: |
           cd client
+          npm run lint
           npm i
 
       - name: deploy client
