@@ -1,9 +1,9 @@
 import {
   Alert,
   AlertIcon,
+  Flex,
   IconButton,
   Input,
-  Stack,
   Text,
   useColorMode,
   VStack,
@@ -19,24 +19,25 @@ export const NewsletterSubscribe = () => {
     "https://googlemail.us7.list-manage.com/subscribe/post?u=84997ea5ce2e52834a5dd1b34&amp;id=b54f3d9c90";
 
   return (
-    <VStack align="flex-start">
+    <VStack align="stretch">
       <Text fontWeight="500" fontSize="lg" mb={2}>
         Follow us! Be the first to hear about new features
       </Text>
-      <Stack direction="row">
-        <MailchimpSubscribe
-          url={url}
-          render={({ subscribe, status, message }) => {
-            console.log({ status, message });
-            return (
-              <>
+
+      <MailchimpSubscribe
+        url={url}
+        render={({ subscribe, status, message }) => {
+          console.log({ status, message });
+          return (
+            <>
+              <Flex>
                 <Input
                   type="email"
-                  w="full"
                   placeholder="Your email address"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value as string)}
-                  bg={colorMode === "dark" ? "gray.100" : "whiteAlpha.100"}
+                  bg={colorMode === "light" ? "gray.100" : "whiteAlpha.100"}
                   border={0}
                   _focus={{
                     bg: "whiteAlpha.300",
@@ -52,25 +53,27 @@ export const NewsletterSubscribe = () => {
                     bg: "green.500",
                   }}
                   aria-label="Subscribe"
+                  ml={2}
                 />
-                {status === "success" && (
-                  <Alert status="success" variant="left-accent">
-                    <AlertIcon />
-                    Thank you so much and talk to you soon!
-                  </Alert>
-                )}
+              </Flex>
+              {status === "success" && (
+                <Alert status="success" variant="left-accent">
+                  <AlertIcon />
+                  Thank you for subscribing and talk to you soon!
+                </Alert>
+              )}
 
-                {status === "error" && (
-                  <Alert status="warning" variant="left-accent">
-                    <AlertIcon />
-                    You are already subscribed to SimplyShift!
-                  </Alert>
-                )}
-              </>
-            );
-          }}
-        />
-      </Stack>
+              {status === "error" && (
+                <Alert status="warning" variant="left-accent">
+                  <AlertIcon />
+                  {!email && <>Please enter a valid email address.</>}
+                  {email && <>Something went wrong. Please try again later!</>}
+                </Alert>
+              )}
+            </>
+          );
+        }}
+      />
     </VStack>
   );
 };

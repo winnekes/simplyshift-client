@@ -9,6 +9,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { colors } from "../../theme/colors";
+import { width } from "../../theme/theme";
 import { BrandText } from "../common/brand-text";
 import { NewsletterSubscribe } from "../form/newsletter-subscribe";
 
@@ -18,13 +19,13 @@ export function Footer() {
   return (
     <Box
       mt="200px"
-      pb="50px"
+      py="50px"
       bg={colors[colorMode].ui02}
       color={useColorModeValue("gray.700", "gray.200")}
     >
-      <Container as={Stack} maxW="6xl" py={10}>
+      <Container maxW={width} px={[5, 5, 5, 0]}>
         <SimpleGrid
-          templateColumns={{ sm: "1fr ", md: "1fr 1fr 2fr" }}
+          templateColumns={{ sm: "1fr ", md: "1fr 1fr 1.5fr" }}
           spacing={8}
         >
           <Stack spacing={6}>
@@ -37,6 +38,7 @@ export function Footer() {
               About SimplyShift
             </Text>
             <Link href="#">Privacy Policy</Link>
+            <Link href="#">Terms and Conditions</Link>
             <Link href="#">Found an issue?</Link>
           </Stack>
           <NewsletterSubscribe />
