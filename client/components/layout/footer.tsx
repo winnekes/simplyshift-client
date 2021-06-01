@@ -32,10 +32,10 @@ export function Footer() {
           templateColumns={{ sm: "1fr ", md: "1fr 1fr 1.5fr" }}
           spacing={8}
         >
-          <Stack spacing={6}>
-            <Text fontSize="sm">
+          <Stack spacing={6} fontSize="sm">
+            <Box>
               © 2021 <BrandText>SimplyShift</BrandText>. <br />
-              <Text fontColor="gray.400">
+              <Text color="gray.400">
                 Made with <Icon as={BiHeart} color="green.400" /> by
                 tinyhive.dev
               </Text>
@@ -49,7 +49,7 @@ export function Footer() {
               >
                 <EmailIcon /> simplyshift@tinyhive.dev
               </Link>
-            </Text>
+            </Box>
           </Stack>
           <Stack align="flex-start">
             {/*<Text fontWeight="500" fontSize="lg" mb={2}>*/}
