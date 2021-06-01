@@ -23,7 +23,7 @@ import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../contexts/auth-context";
-import { loginMutation, LoginMutationData } from "../services/mutations/loginMutation";
+import { loginMutation, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);

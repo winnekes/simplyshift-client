@@ -1,20 +1,9 @@
-import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Heading,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { FaKey } from "react-icons/fa";
+import { Button, Divider, Heading } from "@chakra-ui/react";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { ChangePassword } from "../components/settings/change-password";
+import { DeleteAccount } from "../components/settings/delete-account";
 import { useAuth } from "../contexts/auth-context";
-import { SignupMutationData } from "../services/mutations/signup";
 import Login from "./login";
 
 export default function Settings() {
@@ -33,6 +22,8 @@ export default function Settings() {
         </Page.Title>
         <Page.Content>
           <ChangePassword />
+          <Divider my={10} />
+          <DeleteAccount />
         </Page.Content>
       </Page>
     </PageWrapper>

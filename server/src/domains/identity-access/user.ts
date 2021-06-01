@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
+import Calendar from "../calendar/calendar";
 import ShiftEntry from "../shift-entry/shift-entry";
 import ShiftModel from "../shift-model/shift-model";
 
@@ -45,11 +46,20 @@ export default class User extends BaseEntity {
     return bcrypt.compare(rawPassword, this.password);
   }
 
-  @OneToMany(() => ShiftModel, (shiftModel) => shiftModel.user)
+  @OneToMany(() => ShiftModel, (shiftModel) => shiftModel.user, {
+    onDelete: "CASCADE",
+  })
   shiftModels!: ShiftModel[];
 
-  @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.user)
+  @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.user, {
+    onDelete: "CASCADE",
+  })
   shiftEntries!: ShiftEntry[];
+
+  @OneToMany(() => Calendar, (calendar) => calendar.user, {
+    onDelete: "CASCADE",
+  })
+  calendars!: Calendar[];
 
   @CreateDateColumn({ type: "timestamptz" })
   createdAt!: Date;

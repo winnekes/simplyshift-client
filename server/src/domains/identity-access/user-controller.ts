@@ -6,6 +6,7 @@ import {
   Authorized,
   CurrentUser,
   Put,
+  Delete,
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
@@ -109,5 +110,11 @@ export default class UserController {
     } catch (error) {
       throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
     }
+  }
+
+  @Authorized()
+  @Delete("/users")
+  async deleteUser(@CurrentUser() user: User) {
+    return this.userRepository.delete(user.id);
   }
 }
