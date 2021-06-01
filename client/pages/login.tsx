@@ -23,7 +23,7 @@ import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../contexts/auth-context";
-import { login, LoginMutationData } from "../services/mutations/login";
+import { loginMutation, LoginMutationData } from "../services/mutations/loginMutation";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +35,7 @@ export default function Login() {
       defaultValues: { stayLoggedIn: false },
     });
 
-  const { isLoading, mutate } = useMutation(login, {
+  const { isLoading, mutate } = useMutation(loginMutation, {
     onSuccess: async ({ data }) => {
       auth.setToken(data.token);
       auth.setUser(data.user);

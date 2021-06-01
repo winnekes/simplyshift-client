@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
 import {
-  changePassword,
+  changePasswordMutation,
   ChangePasswordData,
 } from "../../services/mutations/change-password";
 
@@ -25,7 +25,7 @@ export const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordRepeated, setShowPasswordRepeated] = useState(false);
 
-  const { isLoading, mutate } = useMutation(changePassword, {
+  const { isLoading, mutate } = useMutation(changePasswordMutation, {
     onSuccess: async ({ data }) => {},
   });
 

@@ -6,6 +6,6 @@ export type ChangePasswordData = {
   passwordRepeated: string;
 };
 
-export const changePassword = (data: ChangePasswordData) => {
+export const changePasswordMutation = (data: ChangePasswordData) => {
   return api.put<User>("users/profile/change-password", data);
 };
