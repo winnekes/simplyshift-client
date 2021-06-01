@@ -1,3 +1,4 @@
+import { EmailIcon } from "@chakra-ui/icons";
 import {
   Box,
   Container,
@@ -7,7 +8,10 @@ import {
   Text,
   useColorModeValue,
   useColorMode,
+  Divider,
+  Icon,
 } from "@chakra-ui/react";
+import { BiHeart } from "react-icons/bi";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
 import { BrandText } from "../common/brand-text";
@@ -30,16 +34,29 @@ export function Footer() {
         >
           <Stack spacing={6}>
             <Text fontSize="sm">
-              © 2021 <BrandText>SimplyShift</BrandText>
+              © 2021 <BrandText>SimplyShift</BrandText>. <br />
+              <Text fontColor="gray.400">
+                Made with <Icon as={BiHeart} color="green.400" /> by
+                tinyhive.dev
+              </Text>
+              <Divider my={5} />
+              <BrandText>Found an issue?</BrandText> <br />
+              Let us know at{" "}
+              <Link
+                color="green.400"
+                href="mailto:simplyshift@tinyhive.dev"
+                isExternal
+              >
+                <EmailIcon /> simplyshift@tinyhive.dev
+              </Link>
             </Text>
           </Stack>
           <Stack align="flex-start">
-            <Text fontWeight="500" fontSize="lg" mb={2}>
-              About SimplyShift
-            </Text>
-            <Link href="#">Privacy Policy</Link>
-            <Link href="#">Terms and Conditions</Link>
-            <Link href="#">Found an issue?</Link>
+            {/*<Text fontWeight="500" fontSize="lg" mb={2}>*/}
+            {/*  About SimplyShift*/}
+            {/*</Text>*/}
+            {/*<Link href="#">Privacy Policy</Link>*/}
+            {/*<Link href="#">Terms and Conditions</Link>*/}
           </Stack>
           <NewsletterSubscribe />
         </SimpleGrid>
