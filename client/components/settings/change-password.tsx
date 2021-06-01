@@ -1,6 +1,5 @@
 import {
   Button,
-  Container,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -26,7 +25,7 @@ export const ChangePassword = () => {
   const [showPasswordRepeated, setShowPasswordRepeated] = useState(false);
 
   const { isLoading, mutate } = useMutation(changePasswordMutation, {
-    onSuccess: async ({ data }) => {},
+    onSuccess: async () => {},
   });
 
   const { register, errors, handleSubmit } = useForm<ChangePasswordData>();

@@ -26,9 +26,9 @@ jobs:
         with:
           node-version: "15.x"
 
-      - name: check client
+      - name: check server
         run: |
-          cd client
+          cd server
           npm ci
           npm run lint
 
