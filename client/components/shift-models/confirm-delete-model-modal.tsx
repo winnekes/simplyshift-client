@@ -22,7 +22,7 @@ type Props = {
 export const ConfirmDeleteModelModal = ({ shiftModel, onClose }: Props) => {
   const cancelRef = useRef();
 
-  const { isLoading, error, mutate } = useMutation(deleteShiftModelMutation, {
+  const { isLoading, mutate } = useMutation(deleteShiftModelMutation, {
     onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),
   });
@@ -48,7 +48,12 @@ export const ConfirmDeleteModelModal = ({ shiftModel, onClose }: Props) => {
           <Button ref={cancelRef} onClick={onClose}>
             No
           </Button>
-          <Button colorScheme="green" ml={3} onClick={deleteModel}>
+          <Button
+            colorScheme="green"
+            ml={3}
+            onClick={deleteModel}
+            isLoading={isLoading}
+          >
             Yes
           </Button>
         </AlertDialogFooter>

@@ -10,7 +10,7 @@ import { useFormContext, Controller } from "react-hook-form";
 import { AddShiftModelData } from "../../services/mutations/add-shift-model";
 
 export const ModelForm = () => {
-  const { register, errors, control, setValue, getValues } =
+  const { register, errors, control, setValue } =
     useFormContext<AddShiftModelData>();
 
   return (

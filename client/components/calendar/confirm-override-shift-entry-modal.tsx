@@ -25,7 +25,7 @@ export const ConfirmOverrideShiftEntryModal = ({
 }: Props) => {
   const cancelRef = useRef();
 
-  const { isLoading, error, mutate } = useMutation(addShiftEntryMutation, {
+  const { isLoading, mutate } = useMutation(addShiftEntryMutation, {
     onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),
   });

@@ -31,7 +31,7 @@ export default function Signup() {
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<SignupMutationData>();
 
-  const { isLoading, error, mutate } = useMutation(signupMutation, {
+  const { isLoading, mutate } = useMutation(signupMutation, {
     onSuccess: async ({ data }) => {
       auth.setToken(data.token);
       auth.setUser(data.user);

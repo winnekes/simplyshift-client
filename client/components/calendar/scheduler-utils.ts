@@ -12,7 +12,7 @@ moment.locale("nl", {
 
 export const localizer = momentLocalizer(moment);
 
-export const slotPropGetter = (date: Date) => {
+export const slotPropGetter = () => {
   return {
     style: {
       backgroundColor: "red !important",

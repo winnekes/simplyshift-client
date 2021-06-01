@@ -31,7 +31,7 @@ export default function Login() {
       defaultValues: { stayLoggedIn: false },
     });
 
-  const { isLoading, error, mutate } = useMutation(login, {
+  const { isLoading, mutate } = useMutation(login, {
     onSuccess: async ({ data }) => {
       auth.setToken(data.token);
       auth.setUser(data.user);

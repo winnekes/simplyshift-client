@@ -6,15 +6,9 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl,
-  FormLabel,
-  InputGroup,
-  Input,
-  FormHelperText,
   useColorMode,
 } from "@chakra-ui/react";
-import { CirclePicker } from "react-color";
-import { useForm, Controller, FormProvider } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
   AddShiftModelData,
@@ -41,8 +35,8 @@ export function AddModelModal({ onClose }: Props) {
 
   const methods = useForm<AddShiftModelData>({ defaultValues });
 
-  // todo use isloading and error
-  const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
+  // todo use error
+  const { isLoading, mutate } = useMutation(addShiftModelMutation, {
     onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),
   });
@@ -66,7 +60,7 @@ export function AddModelModal({ onClose }: Props) {
             <Button variant="ghost" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" ml={3}>
+            <Button type="submit" ml={3} isLoading={isLoading}>
               Save
             </Button>
           </ModalFooter>

@@ -19,7 +19,7 @@ import Login from "./login";
 // todo optimise usage of arrow functions?
 export default function Settings() {
   const { user } = useAuth();
-  const { register, handleSubmit, errors } = useForm<SignupMutationData>();
+  const { register, errors } = useForm<SignupMutationData>();
 
   // todo try to handle globally (so we don't have to add this check on every protected page)
   if (!user) {
