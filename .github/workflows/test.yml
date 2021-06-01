@@ -1,7 +1,7 @@
 name: Test SimplyShift
 on:  [push]
 
-  jobs:
+jobs:
   test-client:
     runs-on: ubuntu-latest
     environment: production
