@@ -16,7 +16,6 @@ import { theme } from "../theme/theme";
 const toast = createStandaloneToast();
 const toastId = "loading-toast";
 
-// todo fix color
 const showToast = () => {
   if (!toast.isActive(toastId)) {
     toast({

@@ -23,7 +23,6 @@ type Props = {
   onClose: () => void;
 };
 
-// todo extract form for edit and add model
 export function AddModelModal({ onClose }: Props) {
   const { colorMode } = useColorMode();
   const defaultValues: AddShiftModelData = {
@@ -35,7 +34,6 @@ export function AddModelModal({ onClose }: Props) {
 
   const methods = useForm<AddShiftModelData>({ defaultValues });
 
-  // todo use error
   const { isLoading, mutate } = useMutation(addShiftModelMutation, {
     onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),

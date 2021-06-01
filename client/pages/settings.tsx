@@ -16,7 +16,6 @@ import { useAuth } from "../contexts/auth-context";
 import { SignupMutationData } from "../services/mutations/signup";
 import Login from "./login";
 
-// todo optimise usage of arrow functions?
 export default function Settings() {
   const { user } = useAuth();
   const { register, errors } = useForm<SignupMutationData>();
