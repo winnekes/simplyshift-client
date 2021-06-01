@@ -1,7 +1,6 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { colors } from "./colors";
 import { Button } from "./overrides/button";
-import { Modal } from "./overrides/modal";
 
 const config: ThemeConfig = {
   initialColorMode: "light",
@@ -16,7 +15,6 @@ export const theme = extendTheme({
   },
   components: {
     Button,
-    Modal,
   },
   styles: {
     global: (props) => ({
