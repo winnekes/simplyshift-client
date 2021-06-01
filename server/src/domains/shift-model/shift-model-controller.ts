@@ -58,13 +58,18 @@ export default class ShiftModelController {
   async updateShiftModel(
     @Param("id") id: number,
     @CurrentUser() user: User,
-    @Body() update: Partial<ShiftModel>
+    @Body() data: Partial<ShiftModel>
   ) {
-    const entity = await this.shiftModelRepository.findOne(id, {
+    const shiftModel = await this.shiftModelRepository.findOne(id, {
       where: { user },
     });
-    if (!entity) throw new NotFoundError("Cannot find the shift model.");
-    return await ShiftModel.merge(entity, update).save();
+
+    if (!shiftModel) {
+      throw new NotFoundError("Cannot find the shift model.");
+    }
+
+    const updatedShiftModel = ShiftModel.merge(shiftModel, data);
+    return this.shiftModelRepository.save(updatedShiftModel);
   }
 
   @Authorized()
