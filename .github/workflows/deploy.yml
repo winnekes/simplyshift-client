@@ -55,7 +55,7 @@ jobs:
           node-version: "15.x"
 
       - name: build client
-      - uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
         run: |
           cd client
           echo $ENV_PRODUCTION >> .env.production
