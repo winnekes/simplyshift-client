@@ -54,11 +54,13 @@ jobs:
         with:
           node-version: "15.x"
 
-      - name: install dependencies
+      - name: build client
+      - uses: actions/setup-node@v2
         run: |
           cd client
           echo $ENV_PRODUCTION >> .env.production
           npm i
+          npm rebuild node-sass
           npm run build
 
       - name: create env file
@@ -76,11 +78,11 @@ jobs:
           source: "./client/.next,./client/package.json"
           target: "/home/simona/webapps/simplyshift"
 
-      - name: build client
+      - name: restart client
         uses: appleboy/ssh-action@master
         with:
           HOST: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/client && npm i && npm rebuild node-sass  && pm2 restart simplyshift-client
+          script: cd /home/simona/webapps/simplyshift/client && pm2 restart simplyshift-client
