@@ -21,6 +21,13 @@ jobs:
           npm i
           npm run build
 
+      - name: create environment file
+        run: |
+          cd server
+          printf "$ENV_SERVER_PRODUCTION" >> .env
+        env:
+          ENV_PRODUCTION: ${{secrets.ENV_SERVER_PRODUCTION}}
+
       - name: delete old server
         uses: appleboy/ssh-action@master
         with:
@@ -38,7 +45,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./server/lib,./server/package.json"
+          source: "./server/lib,./server/package.json, ./server/package-lock.json, ./server/.env"
           target: "/home/simona/webapps/simplyshift"
 
       - name: install server dependencies
@@ -59,6 +66,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "15.x"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/client/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/client/package-lock.json') }}
 
       - name: build client
         run: |
