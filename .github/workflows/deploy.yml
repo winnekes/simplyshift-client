@@ -68,7 +68,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./client"
+          source: "./client/.next,./client/package.json"
           target: "/home/simona/webapps/simplyshift"
 
       - name: build client
@@ -78,4 +78,4 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/client && npm rebuild node-sass && npm run build
+          script: cd /home/simona/webapps/simplyshift/client && npm rebuild node-sass && npm run build && pm2 restart simplyshift-client
