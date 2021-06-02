@@ -5,6 +5,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SWRConfig } from "swr";
 import { AuthProvider } from "../contexts/auth-context";
@@ -61,6 +62,12 @@ function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <SWRConfig value={swrConfig}>
           <AuthProvider>
+            <Head>
+              <meta
+                name="viewport"
+                content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+              />
+            </Head>
             <Component {...pageProps} />
           </AuthProvider>
         </SWRConfig>
