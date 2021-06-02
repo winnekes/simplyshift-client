@@ -9,6 +9,6 @@ export type LoginMutationData = {
 
 export type LoginMutationResponse = { token: string; user: User };
 
-export const login = (data: LoginMutationData) => {
+export const loginMutation = (data: LoginMutationData) => {
   return api.post<LoginMutationResponse>("login", data);
 };

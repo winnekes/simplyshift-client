@@ -76,6 +76,12 @@ export function AuthProvider(props) {
     if (error.response) {
       const errorCode = error.response.data?.code;
 
+      const codesToHandle = [
+        "SESSION_EXPIRED",
+        "USER_NOT_FOUND",
+        "PASSWORD_NOT_MATCH",
+        "INCORRECT_EMAIL_OR_PASSWORD",
+      ];
       // switch on errors
       // only allow certain error messages
       switch (errorCode) {
@@ -83,24 +89,36 @@ export function AuthProvider(props) {
           errorMessage = "Your session expired. Please log in again!";
           await logout();
           break;
+        case "USER_NOT_FOUND":
+          errorMessage =
+            "This email address does not exist. Sign up for SimplyShift now!";
+          break;
+        case "PASSWORD_NOT_MATCH":
+          errorMessage = "Make sure the passwords match.";
+          break;
+        case "INCORRECT_EMAIL_OR_PASSWORD":
+          errorMessage = "Invalid email address or password.";
+          break;
       }
+
+      if (codesToHandle.includes(errorCode)) {
+        const toast = createStandaloneToast();
+
+        const id = "test-toast";
+
+        if (!toast.isActive(id)) {
+          toast({
+            id,
+            title: errorMessage,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+
+      return Promise.reject(error);
     }
-
-    const toast = createStandaloneToast();
-
-    const id = "test-toast";
-
-    if (!toast.isActive(id)) {
-      toast({
-        id,
-        title: errorMessage,
-
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-    return Promise.reject(error);
   };
 
   api.interceptors.response.use(onResponse, onResponseError);

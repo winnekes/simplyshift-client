@@ -5,7 +5,6 @@ import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../contexts/auth-context";
 import Login from "./login";
 
-// todo optimise usage of arrow functions?
 export default function Calendar() {
   const { user } = useAuth();
 

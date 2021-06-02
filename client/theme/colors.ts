@@ -1,4 +1,3 @@
-// todo
 export const colors = {
   light: {
     ui01: "#f5f5f5",

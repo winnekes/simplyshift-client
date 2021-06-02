@@ -30,7 +30,10 @@ export default class Calendar extends BaseEntity {
   @Column("boolean", { default: false })
   isDefault!: boolean;
 
-  @ManyToOne(() => User, (user) => user.shiftEntries)
+  @ManyToOne(() => User, (user) => user.calendars, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   user!: User;
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.calendar)

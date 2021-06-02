@@ -5,6 +5,8 @@ import {
   Post,
   Authorized,
   CurrentUser,
+  Put,
+  Delete,
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
@@ -62,6 +64,23 @@ export default class UserController {
     }
   }
 
+  @Authorized()
+  @Put("/users/profile/change-password")
+  async changePassword(
+    @CurrentUser() user: User,
+    @Body() data: { password: string; passwordRepeated: string }
+  ) {
+    if (data.password !== data.passwordRepeated) {
+      throw new ExtendedHttpError(
+        "Passwords do not match.",
+        "NO_MATCH_PASSWORD"
+      );
+    }
+
+    await user.setPassword(data.password);
+    return this.userRepository.save(user);
+  }
+
   @Post("/users/google")
   async createUserViaGoogle(@Body() data: { tokenId: string }) {
     try {
@@ -91,5 +110,11 @@ export default class UserController {
     } catch (error) {
       throw new ExtendedHttpError("Something went wrong", "CREATE_USER_FAILED");
     }
+  }
+
+  @Authorized()
+  @Delete("/users")
+  async deleteUser(@CurrentUser() user: User) {
+    return (await this.userRepository.delete(user.id)).affected === 0;
   }
 }

@@ -11,7 +11,7 @@ interface TokenPayload {
   id: number;
 }
 
-export const sign = (data: TokenPayload, expiresIn: string | number) =>
+export const sign = (data: TokenPayload, expiresIn: string | number): string =>
   jwt.sign({ data }, secret, { expiresIn });
 
 export const verify = (token: string): { data: TokenPayload } =>

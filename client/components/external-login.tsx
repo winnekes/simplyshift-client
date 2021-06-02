@@ -47,7 +47,6 @@ export const ExternalLogin = () => {
   };
 
   // TODO Facebook login
-
   const handleGoogleError = () => {
     setError("Something went wrong. Try again later.");
   };

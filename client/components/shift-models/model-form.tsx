@@ -13,6 +13,7 @@ export const ModelForm = () => {
   const { register, errors, control, setValue } =
     useFormContext<AddShiftModelData>();
 
+  // TODO refactor <FormControl> into reusable component, it is too verbose in bigger forms
   return (
     <>
       <FormControl>
@@ -29,9 +30,8 @@ export const ModelForm = () => {
           {errors.name && errors.name.message} &nbsp;
         </FormHelperText>
       </FormControl>
-      `
       <FormControl>
-        `<FormLabel>Starts at</FormLabel>
+        <FormLabel>Starts at</FormLabel>
         <Input
           type="time"
           name="startsAt"
