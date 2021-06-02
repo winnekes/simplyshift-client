@@ -6,8 +6,9 @@
   "background_color": "#fff",
   "theme_color": "#48bb78",
   "dir": "ltr",
-  "display": "standalone",
+  "display": "minimal-ui",
   "orientation": "portrait-primary",
+  "scope": "/",
   "icons": [
     {
       "src": "/android-icon-512x512.png",
@@ -78,8 +79,14 @@
       "src": "/favicon-16x16.png",
       "type": "image/png",
       "sizes": "16x16"
+    },
+    {
+      "src": "/maskable_icon.png",
+      "sizes": "640x640x",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "/",
+  "start_url": "/calendar",
   "prefer_related_applications": false
 }
