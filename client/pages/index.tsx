@@ -1,4 +1,4 @@
-import { BellIcon, EditIcon, IconProps, TimeIcon } from "@chakra-ui/icons";
+import { EditIcon, TimeIcon } from "@chakra-ui/icons";
 import {
   Box,
   Container,
@@ -10,9 +10,7 @@ import {
   Image,
   SimpleGrid,
   VStack,
-  Center,
   Button,
-  Spacer,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { BlobIcon } from "../components/common/blob-icon";
@@ -20,12 +18,6 @@ import { BrandText } from "../components/common/brand-text";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
-import {
-  BiBell,
-  BiCalendarHeart,
-  BiCloudDownload,
-  BiShareAlt,
-} from "react-icons/bi";
 
 export default function Home() {
   return (
@@ -38,6 +30,7 @@ export default function Home() {
       >
         <VStack flex={1} spacing={{ base: 5, md: 10 }}>
           <Heading
+            as="h1"
             lineHeight={1.1}
             fontWeight={600}
             fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}

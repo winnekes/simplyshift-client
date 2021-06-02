@@ -7,9 +7,7 @@ import {
   Calendar as BigCalendar,
   Event,
   EventProps,
-  NavigateAction,
   stringOrDate,
-  View,
 } from "react-big-calendar";
 import { useMutation } from "react-query";
 import useSWR from "swr";
@@ -81,12 +79,7 @@ export const Scheduler = () => {
     return <ErrorContainer />;
   }
 
-  const eventStyleGetter = (
-    event: ShiftEntryEvent,
-    start: string | Date,
-    end: string | Date,
-    isSelected: boolean
-  ) => {
+  const eventStyleGetter = (event: ShiftEntryEvent) => {
     return {
       style: {
         backgroundColor: event.color,
@@ -133,7 +126,7 @@ export const Scheduler = () => {
     }
   };
 
-  const onNavigate = async (date: Date, view: View, action: NavigateAction) => {
+  const onNavigate = async (date: Date) => {
     await setSelectedTimeFrame(date);
   };
 
@@ -147,25 +140,29 @@ export const Scheduler = () => {
   };
 
   const components = {
-    toolbar: (toolbar) => (
-      <Toolbar
-        toolbar={toolbar}
-        isEditingCalendar={isEditingCalendar}
-        onEditMode={onEditMode}
-      />
-    ),
+    toolbar(toolbar) {
+      return (
+        <Toolbar
+          toolbar={toolbar}
+          isEditingCalendar={isEditingCalendar}
+          onEditMode={onEditMode}
+        />
+      );
+    },
 
-    event: (event: PropsWithChildren<EventProps<ShiftEntryEvent>>, title) => (
-      <ModifiedEvent
-        shiftEntryId={event.event.id}
-        events={events}
-        setEvents={setEvents}
-        selectedTimeframe={selectedTimeframe}
-        event={event}
-        title={title}
-        isEditingCalendar={isEditingCalendar}
-      />
-    ),
+    event(event: PropsWithChildren<EventProps<ShiftEntryEvent>>, title) {
+      return (
+        <ModifiedEvent
+          shiftEntryId={event.event.id}
+          events={events}
+          setEvents={setEvents}
+          selectedTimeframe={selectedTimeframe}
+          event={event}
+          title={title}
+          isEditingCalendar={isEditingCalendar}
+        />
+      );
+    },
   };
 
   return (

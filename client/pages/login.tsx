@@ -11,8 +11,10 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
@@ -21,9 +23,11 @@ import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../contexts/auth-context";
-import { login, LoginMutationData } from "../services/mutations/login";
+import { loginMutation, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const auth = useAuth();
   const router = useRouter();
   const { register, handleSubmit, errors, control, setValue } =
@@ -31,7 +35,7 @@ export default function Login() {
       defaultValues: { stayLoggedIn: false },
     });
 
-  const { isLoading, error, mutate } = useMutation(login, {
+  const { isLoading, mutate } = useMutation(loginMutation, {
     onSuccess: async ({ data }) => {
       auth.setToken(data.token);
       auth.setUser(data.user);
@@ -77,11 +81,20 @@ export default function Login() {
                     <Icon as={FaKey} color="green.400" />
                   </InputLeftElement>
                   <Input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     name="password"
                     ref={register({ required: "This field is required" })}
                   />
+                  <InputRightElement width="4.5rem">
+                    <Button
+                      h="1.75rem"
+                      size="sm"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
                 </InputGroup>
                 <FormHelperText color="red">
                   {errors.password && errors.password.message} &nbsp;

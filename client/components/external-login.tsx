@@ -24,18 +24,17 @@ export const ExternalLogin = () => {
   const auth = useAuth();
   const router = useRouter();
 
-  const {
-    isLoading: googleIsLoading,
-    error: googleError,
-    mutate: googleSignUp,
-  } = useMutation(googleSignUpMutation, {
-    onSuccess: async ({ data }) => {
-      auth.setToken(data.token);
-      auth.setUser(data.user);
+  const { isLoading: googleIsLoading, mutate: googleSignUp } = useMutation(
+    googleSignUpMutation,
+    {
+      onSuccess: async ({ data }) => {
+        auth.setToken(data.token);
+        auth.setUser(data.user);
 
-      await router.push("/calendar");
-    },
-  });
+        await router.push("/calendar");
+      },
+    }
+  );
 
   const handleGoogleResponse = (
     response: GoogleLoginResponse | GoogleLoginResponseOffline
@@ -48,7 +47,6 @@ export const ExternalLogin = () => {
   };
 
   // TODO Facebook login
-
   const handleGoogleError = () => {
     setError("Something went wrong. Try again later.");
   };

@@ -1,5 +1,4 @@
-import { useRouter } from "next/router";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import Head from "next/head";
 import { useAuth } from "../../contexts/auth-context";
 import { Loading } from "../common/loading";

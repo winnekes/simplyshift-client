@@ -29,6 +29,7 @@ Sentry.init({
 
 const app = createKoaServer({
   cors: true,
+  routePrefix: "/api",
   middlewares: [ErrorLoggingMiddleware],
   defaultErrorHandler: false,
   controllers: [

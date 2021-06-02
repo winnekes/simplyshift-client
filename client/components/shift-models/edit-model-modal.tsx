@@ -25,14 +25,13 @@ export function EditModelModal({ model, onClose }: Props) {
   const { id, ...rest } = model;
   const methods = useForm<AddShiftModelData>({ defaultValues: { ...rest } });
 
-  const { isLoading, error, mutate } = useMutation(editShiftModelMutation, {
+  const { isLoading, mutate } = useMutation(editShiftModelMutation, {
     onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),
   });
 
   const onSubmit = methods.handleSubmit((data) => mutate({ id, ...data }));
 
-  // todo refactor (form is identical to AddModelModal)
   return (
     <Modal isOpen onClose={onClose} isCentered size="sm">
       <ModalOverlay />
@@ -50,7 +49,7 @@ export function EditModelModal({ model, onClose }: Props) {
             <Button variant="ghost" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" ml={3}>
+            <Button type="submit" ml={3} isLoading={isLoading}>
               Save
             </Button>
           </ModalFooter>

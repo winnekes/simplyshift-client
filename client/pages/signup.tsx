@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useMutation } from "react-query";
 import { ExternalLogin } from "../components/external-login";
 import { DividedSegment } from "../components/layout/divided-segment";
@@ -17,6 +18,7 @@ import {
   Heading,
   Stack,
   Divider,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
@@ -27,11 +29,14 @@ import {
 } from "../services/mutations/signup";
 
 export default function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordRepeated, setShowPasswordRepeated] = useState(false);
+
   const auth = useAuth();
   const router = useRouter();
   const { register, handleSubmit, errors } = useForm<SignupMutationData>();
 
-  const { isLoading, error, mutate } = useMutation(signupMutation, {
+  const { isLoading, mutate } = useMutation(signupMutation, {
     onSuccess: async ({ data }) => {
       auth.setToken(data.token);
       auth.setUser(data.user);
@@ -111,7 +116,7 @@ export default function Signup() {
                       <Icon as={FaKey} color="green.400" />
                     </InputLeftElement>
                     <Input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Password"
                       name="password"
                       ref={register({
@@ -119,6 +124,15 @@ export default function Signup() {
                         min: 8,
                       })}
                     />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? "Hide" : "Show"}
+                      </Button>
+                    </InputRightElement>
                   </InputGroup>
                   <FormHelperText>
                     {errors.password && errors.password.message}
@@ -131,7 +145,7 @@ export default function Signup() {
                       <Icon as={FaKey} color="green.400" />
                     </InputLeftElement>
                     <Input
-                      type="password"
+                      type={showPasswordRepeated ? "text" : "password"}
                       placeholder="Confirm your password"
                       name="passwordRepeated"
                       ref={register({
@@ -139,6 +153,17 @@ export default function Signup() {
                         min: 8,
                       })}
                     />
+                    <InputRightElement width="4.5rem">
+                      <Button
+                        h="1.75rem"
+                        size="sm"
+                        onClick={() =>
+                          setShowPasswordRepeated(!showPasswordRepeated)
+                        }
+                      >
+                        {showPasswordRepeated ? "Hide" : "Show"}
+                      </Button>
+                    </InputRightElement>
                   </InputGroup>
                   <FormHelperText>
                     {errors.password && errors.password.message}

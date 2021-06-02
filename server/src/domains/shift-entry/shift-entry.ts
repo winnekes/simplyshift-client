@@ -31,7 +31,10 @@ export default class ShiftEntry extends BaseEntity {
   @Column("varchar")
   note!: string;
 
-  @ManyToOne(() => User, (user) => user.shiftEntries)
+  @ManyToOne(() => User, (user) => user.shiftEntries, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   user!: User;
 
   @ManyToOne(() => ShiftModel, (shiftModel) => shiftModel.shiftEntries)

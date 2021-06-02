@@ -6,15 +6,11 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl,
-  FormLabel,
-  InputGroup,
-  Input,
-  FormHelperText,
   useColorMode,
+  useToast,
 } from "@chakra-ui/react";
-import { CirclePicker } from "react-color";
-import { useForm, Controller, FormProvider } from "react-hook-form";
+import { AxiosError } from "axios";
+import { useForm, FormProvider } from "react-hook-form";
 import { useMutation } from "react-query";
 import {
   AddShiftModelData,
@@ -29,8 +25,8 @@ type Props = {
   onClose: () => void;
 };
 
-// todo extract form for edit and add model
 export function AddModelModal({ onClose }: Props) {
+  const toast = useToast();
   const { colorMode } = useColorMode();
   const defaultValues: AddShiftModelData = {
     name: "Early shift",
@@ -41,37 +37,51 @@ export function AddModelModal({ onClose }: Props) {
 
   const methods = useForm<AddShiftModelData>({ defaultValues });
 
-  // todo use isloading and error
-  const { isLoading, error, mutate } = useMutation(addShiftModelMutation, {
-    onSuccess: () => onClose(),
+  const { isLoading, mutate, error } = useMutation<
+    unknown,
+    AxiosError,
+    AddShiftModelData,
+    unknown
+  >(addShiftModelMutation, {
+    //onSuccess: () => onClose(),
     onSettled: () => fetch("/shift-model"),
   });
 
   const onSubmit = methods.handleSubmit((data) => mutate(data));
-
+  console.log({ error });
   return (
-    <Modal isOpen onClose={onClose} isCentered size="sm">
-      <ModalOverlay />
-      <ModalContent bg={colors[colorMode].ui02}>
-        <form onSubmit={onSubmit}>
-          <ModalHeader>Add a new shift</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormProvider {...methods}>
-              <ModelForm />
-            </FormProvider>
-          </ModalBody>
+    <>
+      <Modal isOpen onClose={onClose} isCentered size="sm">
+        <ModalOverlay />
+        <ModalContent bg={colors[colorMode].ui02}>
+          <form onSubmit={onSubmit}>
+            <ModalHeader>Add a new shift</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormProvider {...methods}>
+                <ModelForm />
+              </FormProvider>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button variant="ghost" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit" ml={3}>
-              Save
-            </Button>
-          </ModalFooter>
-        </form>
-      </ModalContent>
-    </Modal>
+            <ModalFooter>
+              <Button variant="ghost" onClick={onClose}>
+                Cancel
+              </Button>
+              <Button type="submit" ml={3} isLoading={isLoading}>
+                Save
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+      {error &&
+        toast({
+          title: "Oops",
+          description: error.response.data.message,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        })}
+    </>
   );
 }

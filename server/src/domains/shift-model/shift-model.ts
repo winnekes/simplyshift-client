@@ -42,7 +42,10 @@ export default class ShiftModel extends BaseEntity {
   @Column("text")
   color!: string;
 
-  @ManyToOne(() => User, (user) => user.shiftModels)
+  @ManyToOne(() => User, (user) => user.shiftModels, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   user!: User;
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.shiftModel)

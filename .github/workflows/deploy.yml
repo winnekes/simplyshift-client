@@ -1,28 +1,81 @@
-name: Deploy
-on: [push]
+name: Build and deploy SimplyShift
+on:
+  push:
+    branches:
+      - master
+
 jobs:
-  build:
+  build-server:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "15.x"
 
-      - name: Copy repository contents via scp
+      - name: install dependencies
+        run: |
+          cd server
+          npm i
+      - name: compile server
+        run: |
+          cd server
+          npm run build
+
+      - name: deploy compiled server
         uses: appleboy/scp-action@master
         env:
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "."
-          target: "/var/www/mywebsite"
+          source: "./server"
+          target: "/home/simona/webapps/simplyshift"
 
-      - name: Executing remote command
+      - name: install server dependencies
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: ls
+          script: cd /home/simona/webapps/simplyshift/server && npm install
+
+  build-client:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "15.x"
+
+      - name: install dependencies
+        run: |
+          cd client
+          npm i
+          npm run lint
+
+      - name: deploy client
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
+        with:
+          source: "./client"
+          target: "/home/simona/webapps/simplyshift"
+
+      - name: build client
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
+          script: cd /home/simona/webapps/simplyshift/client && npm rebuild node-sass && npm run build
