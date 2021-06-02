@@ -1,19 +1,15 @@
 import { EditIcon, TimeIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Container,
-  Flex,
   Heading,
   Icon,
   Stack,
   Text,
-  Image,
   SimpleGrid,
   VStack,
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { BlobIcon } from "../components/common/blob-icon";
 import { BrandText } from "../components/common/brand-text";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
@@ -95,42 +91,6 @@ export default function Home() {
           </Stack>
         </VStack>
       </Stack>
-      <Flex
-        my="100px"
-        flex={1}
-        justify="center"
-        align="center"
-        position="relative"
-        w="full"
-      >
-        <BlobIcon
-          w="150%"
-          h="150%"
-          position="absolute"
-          top="-20%"
-          left={0}
-          zIndex={-1}
-          color="green.100"
-        />
-        <Box
-          mx={6}
-          position="relative"
-          height="300px"
-          rounded="2xl"
-          boxShadow="2xl"
-          width="full"
-          overflow="hidden"
-        >
-          <Image
-            alt="Hero Image"
-            fit="cover"
-            align="center"
-            w="100%"
-            h="100%"
-            src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80"
-          />
-        </Box>
-      </Flex>
 
       <VStack p={4} mt="150px">
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>

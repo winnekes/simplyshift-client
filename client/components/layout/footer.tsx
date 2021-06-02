@@ -32,7 +32,7 @@ export function Footer() {
           templateColumns={{ sm: "1fr ", md: "1fr 1fr 1.5fr" }}
           spacing={8}
         >
-          <Stack spacing={6} fontSize="sm">
+          <Stack spacing={2} fontSize="sm">
             <Box>
               © 2021 <BrandText>SimplyShift</BrandText>. <br />
               <Text color="gray.400">
