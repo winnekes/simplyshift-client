@@ -32,7 +32,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./server"
+          source: "./server/lib,./server/package.json"
           target: "/home/simona/webapps/simplyshift"
 
       - name: install server dependencies
@@ -42,7 +42,7 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/server && npm install
+          script: cd /home/simona/webapps/simplyshift/server && npm install && pm2 restart simplyshift-server
 
   build-client:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
         run: |
           cd client
           npm i
-          npm run lint
+          npm run build
 
       - name: deploy client
         uses: appleboy/scp-action@master
@@ -78,4 +78,4 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/client && npm rebuild node-sass && npm run build && pm2 restart simplyshift-client
+          script: cd /home/simona/webapps/simplyshift/client && npm i && npm rebuild node-sass  && pm2 restart simplyshift-client

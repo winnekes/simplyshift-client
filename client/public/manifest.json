@@ -82,7 +82,7 @@
     },
     {
       "src": "/maskable_icon.png",
-      "sizes": "640x640x",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
