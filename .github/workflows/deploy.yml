@@ -54,7 +54,7 @@ jobs:
       - name: build client
         run: |
           cd client
-          printf $ENV_PRODUCTION >> .env.production
+          printf "$ENV_PRODUCTION" >> .env.production
           cat .env.production
           npm i
           npm rebuild node-sass
@@ -71,7 +71,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./client/.next,./client/package.json"
+          source: "./client/.next,./client/package.json, ./client/package-lock.json"
           target: "/home/simona/webapps/simplyshift"
 
       - name: restart client
