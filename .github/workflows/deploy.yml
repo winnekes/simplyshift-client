@@ -87,7 +87,7 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./client/.next,./client/package.json, ./client/package-lock.json"
+          source: "./client/.next, ./client/package.json, ./client/public, ./client/package-lock.json"
           target: "/home/simona/webapps/simplyshift"
 
       - name: restart client
