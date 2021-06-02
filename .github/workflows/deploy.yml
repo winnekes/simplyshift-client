@@ -26,7 +26,7 @@ jobs:
           cd server
           printf "$ENV_SERVER_PRODUCTION" >> .env
         env:
-          ENV_SERVER_RODUCTION: ${{secrets.ENV_SERVER_PRODUCTION}}
+          ENV_SERVER_PRODUCTION: ${{secrets.ENV_SERVER_PRODUCTION}}
 
       - name: delete old server
         uses: appleboy/ssh-action@master
