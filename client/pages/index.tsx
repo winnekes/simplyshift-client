@@ -1,19 +1,15 @@
 import { EditIcon, TimeIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Container,
-  Flex,
   Heading,
   Icon,
   Stack,
   Text,
-  Image,
   SimpleGrid,
   VStack,
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { BlobIcon } from "../components/common/blob-icon";
 import { BrandText } from "../components/common/brand-text";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
