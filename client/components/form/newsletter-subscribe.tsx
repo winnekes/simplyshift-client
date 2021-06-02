@@ -26,7 +26,7 @@ export const NewsletterSubscribe = () => {
 
       <MailchimpSubscribe
         url={url}
-        render={({ subscribe, status, message }) => (
+        render={({ subscribe, status }) => (
           <>
             <Flex>
               <Input
