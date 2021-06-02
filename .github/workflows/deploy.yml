@@ -54,7 +54,7 @@ jobs:
       - name: build client
         run: |
           cd client
-          echo $ENV_PRODUCTION >> .env.production
+          printf $ENV_PRODUCTION >> .env.production
           cat .env.production
           npm i
           npm rebuild node-sass
@@ -62,11 +62,6 @@ jobs:
         env:
           ENV_PRODUCTION: ${{secrets.ENV_PRODUCTION}}
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v2
-        with:
-            name: DEV_ENV_FILE
-            path: client/.env.production
 
       - name: deploy client
         uses: appleboy/scp-action@master
