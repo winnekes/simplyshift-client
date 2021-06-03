@@ -1,4 +1,4 @@
-import { EmailIcon } from "@chakra-ui/icons";
+import { EmailIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Box,
   Container,
@@ -10,6 +10,8 @@ import {
   useColorMode,
   Divider,
   Icon,
+  Image,
+  HStack,
 } from "@chakra-ui/react";
 import { BiHeart } from "react-icons/bi";
 import { colors } from "../../theme/colors";
@@ -34,10 +36,23 @@ export function Footer() {
         >
           <Stack spacing={2} fontSize="sm">
             <Box>
-              © 2021 <BrandText>SimplyShift</BrandText>. <br />
+              <HStack>
+                <Image
+                  src="/logo.svg"
+                  alt="Brand logo"
+                  h="32px"
+                  w="32px"
+                  py="5px"
+                />{" "}
+                <span>
+                  © 2021 <BrandText>SimplyShift</BrandText>.
+                </span>
+              </HStack>
               <Text color="gray.400">
-                Made with <Icon as={BiHeart} color="green.400" /> by
-                tinyhive.dev
+                Made with <Icon as={BiHeart} color="green.400" /> by{" "}
+                <Link isExternal href="https://tinyhive.dev" color="green.400">
+                  tinyhive.dev <ExternalLinkIcon mx="2px" />
+                </Link>
               </Text>
               <Divider my={5} />
               <BrandText>Found an issue?</BrandText> <br />
@@ -46,6 +61,7 @@ export function Footer() {
                 color="green.400"
                 href="mailto:simplyshift@tinyhive.dev"
                 isExternal
+                style={{ whiteSpace: "nowrap" }}
               >
                 <EmailIcon /> simplyshift@tinyhive.dev
               </Link>

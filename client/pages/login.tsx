@@ -14,7 +14,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
@@ -42,6 +42,12 @@ export default function Login() {
       await router.push("/calendar");
     },
   });
+
+  useEffect(() => {
+    if (auth.user) {
+      router.push("/calendar");
+    }
+  }, [auth.user]);
 
   const onSubmit = handleSubmit(async ({ email, password, stayLoggedIn }) => {
     mutate({ email, password, stayLoggedIn });

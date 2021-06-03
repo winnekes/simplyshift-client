@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { ExternalLogin } from "../components/external-login";
 import { DividedSegment } from "../components/layout/divided-segment";
@@ -48,6 +48,12 @@ export default function Signup() {
   const onSubmit = handleSubmit(async (data) => {
     mutate(data);
   });
+
+  useEffect(() => {
+    if (auth.user) {
+      router.push("/calendar");
+    }
+  }, [auth.user]);
 
   return (
     <PageWrapper title="Sign up">

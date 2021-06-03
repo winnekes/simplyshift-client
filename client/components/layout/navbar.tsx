@@ -17,6 +17,7 @@ import {
   Badge,
   LinkOverlay,
   LinkBox,
+  Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
@@ -57,11 +58,12 @@ export function Navbar() {
             <Link href="/" passHref>
               <LinkOverlay>
                 <HStack px={2}>
+                  <Image src="/logo.svg" alt="Brand logo" h="32px" w="32px" />{" "}
                   <Heading size="1xl" mr={0}>
                     SimplyShift
                   </Heading>
                   <Badge ml={0} colorScheme="green">
-                    Alpha
+                    Early Access
                   </Badge>
                 </HStack>
               </LinkOverlay>

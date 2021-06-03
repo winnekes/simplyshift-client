@@ -10,16 +10,28 @@ import {
   Button,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { BrandText } from "../components/common/brand-text";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
+import { useAuth } from "../contexts/auth-context";
 
 export default function Home() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/calendar");
+    }
+  }, []);
+
   return (
     <PageWrapper title="A simple calendar to keep track of your shifts">
       <Stack
-        align="center"
+        align="left"
         spacing={{ base: 8, md: 10 }}
         py={{ base: 20, md: 28 }}
         direction={{ base: "column", md: "row" }}
@@ -49,7 +61,7 @@ export default function Home() {
             </Text>
             <br />
             <Text as="span" color="green.400">
-              the simplest scheduling solution!
+              the simple shift scheduler
             </Text>
           </Heading>
           <Container maxWidth="container.md" py={5}>
