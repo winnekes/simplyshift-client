@@ -17,15 +17,19 @@ import {
   Badge,
   LinkOverlay,
   LinkBox,
-  Image,
+  ColorModeOptions,
+  ColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
+import { useEffect, useState } from "react";
 import { useGoogleLogout } from "react-google-login";
 import { BiExit } from "react-icons/bi";
 import { useAuth } from "../../hooks/use-auth";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
+import { ChakraNextImage } from "../common/chakra-next-image";
+import { set, get, update } from "idb-keyval";
 
 export function Navbar() {
   const { user, logout } = useAuth();
@@ -36,6 +40,14 @@ export function Navbar() {
   });
 
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const toggleColorSetting = () => {
+    toggleColorMode();
+
+    update<ColorMode>("colorMode", (oldValue) =>
+      oldValue === "light" ? "dark" : "light"
+    );
+  };
 
   return (
     <Box
@@ -58,7 +70,12 @@ export function Navbar() {
             <Link href="/" passHref>
               <LinkOverlay>
                 <HStack px={2}>
-                  <Image src="/logo.svg" alt="Brand logo" h="32px" w="32px" />{" "}
+                  <ChakraNextImage
+                    w="32px"
+                    h="32px"
+                    src="/logo.svg"
+                    alt="Brand logo"
+                  />
                   <Heading size="1xl" mr={0}>
                     SimplyShift
                   </Heading>
@@ -84,7 +101,7 @@ export function Navbar() {
             aria-label="Switch color mode"
             icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             variant="ghost"
-            onClick={toggleColorMode}
+            onClick={toggleColorSetting}
           />
           <Menu>
             {user && (

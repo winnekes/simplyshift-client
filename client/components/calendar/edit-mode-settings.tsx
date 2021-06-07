@@ -1,9 +1,10 @@
 import { FormControl, FormLabel, Switch, Text, VStack } from "@chakra-ui/react";
 
-type Props = {
+interface Props {
   isEditingCalendar: boolean;
   onChange: () => void;
-};
+}
+
 export function EditModeSettings({ isEditingCalendar, onChange }: Props) {
   return (
     <VStack align="flex-end">

@@ -14,10 +14,10 @@ import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry"
 import { ShiftModel } from "../../types";
 import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
-type Props = {
+interface Props {
   newShiftEntryData: { shiftModel: ShiftModel; date: Date };
   onClose: () => void;
-};
+}
 
 export const ConfirmOverrideShiftEntryModal = ({
   newShiftEntryData: { shiftModel, date },

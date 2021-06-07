@@ -22,6 +22,7 @@
     "date-arithmetic": "^4.1.0",
     "dotenv": "^10.0.0",
     "framer-motion": "^4.1.2",
+    "idb-keyval": "^5.0.6",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "next": "^10.2.3",

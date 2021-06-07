@@ -24,11 +24,11 @@ import { AddModelModal } from "./add-model-modal";
 import { ConfirmDeleteModelModal } from "./confirm-delete-model-modal";
 import { EditModelModal } from "./edit-model-modal";
 
-type Props = {
+interface Props {
   shiftModels: ShiftModel[];
   selectedModelId: number;
   setSelectedModelId: Dispatch<SetStateAction<number>>;
-};
+}
 
 export const ShiftModelsList = ({
   shiftModels,
@@ -36,10 +36,14 @@ export const ShiftModelsList = ({
   setSelectedModelId,
 }: Props) => {
   const [showAddModelModal, setShowAddModelModal] = useState(false);
-  const [selectedModelForEditing, setSelectedModelForEditing] =
-    useState<ShiftModel | null>(null);
-  const [selectedModelForDeleting, setSelectedModelForDeleting] =
-    useState<ShiftModel | null>(null);
+  const [
+    selectedModelForEditing,
+    setSelectedModelForEditing,
+  ] = useState<ShiftModel | null>(null);
+  const [
+    selectedModelForDeleting,
+    setSelectedModelForDeleting,
+  ] = useState<ShiftModel | null>(null);
 
   const selectModelHandler = (id: number) => {
     if (selectedModelId === id) {

@@ -146,13 +146,6 @@ export function AuthProvider(props) {
     logout,
   };
 
-  if (initialising) {
-    return (
-      <Center height="100vh">
-        <Loading />
-      </Center>
-    );
-  }
   return <UseAuth.Provider value={properties} {...props} />;
 }
 

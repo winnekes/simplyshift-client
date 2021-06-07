@@ -13,9 +13,9 @@ import { useAuth } from "../../hooks/use-auth";
 import { deleteAccountMutation } from "../../services/mutations/delete-account";
 import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
-type Props = {
+interface Props {
   onClose: () => void;
-};
+}
 
 export const ConfirmDeleteAccountModal = ({ onClose }: Props) => {
   const cancelRef = useRef();

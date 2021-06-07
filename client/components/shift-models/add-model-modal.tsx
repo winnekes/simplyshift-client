@@ -20,12 +20,11 @@ import { colors } from "../../theme/colors";
 import { ModalContent } from "../common/overrides/modal";
 import { ModelForm } from "./model-form";
 
-type Props = {
+interface Props {
   onClose: () => void;
-};
+}
 
 export function AddModelModal({ onClose }: Props) {
-  //const toast = useToast();
   const { colorMode } = useColorMode();
   const defaultValues: AddShiftModelData = {
     name: "Early shift",

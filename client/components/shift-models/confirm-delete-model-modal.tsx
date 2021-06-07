@@ -14,10 +14,10 @@ import { deleteShiftModelMutation } from "../../services/mutations/delete-shift-
 import { ShiftModel } from "../../types";
 import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
-type Props = {
+interface Props {
   shiftModel: ShiftModel;
   onClose: () => void;
-};
+}
 
 export const ConfirmDeleteModelModal = ({ shiftModel, onClose }: Props) => {
   const cancelRef = useRef();

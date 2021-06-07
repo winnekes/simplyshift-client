@@ -16,10 +16,10 @@ import { ShiftModel } from "../../types";
 import { ModalContent } from "../common/overrides/modal";
 import { ModelForm } from "./model-form";
 
-type Props = {
+interface Props {
   model: ShiftModel;
   onClose: () => void;
-};
+}
 
 export function EditModelModal({ model, onClose }: Props) {
   const { id, ...rest } = model;

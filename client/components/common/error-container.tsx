@@ -6,9 +6,9 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-type Props = {
+interface Props {
   message?: string;
-};
+}
 
 export const ErrorContainer = ({ message }: Props) => {
   return (

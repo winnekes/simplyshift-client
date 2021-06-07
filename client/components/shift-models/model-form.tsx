@@ -11,9 +11,9 @@ import { CirclePicker } from "react-color";
 import { useFormContext, Controller } from "react-hook-form";
 import { AddShiftModelData } from "../../services/mutations/add-shift-model";
 
-type Props = {
+interface Props {
   errorCode?: string;
-};
+}
 
 export const ModelForm = ({ errorCode }: Props) => {
   const {

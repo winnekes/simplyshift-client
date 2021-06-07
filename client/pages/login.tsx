@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useMutation } from "react-query";
+import { Loading } from "../components/common/loading";
 import { ExternalLogin } from "../components/external-login";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
@@ -26,10 +27,10 @@ import { useAuth } from "../hooks/use-auth";
 import { loginMutation, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const auth = useAuth();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const { initialising, user, setUser, setToken } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -42,21 +43,25 @@ export default function Login() {
 
   const { isLoading, mutate } = useMutation(loginMutation, {
     onSuccess: async ({ data }) => {
-      auth.setToken(data.token);
-      auth.setUser(data.user);
+      setToken(data.token);
+      setUser(data.user);
       await router.push("/calendar");
     },
   });
 
-  useEffect(() => {
-    if (auth.user) {
-      router.push("/calendar");
-    }
-  }, [auth.user]);
-
   const onSubmit = handleSubmit(async ({ email, password, stayLoggedIn }) => {
     mutate({ email, password, stayLoggedIn });
   });
+
+  useEffect(() => {
+    if (!initialising && user) {
+      router.push("/calendar");
+    }
+  }, [initialising, user]);
+
+  if (initialising) {
+    return <Loading />;
+  }
 
   return (
     <PageWrapper title="Login">

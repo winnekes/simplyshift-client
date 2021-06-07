@@ -13,11 +13,11 @@ import moment from "moment";
 import { ToolbarProps } from "react-big-calendar";
 import { EditModeSettings } from "./edit-mode-settings";
 
-type Props = {
+interface Props {
   toolbar: ToolbarProps;
   isEditingCalendar: boolean;
   onEditMode: () => void;
-};
+}
 
 export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
   const gotToPreviousMonth = () => {
