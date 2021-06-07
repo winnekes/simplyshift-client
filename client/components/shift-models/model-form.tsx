@@ -4,12 +4,18 @@ import {
   FormLabel,
   Input,
   InputGroup,
+  Text,
 } from "@chakra-ui/react";
+import { AxiosError } from "axios";
 import { CirclePicker } from "react-color";
 import { useFormContext, Controller } from "react-hook-form";
 import { AddShiftModelData } from "../../services/mutations/add-shift-model";
 
-export const ModelForm = () => {
+type Props = {
+  errorCode?: string;
+};
+
+export const ModelForm = ({ errorCode }: Props) => {
   const { register, errors, control, setValue } =
     useFormContext<AddShiftModelData>();
 
@@ -27,7 +33,13 @@ export const ModelForm = () => {
           />
         </InputGroup>
         <FormHelperText>
-          {errors.name && errors.name.message} &nbsp;
+          {errorCode === "DUPLICATE_SHIFT_MODEL_NAME" && (
+            <Text color="red">
+              A shift model with the same name already exists
+            </Text>
+          )}
+          <br />
+          {errors?.name?.message} &nbsp;
         </FormHelperText>
       </FormControl>
       <FormControl>
@@ -37,9 +49,7 @@ export const ModelForm = () => {
           name="startsAt"
           ref={register({ required: "This field is required" })}
         />
-        <FormHelperText>
-          {errors.startsAt && errors.startsAt.message} &nbsp;
-        </FormHelperText>
+        <FormHelperText>{errors?.startsAt?.message} &nbsp;</FormHelperText>
       </FormControl>
       <FormControl>
         <FormLabel>Ends at</FormLabel>
@@ -48,9 +58,7 @@ export const ModelForm = () => {
           name="endsAt"
           ref={register({ required: "This field is required" })}
         />
-        <FormHelperText>
-          {errors.endsAt && errors.endsAt.message} &nbsp;
-        </FormHelperText>
+        <FormHelperText>{errors?.endsAt?.message} &nbsp;</FormHelperText>
       </FormControl>
       <FormControl>
         <FormLabel>Color</FormLabel>

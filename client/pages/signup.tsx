@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth";
 import {
   signupMutation,
   SignupMutationData,

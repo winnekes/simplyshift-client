@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useMutation } from "react-query";
-import { useAuth } from "../../contexts/auth-context";
+import { useAuth } from "../../hooks/use-auth";
 import { deleteAccountMutation } from "../../services/mutations/delete-account";
 import { AlertDialogContent } from "../common/overrides/alert-dialog";
 

@@ -3,7 +3,7 @@ import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { ChangePassword } from "../components/settings/change-password";
 import { DeleteAccount } from "../components/settings/delete-account";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth";
 import Login from "./login";
 
 export default function Settings() {

@@ -22,7 +22,7 @@ import { ExternalLogin } from "../components/external-login";
 import { DividedSegment } from "../components/layout/divided-segment";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth";
 import { loginMutation, LoginMutationData } from "../services/mutations/login";
 
 export default function Login() {
@@ -30,10 +30,15 @@ export default function Login() {
 
   const auth = useAuth();
   const router = useRouter();
-  const { register, handleSubmit, errors, control, setValue } =
-    useForm<LoginMutationData>({
-      defaultValues: { stayLoggedIn: false },
-    });
+  const {
+    register,
+    handleSubmit,
+    errors,
+    control,
+    setValue,
+  } = useForm<LoginMutationData>({
+    defaultValues: { stayLoggedIn: false },
+  });
 
   const { isLoading, mutate } = useMutation(loginMutation, {
     onSuccess: async ({ data }) => {

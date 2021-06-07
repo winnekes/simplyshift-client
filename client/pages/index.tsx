@@ -12,11 +12,12 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { BiPlay } from "react-icons/bi";
 import { BrandText } from "../components/common/brand-text";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth";
 
 export default function Home() {
   const { user } = useAuth();
@@ -79,6 +80,7 @@ export default function Home() {
           >
             <Link href="/signup">
               <Button
+                leftIcon={<CheckIcon />}
                 rounded="full"
                 size="lg"
                 fontWeight="normal"
@@ -90,6 +92,7 @@ export default function Home() {
             </Link>
             <Link href="/signup">
               <Button
+                leftIcon={<BiPlay />}
                 rounded="full"
                 size="lg"
                 fontWeight="normal"

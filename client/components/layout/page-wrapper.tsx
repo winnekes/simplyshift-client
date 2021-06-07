@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import Head from "next/head";
-import { useAuth } from "../../contexts/auth-context";
+import { useAuth } from "../../hooks/use-auth";
 import { Loading } from "../common/loading";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";

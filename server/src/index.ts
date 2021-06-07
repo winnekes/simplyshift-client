@@ -23,7 +23,8 @@ dotenv.config();
 const port = process.env.PORT;
 
 Sentry.init({
-  dsn: "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  dsn:
+    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
   logLevel: LogLevel.Error,
 });
 
@@ -41,6 +42,7 @@ const app = createKoaServer({
   ],
   authorizationChecker: async (action: Action) => {
     const header: string = action.request.headers.authorization;
+    console.log({ req: action.request.cookies });
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
       try {

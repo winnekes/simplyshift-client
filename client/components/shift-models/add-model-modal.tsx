@@ -18,6 +18,7 @@ import {
 } from "../../services/mutations/add-shift-model";
 import { mutate as fetch } from "swr";
 import { colors } from "../../theme/colors";
+import { setFieldValidationErrors } from "../../utils/errors";
 import { ModalContent } from "../common/overrides/modal";
 import { ModelForm } from "./model-form";
 
@@ -35,7 +36,9 @@ export function AddModelModal({ onClose }: Props) {
     color: "#ffeb3b",
   };
 
-  const methods = useForm<AddShiftModelData>({ defaultValues });
+  const methods = useForm<AddShiftModelData>({
+    defaultValues,
+  });
 
   const { isLoading, mutate, error } = useMutation<
     unknown,
@@ -43,12 +46,14 @@ export function AddModelModal({ onClose }: Props) {
     AddShiftModelData,
     unknown
   >(addShiftModelMutation, {
-    //onSuccess: () => onClose(),
+    onSuccess: () => onClose(),
+    onError: (error) => {
+      setFieldValidationErrors(error, methods.setError);
+    },
     onSettled: () => fetch("/shift-model"),
   });
 
   const onSubmit = methods.handleSubmit((data) => mutate(data));
-  console.log({ error });
   return (
     <>
       <Modal isOpen onClose={onClose} isCentered size="sm">
@@ -59,7 +64,7 @@ export function AddModelModal({ onClose }: Props) {
             <ModalCloseButton />
             <ModalBody>
               <FormProvider {...methods}>
-                <ModelForm />
+                <ModelForm errorCode={error?.response.data.code} />
               </FormProvider>
             </ModalBody>
 
@@ -74,14 +79,6 @@ export function AddModelModal({ onClose }: Props) {
           </form>
         </ModalContent>
       </Modal>
-      {error &&
-        toast({
-          title: "Oops",
-          description: error.response.data.message,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        })}
     </>
   );
 }

@@ -46,7 +46,6 @@ class MyDocument extends Document {
             sizes="60x60"
             href="/apple-icon-60x60.png"
           />
-          <meta name="theme-color" content="#48bb78" />
           <link
             rel="apple-touch-startup-image"
             href="/apple-icon-180x180.png"

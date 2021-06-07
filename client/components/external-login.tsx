@@ -15,7 +15,7 @@ import GoogleLogin, {
 
 import { FcGoogle } from "react-icons/fc";
 import { useMutation } from "react-query";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth";
 import { googleSignUpMutation } from "../services/mutations/signup";
 
 export const ExternalLogin = () => {

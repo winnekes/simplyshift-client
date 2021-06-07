@@ -2,7 +2,7 @@ import { Heading } from "@chakra-ui/react";
 import { Scheduler } from "../components/calendar/scheduler";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
-import { useAuth } from "../contexts/auth-context";
+import { useAuth } from "../hooks/use-auth";
 import Login from "./login";
 
 export default function Calendar() {

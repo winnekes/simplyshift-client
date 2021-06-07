@@ -23,7 +23,7 @@ import Link from "next/link";
 import RouteLink from "next/link";
 import { useGoogleLogout } from "react-google-login";
 import { BiExit } from "react-icons/bi";
-import { useAuth } from "../../contexts/auth-context";
+import { useAuth } from "../../hooks/use-auth";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
 

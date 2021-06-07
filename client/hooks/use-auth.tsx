@@ -20,7 +20,7 @@ type AuthContextType = {
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType>(undefined);
+const UseAuth = createContext<AuthContextType>(undefined);
 
 export function AuthProvider(props) {
   const router = useRouter();
@@ -133,11 +133,11 @@ export function AuthProvider(props) {
     logout,
   };
 
-  return <AuthContext.Provider value={properties} {...props} />;
+  return <UseAuth.Provider value={properties} {...props} />;
 }
 
 export function useAuth() {
-  const data = useContext(AuthContext);
+  const data = useContext(UseAuth);
 
   if (!data) {
     throw new Error("AuthProvider is missing");
