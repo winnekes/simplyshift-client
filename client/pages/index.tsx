@@ -1,4 +1,4 @@
-import { EditIcon, TimeIcon } from "@chakra-ui/icons";
+import { EditIcon, TimeIcon, CheckIcon } from "@chakra-ui/icons";
 import {
   Container,
   Heading,
@@ -20,11 +20,11 @@ import Link from "next/link";
 import { useAuth } from "../hooks/use-auth";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { initialising, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (!initialising && user) {
       router.push("/calendar");
     }
   }, []);

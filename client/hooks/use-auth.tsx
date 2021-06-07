@@ -1,4 +1,4 @@
-import { createStandaloneToast } from "@chakra-ui/react";
+import { Center, createStandaloneToast } from "@chakra-ui/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import {
@@ -10,11 +10,13 @@ import {
   createContext,
 } from "react";
 import useSWR from "swr";
+import { Loading } from "../components/common/loading";
 import { api } from "../services/api";
 import { User } from "../types";
 
 type AuthContextType = {
   user: User | null;
+  initialising: boolean;
   setUser: Dispatch<SetStateAction<User>>;
   setToken: Dispatch<SetStateAction<string>>;
   logout: () => void;
@@ -24,6 +26,8 @@ const UseAuth = createContext<AuthContextType>(undefined);
 
 export function AuthProvider(props) {
   const router = useRouter();
+  const [initialising, setInitialising] = useState(true);
+  const [checked, setChecked] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [canFetchProfile, setCanFetchProfile] = useState(false);
@@ -33,7 +37,11 @@ export function AuthProvider(props) {
   useEffect(() => {
     if (window) {
       const token = window.localStorage.getItem("token");
-      setToken(token);
+      if (token) {
+        setToken(token);
+      } else {
+        return setChecked(true);
+      }
 
       api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -46,8 +54,15 @@ export function AuthProvider(props) {
   useEffect(() => {
     if (data) {
       setUser(data);
+      setChecked(true);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (checked) {
+      setInitialising(false);
+    }
+  }, [checked]);
 
   const logout = async () => {
     if (window) {
@@ -67,9 +82,6 @@ export function AuthProvider(props) {
     return response;
   };
 
-  // TODO switch on error messages (-> for default message)
-  // JWT expired
-  //
   const onResponseError = async (error: AxiosError) => {
     let errorMessage = "Oh no, something went wrong!";
 
@@ -125,6 +137,7 @@ export function AuthProvider(props) {
 
   const properties: AuthContextType = {
     user,
+    initialising,
     setUser,
     setToken: (token: string) => {
       window.localStorage.setItem("token", token);
@@ -133,6 +146,13 @@ export function AuthProvider(props) {
     logout,
   };
 
+  if (initialising) {
+    return (
+      <Center height="100vh">
+        <Loading />
+      </Center>
+    );
+  }
   return <UseAuth.Provider value={properties} {...props} />;
 }
 

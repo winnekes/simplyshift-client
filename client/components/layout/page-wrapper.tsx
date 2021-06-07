@@ -1,4 +1,5 @@
-import { FunctionComponent } from "react";
+import { useRouter } from "next/router";
+import { FunctionComponent, useEffect } from "react";
 import Head from "next/head";
 import { useAuth } from "../../hooks/use-auth";
 import { Loading } from "../common/loading";
@@ -17,7 +18,20 @@ export const PageWrapper: FunctionComponent<Props> = ({
   title,
   isProtectedPage,
 }) => {
-  const { user } = useAuth();
+  const { initialising, user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!initialising) {
+      if (isProtectedPage && !user) {
+        router.replace("/login");
+      }
+
+      if (!isProtectedPage && user) {
+        router.replace("/calendar");
+      }
+    }
+  }, []);
 
   return (
     <>

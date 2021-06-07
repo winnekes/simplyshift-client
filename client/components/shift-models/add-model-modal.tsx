@@ -7,7 +7,6 @@ import {
   ModalCloseButton,
   Button,
   useColorMode,
-  useToast,
 } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { useForm, FormProvider } from "react-hook-form";
@@ -27,7 +26,7 @@ type Props = {
 };
 
 export function AddModelModal({ onClose }: Props) {
-  const toast = useToast();
+  //const toast = useToast();
   const { colorMode } = useColorMode();
   const defaultValues: AddShiftModelData = {
     name: "Early shift",

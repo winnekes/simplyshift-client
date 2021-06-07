@@ -6,7 +6,7 @@ import {
   InputGroup,
   Text,
 } from "@chakra-ui/react";
-import { AxiosError } from "axios";
+//import { AxiosError } from "axios";
 import { CirclePicker } from "react-color";
 import { useFormContext, Controller } from "react-hook-form";
 import { AddShiftModelData } from "../../services/mutations/add-shift-model";
@@ -16,8 +16,12 @@ type Props = {
 };
 
 export const ModelForm = ({ errorCode }: Props) => {
-  const { register, errors, control, setValue } =
-    useFormContext<AddShiftModelData>();
+  const {
+    register,
+    errors,
+    control,
+    setValue,
+  } = useFormContext<AddShiftModelData>();
 
   // TODO refactor <FormControl> into reusable component, it is too verbose in bigger forms
   return (
