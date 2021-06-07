@@ -12,6 +12,7 @@ import {
   Delete,
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
+import { ExtendedHttpError } from "../../utils/extended-http-error";
 
 import ShiftModel from "./shift-model";
 import User from "../identity-access/user";
@@ -37,20 +38,20 @@ export default class ShiftModelController {
   @Post("/shift-model")
   async createShiftModel(
     @CurrentUser() user: User,
-    @Body() shiftModel: ShiftModel,
-    @Res() response: any
+    @Body() shiftModel: ShiftModel
   ) {
-    try {
-      shiftModel.user = user;
-      return await this.shiftModelRepository.save(shiftModel);
-    } catch (err) {
-      console.log(err);
-      response.status = 400;
-      response.body = {
-        message: "Shift model name already exists.",
-      };
-      return response;
+    const existingShiftModelByName =
+      await this.shiftModelRepository.findOneForUser(user, {
+        where: { name: shiftModel.name },
+      });
+    if (existingShiftModelByName) {
+      throw new ExtendedHttpError(
+        "A shift model with the same name already exists.",
+        "DUPLICATE_SHIFT_MODEL_NAME"
+      );
     }
+    shiftModel.user = user;
+    return this.shiftModelRepository.save(shiftModel);
   }
 
   @Authorized()
