@@ -136,13 +136,13 @@ export const ShiftModelsList = ({
         shift.
       </Text>
       <br />
-      {selectedModelForEditing && (
+      {!!selectedModelForEditing && (
         <EditModelModal
           model={selectedModelForEditing}
           onClose={() => setSelectedModelForEditing(null)}
         />
       )}
-      {selectedModelForDeleting && (
+      {!!selectedModelForDeleting && (
         <ConfirmDeleteModelModal
           shiftModel={selectedModelForDeleting}
           onClose={() => setSelectedModelForDeleting(null)}
