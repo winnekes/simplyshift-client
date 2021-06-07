@@ -17,19 +17,17 @@ import {
   Badge,
   LinkOverlay,
   LinkBox,
-  ColorModeOptions,
   ColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import RouteLink from "next/link";
-import { useEffect, useState } from "react";
 import { useGoogleLogout } from "react-google-login";
 import { BiExit } from "react-icons/bi";
 import { useAuth } from "../../hooks/use-auth";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
 import { ChakraNextImage } from "../common/chakra-next-image";
-import { set, get, update } from "idb-keyval";
+import { update } from "idb-keyval";
 
 export function Navbar() {
   const { user, logout } = useAuth();

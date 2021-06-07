@@ -1,4 +1,4 @@
-import { Center, createStandaloneToast } from "@chakra-ui/react";
+import { createStandaloneToast } from "@chakra-ui/react";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import {
@@ -10,7 +10,6 @@ import {
   createContext,
 } from "react";
 import useSWR from "swr";
-import { Loading } from "../components/common/loading";
 import { api } from "../services/api";
 import { User } from "../types";
 

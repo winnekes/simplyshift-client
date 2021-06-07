@@ -1,4 +1,3 @@
-import { useAnimatedState } from "framer-motion/types/animation/use-animated-state";
 import { get } from "idb-keyval";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
@@ -26,7 +25,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
   title,
   isProtectedPage,
 }) => {
-  const [loadColorMode, setLoadColorMode] = useState(true);
+  const [, setLoadColorMode] = useState(true);
   const { initialising, user } = useAuth();
   const router = useRouter();
   const { setColorMode } = useColorMode();
