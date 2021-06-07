@@ -123,7 +123,6 @@ export const Scheduler = () => {
     start: stringOrDate;
     end: stringOrDate;
   }) => {
-    console.log({ end: slot.end });
     if (selectedModelId) {
       const startsAt = moment(slot.start).toDate();
       await createShiftEntry(startsAt);

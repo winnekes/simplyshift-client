@@ -44,8 +44,7 @@ export const PageWrapper: FunctionComponent<Props> = ({
 
   useEffect(() => {
     get<ColorMode>("colorMode").then((value) => {
-      console.log(value);
-      setColorMode(value);
+      setColorMode(value || "light");
       setLoadColorMode(false);
     });
   }, []);
