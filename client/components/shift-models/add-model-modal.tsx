@@ -17,7 +17,6 @@ import {
 } from "../../services/mutations/add-shift-model";
 import { mutate as fetch } from "swr";
 import { colors } from "../../theme/colors";
-import { setFieldValidationErrors } from "../../utils/errors";
 import { ModalContent } from "../common/overrides/modal";
 import { ModelForm } from "./model-form";
 
@@ -46,9 +45,9 @@ export function AddModelModal({ onClose }: Props) {
     unknown
   >(addShiftModelMutation, {
     onSuccess: () => onClose(),
-    onError: (error) => {
-      setFieldValidationErrors(error, methods.setError);
-    },
+    // onError: (error) => {
+    //   setFieldValidationErrors(error, methods.setError);
+    // },
     onSettled: () => fetch("/shift-model"),
   });
 
