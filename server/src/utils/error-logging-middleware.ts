@@ -2,8 +2,6 @@ import * as Sentry from "@sentry/node";
 import { Context, Next } from "koa";
 import { Middleware, KoaMiddlewareInterface } from "routing-controllers";
 
-// todo add logger middleware
-// todo should handle all errors here? *not catch locally in controller for example)
 @Middleware({ type: "before" })
 export class ErrorLoggingMiddleware implements KoaMiddlewareInterface {
   async use(ctx: Context, next: Next): Promise<void> {
@@ -15,6 +13,7 @@ export class ErrorLoggingMiddleware implements KoaMiddlewareInterface {
       ctx.body = {
         message: err.message || " Something went wrong",
         code: err.code,
+        validationErrors: err.errors,
       };
       Sentry.withScope(function (scope) {
         scope.addEventProcessor(function (event) {
