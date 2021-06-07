@@ -38,7 +38,7 @@ export default class LoginController {
       );
     }
 
-    const tokenExpiresIn = data.stayLoggedIn ? "30d" : "1h";
+    const tokenExpiresIn = data.stayLoggedIn ? "30d" : "1d";
 
     const token = sign({ id: user.id }, tokenExpiresIn);
     return { token, user };

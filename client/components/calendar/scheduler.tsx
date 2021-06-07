@@ -34,11 +34,10 @@ export const Scheduler = () => {
   const [selectedTimeframe, setSelectedTimeFrame] = useState(new Date());
   const [isEditingCalendar, setIsEditingCalendar] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
-  const [newShiftEntryData, setNewShiftEntryData] =
-    useState<{
-      shiftModel: ShiftModel;
-      date: Date;
-    }>();
+  const [newShiftEntryData, setNewShiftEntryData] = useState<{
+    shiftModel: ShiftModel;
+    date: Date;
+  }>();
 
   const [
     showConfirmOverrideShiftEntryModal,
@@ -51,8 +50,9 @@ export const Scheduler = () => {
     mutate: fetchShiftEntries,
   } = useSWR<ShiftEntry[]>(`/shift-entry?date=${selectedTimeframe}`);
 
-  const { data: shiftModels, error: shiftModelsError } =
-    useSWR<ShiftModel[]>("/shift-model");
+  const { data: shiftModels, error: shiftModelsError } = useSWR<ShiftModel[]>(
+    "/shift-model"
+  );
 
   const { mutate } = useMutation(addShiftEntryMutation, {
     onSettled: async () => {
@@ -119,7 +119,11 @@ export const Scheduler = () => {
     setEvents([...events, newShiftEntry]);
   };
 
-  const onSelectSlot = async (slot: { start: stringOrDate }) => {
+  const onSelectSlot = async (slot: {
+    start: stringOrDate;
+    end: stringOrDate;
+  }) => {
+    console.log({ end: slot.end });
     if (selectedModelId) {
       const startsAt = moment(slot.start).toDate();
       await createShiftEntry(startsAt);
