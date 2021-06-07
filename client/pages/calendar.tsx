@@ -3,7 +3,8 @@ import { Scheduler } from "../components/calendar/scheduler";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 
-export default function Calendar() {
+export default function Calendar(props) {
+  console.log({ props });
   return (
     <PageWrapper title="Calendar" isProtectedPage>
       <Page>

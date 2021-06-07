@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
   createContext,
+  FunctionComponent,
 } from "react";
 import useSWR from "swr";
 import { api } from "../services/api";
@@ -18,12 +19,17 @@ type AuthContextType = {
   initialising: boolean;
   setUser: Dispatch<SetStateAction<User>>;
   setToken: Dispatch<SetStateAction<string>>;
+  globalLoading: boolean;
   logout: () => void;
 };
 
 const UseAuth = createContext<AuthContextType>(undefined);
 
-export function AuthProvider(props) {
+interface Props {
+  globalLoading: boolean;
+}
+
+export const AuthProvider: FunctionComponent<Props> = (props) => {
   const router = useRouter();
   const [initialising, setInitialising] = useState(true);
   const [checked, setChecked] = useState(false);
@@ -143,10 +149,11 @@ export function AuthProvider(props) {
       setToken(token);
     },
     logout,
+    globalLoading: props.globalLoading,
   };
 
   return <UseAuth.Provider value={properties} {...props} />;
-}
+};
 
 export function useAuth() {
   const data = useContext(UseAuth);
