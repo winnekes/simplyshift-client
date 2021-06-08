@@ -14,7 +14,6 @@ import {
   MenuList,
   Stack,
   useColorMode,
-  Badge,
   LinkOverlay,
   LinkBox,
   ColorMode,
@@ -79,9 +78,6 @@ export const Navbar: FunctionComponent = () => {
                     <Heading size="1xl" mr={0}>
                       SimplyShift
                     </Heading>
-                    <Badge ml={0} colorScheme="green">
-                      Early Access
-                    </Badge>
                   </HStack>
                 </LinkOverlay>
               </Link>

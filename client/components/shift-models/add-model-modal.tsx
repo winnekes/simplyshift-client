@@ -14,7 +14,7 @@ import { useMutation } from "react-query";
 import {
   AddShiftModelData,
   addShiftModelMutation,
-} from "../../services/mutations/add-shift-model";
+} from "../../mutations/add-shift-model";
 import { mutate as fetch } from "swr";
 import { colors } from "../../theme/colors";
 import { ModalContent } from "../common/overrides/modal";

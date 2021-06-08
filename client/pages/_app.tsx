@@ -5,7 +5,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SWRConfig, SWRConfiguration } from "swr";
 import { AuthProvider } from "../hooks/use-auth";
-import { api } from "../services/api";
+import { api } from "../mutations/api";
 import "../theme/calendar.scss";
 import "../theme/globals.scss";
 import { theme } from "../theme/theme";
@@ -13,12 +13,15 @@ import { theme } from "../theme/theme";
 function App({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
 
+  const setIsLoading = () => !loading && setLoading(true);
+  const setIsFinished = () => loading && setLoading(false);
+
   // Create a client for React Query (mutations)
   const queryClient = new QueryClient({
     defaultOptions: {
       mutations: {
-        onMutate: () => setLoading(true),
-        onSettled: () => setLoading(false),
+        onMutate: setIsLoading,
+        onSettled: setIsFinished,
       },
     },
   });
@@ -26,9 +29,9 @@ function App({ Component, pageProps }: AppProps) {
   const swrConfig: SWRConfiguration = {
     fetcher: (url) => api.get(url).then((res) => res.data),
     loadingTimeout: 1,
-    onLoadingSlow: () => setLoading(true),
-    onSuccess: () => setLoading(false),
-    onError: () => setLoading(false),
+    onLoadingSlow: setIsLoading,
+    onSuccess: setIsFinished,
+    onError: setIsFinished,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   };

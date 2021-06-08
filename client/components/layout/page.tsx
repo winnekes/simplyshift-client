@@ -1,18 +1,35 @@
-import { Box, useColorMode } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
+import { Box, Center, useColorMode } from "@chakra-ui/react";
+import { Children, cloneElement, FunctionComponent, ReactElement } from "react";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
+
+interface PageProps {
+  simple?: boolean;
+}
 
 interface PageSubComponents {
   Title: FunctionComponent;
   Content: FunctionComponent;
 }
 
-const Title: FunctionComponent = ({ children }) => (
-  <Box paddingX={[6, 6, 6, 0]}>{children}</Box>
-);
+const Title: FunctionComponent<PageProps> = ({ children }) => {
+  return <Box paddingX={[6, 6, 6, 0]}>{children}</Box>;
+};
 
-const Content: FunctionComponent = ({ children }) => {
+const PageTitle: FunctionComponent<PageProps> = ({ children, simple }) => {
+  console.log(simple);
+  if (simple) {
+    console.log("dd");
+    return (
+      <Center>
+        <Title>{children}</Title>
+      </Center>
+    );
+  }
+  return <Title>{children}</Title>;
+};
+
+const Content: FunctionComponent<PageProps> = ({ children, ...props }) => {
   const { colorMode } = useColorMode();
 
   return (
@@ -23,16 +40,34 @@ const Content: FunctionComponent = ({ children }) => {
       borderRadius={5}
       border={[null, `1px solid ${colors[colorMode].ui03}`]}
       borderY={[`1px solid ${colors[colorMode].ui03}`]}
-      width={width}
+      width={props.simple ? "container.sm" : width}
     >
       {children}
     </Box>
   );
 };
 
-export const Page: FunctionComponent & PageSubComponents = ({ children }) => (
-  <div>{children}</div>
+const PageContent: FunctionComponent<PageProps> = ({ children, ...props }) => {
+  if (props.simple) {
+    return (
+      <Center>
+        <Content {...props}>{children}</Content>
+      </Center>
+    );
+  }
+  return <Content {...props}>{children}</Content>;
+};
+
+export const Page: FunctionComponent<PageProps> & PageSubComponents = ({
+  children,
+  ...props
+}) => (
+  <div>
+    {Children.map(children, (child) =>
+      cloneElement(child as ReactElement<any>, { ...props })
+    )}
+  </div>
 );
 
-Page.Title = Title;
-Page.Content = Content;
+Page.Title = PageTitle;
+Page.Content = PageContent;

@@ -9,7 +9,7 @@ import {
 //import { AxiosError } from "axios";
 import { CirclePicker } from "react-color";
 import { useFormContext, Controller } from "react-hook-form";
-import { AddShiftModelData } from "../../services/mutations/add-shift-model";
+import { AddShiftModelData } from "../../mutations/add-shift-model";
 
 interface Props {
   errorCode?: string;

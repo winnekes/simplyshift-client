@@ -11,7 +11,7 @@ import {
   FunctionComponent,
 } from "react";
 import useSWR from "swr";
-import { api } from "../services/api";
+import { api } from "../mutations/api";
 import { User } from "../types";
 
 type AuthContextType = {

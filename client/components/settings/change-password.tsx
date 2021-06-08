@@ -18,7 +18,7 @@ import { useMutation } from "react-query";
 import {
   changePasswordMutation,
   ChangePasswordData,
-} from "../../services/mutations/change-password";
+} from "../../mutations/change-password";
 
 export const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);

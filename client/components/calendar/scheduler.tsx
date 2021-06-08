@@ -11,7 +11,7 @@ import {
 } from "react-big-calendar";
 import { useMutation } from "react-query";
 import useSWR from "swr";
-import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry";
+import { addShiftEntryMutation } from "../../mutations/add-shift-entry";
 import { ShiftEntry, ShiftModel } from "../../types";
 import { ErrorContainer } from "../common/error-container";
 import { ShiftModelsList } from "../shift-models/shift-models-list";
@@ -182,6 +182,7 @@ export const Scheduler = () => {
           culture="en-gb"
           timeslots={1}
           selectable
+          dayLayoutAlgorithm="no-overlap"
           style={{ height: 600 }}
           views={{ week: WeekView, month: true }}
           components={components}
