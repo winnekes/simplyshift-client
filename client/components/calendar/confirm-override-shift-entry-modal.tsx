@@ -10,7 +10,7 @@ import {
 import { useRef } from "react";
 import { useMutation } from "react-query";
 import { mutate as fetch } from "swr";
-import { addShiftEntryMutation } from "../../services/mutations/add-shift-entry";
+import { addShiftEntryMutation } from "../../mutations/add-shift-entry";
 import { ShiftModel } from "../../types";
 import { AlertDialogContent } from "../common/overrides/alert-dialog";
 

@@ -10,7 +10,7 @@ import {
 import { useRef } from "react";
 import { useMutation } from "react-query";
 import { useAuth } from "../../hooks/use-auth";
-import { deleteAccountMutation } from "../../services/mutations/delete-account";
+import { deleteAccountMutation } from "../../mutations/delete-account";
 import { AlertDialogContent } from "../common/overrides/alert-dialog";
 
 interface Props {

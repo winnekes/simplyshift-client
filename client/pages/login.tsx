@@ -22,7 +22,7 @@ import { ExternalLogin } from "../components/external-login";
 import { Page } from "../components/layout/page";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import { useAuth } from "../hooks/use-auth";
-import { loginMutation, LoginMutationData } from "../services/mutations/login";
+import { loginMutation, LoginMutationData } from "../mutations/login";
 
 export default function Login() {
   const router = useRouter();

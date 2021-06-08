@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { BiPlay } from "react-icons/bi";
 import { BrandText } from "../components/common/brand-text";
+import { ChakraNextImage } from "../components/common/chakra-next-image";
 import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
@@ -90,20 +90,15 @@ export default function Home() {
                 Try it out now!
               </Button>
             </Link>
-            <Link href="/signup">
-              <Button
-                leftIcon={<BiPlay />}
-                rounded="full"
-                size="lg"
-                fontWeight="normal"
-                px={6}
-                colorScheme="gray"
-                bg={useColorModeValue("gray.200", "gray.700")}
-              >
-                Watch the demo
-              </Button>
-            </Link>
           </Stack>
+
+          <ChakraNextImage
+            h="lg"
+            src={useColorModeValue("/laptop_light.png", "/laptop_dark.png")}
+            w="100%"
+            alt=""
+            //       mixBlendMode="multiply"
+          />
         </VStack>
       </Stack>
 

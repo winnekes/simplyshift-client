@@ -1,5 +1,5 @@
-import { User } from "../../types";
-import { api } from "../api";
+import { User } from "../types";
+import { api } from "./api";
 
 export type ChangePasswordData = {
   password: string;

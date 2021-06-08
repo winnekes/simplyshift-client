@@ -21,10 +21,7 @@ import {
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaKey } from "react-icons/fa";
 import { useAuth } from "../hooks/use-auth";
-import {
-  signupMutation,
-  SignupMutationData,
-} from "../services/mutations/signup";
+import { signupMutation, SignupMutationData } from "../mutations/signup";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);

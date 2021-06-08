@@ -1,11 +1,17 @@
 import { CloseIcon } from "@chakra-ui/icons";
-import { Flex, Spacer, Text, Tooltip } from "@chakra-ui/react";
+import {
+  Flex,
+  Spacer,
+  Text,
+  Tooltip,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import moment from "moment";
 import { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import { EventProps } from "react-big-calendar";
 import { useMutation } from "react-query";
 import { mutate as fetch } from "swr";
-import { deleteShiftEntryMutation } from "../../services/mutations/delete-shift-entry";
+import { deleteShiftEntryMutation } from "../../mutations/delete-shift-entry";
 import { ShiftEntryEvent } from "./scheduler";
 
 type Props = EventProps & {
@@ -38,6 +44,12 @@ export const ModifiedEvent = ({
     mutate({ shiftEntryId });
   };
 
+  let str = event.title;
+  let acronym = str
+    .split(/\s/)
+    .reduce((response, word) => (response += word.slice(0, 1)), "");
+
+  console.log(acronym);
   return (
     <Tooltip
       label={
@@ -47,9 +59,9 @@ export const ModifiedEvent = ({
         </>
       }
     >
-      <Flex align="center" px={1}>
-        <Text fontSize="xs" isTruncated>
-          {event.title}
+      <Flex align="center" pr={1}>
+        <Text fontSize="xs">
+          {useBreakpointValue({ base: acronym.toUpperCase(), md: event.title })}
         </Text>
         <Spacer />
         {isEditingCalendar && event.event.id !== 0 && (

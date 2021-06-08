@@ -9,9 +9,9 @@ import {
 } from "@chakra-ui/react";
 import { useForm, FormProvider } from "react-hook-form";
 import { useMutation } from "react-query";
-import { AddShiftModelData } from "../../services/mutations/add-shift-model";
+import { AddShiftModelData } from "../../mutations/add-shift-model";
 import { mutate as fetch } from "swr";
-import { editShiftModelMutation } from "../../services/mutations/edit-shift-model";
+import { editShiftModelMutation } from "../../mutations/edit-shift-model";
 import { ShiftModel } from "../../types";
 import { ModalContent } from "../common/overrides/modal";
 import { ModelForm } from "./model-form";

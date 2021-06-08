@@ -16,7 +16,7 @@ import GoogleLogin, {
 import { FcGoogle } from "react-icons/fc";
 import { useMutation } from "react-query";
 import { useAuth } from "../hooks/use-auth";
-import { googleSignUpMutation } from "../services/mutations/signup";
+import { googleSignUpMutation } from "../mutations/signup";
 
 export const ExternalLogin = () => {
   const [error, setError] = useState("");

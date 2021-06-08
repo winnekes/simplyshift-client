@@ -1,5 +1,5 @@
-import { ShiftModel } from "../../types";
-import { api } from "../api";
+import { ShiftModel } from "../types";
+import { api } from "./api";
 
 export type EditShiftModelData = Pick<
   ShiftModel,
