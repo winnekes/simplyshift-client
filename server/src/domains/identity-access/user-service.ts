@@ -1,11 +1,13 @@
 import { getCustomRepository, getManager } from "typeorm";
 import { CalendarRepository } from "../calendar/calendar-repository";
+import { ShiftModelService } from "../shift-model/shift-model-service";
 import User from "./user";
 import { UserRepository } from "./user-repository";
 
 export class UserService {
   private userRepository = getCustomRepository(UserRepository);
   private calendarRepository = getCustomRepository(CalendarRepository);
+  private shiftModelService = new ShiftModelService();
 
   async createUser(
     data: Pick<User, "firstName" | "lastName" | "email" | "password">
@@ -23,6 +25,10 @@ export class UserService {
     await getManager().transaction(async (transactionalEntityManager) => {
       await transactionalEntityManager.save(user);
       await transactionalEntityManager.save(calendar);
+      await this.shiftModelService.createSampleShiftModelsForUser(
+        user,
+        transactionalEntityManager
+      );
     });
 
     return user;

@@ -8,6 +8,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
@@ -50,6 +51,9 @@ export default class User extends BaseEntity {
     onDelete: "CASCADE",
   })
   shiftModels!: ShiftModel[];
+
+  @RelationId((user: User) => user.shiftModels)
+  public shiftModelId!: number;
 
   @OneToMany(() => ShiftEntry, (shiftEntry) => shiftEntry.user, {
     onDelete: "CASCADE",

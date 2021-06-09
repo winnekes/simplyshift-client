@@ -37,9 +37,10 @@ export default class ShiftEntryController {
     return this.shiftEntryService.getShiftEntriesForSingleMonth(user, date);
   }
 
+  // todo accept array of dates
   @Authorized()
   @Post("/shift-entry")
-  async createShiftEntry(
+  async createShiftEntries(
     @CurrentUser()
     user: User,
     @Body() data: { shiftModelId: number; date: Date }
