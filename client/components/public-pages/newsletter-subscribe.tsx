@@ -21,7 +21,7 @@ export const NewsletterSubscribe = () => {
   return (
     <VStack align="stretch">
       <Text fontWeight="500" fontSize="lg" mb={2}>
-        Follow us! Be the first to hear about new features
+        Be the first to hear about new features!
       </Text>
 
       <MailchimpSubscribe

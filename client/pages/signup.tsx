@@ -51,7 +51,7 @@ export default function Signup() {
   }, [auth.user]);
 
   return (
-    <PageWrapper title="Sign up">
+    <PageWrapper>
       <Page simple>
         <Page.Title>
           <Heading>Sign up for SimplyShift</Heading>

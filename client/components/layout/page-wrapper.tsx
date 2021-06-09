@@ -1,11 +1,12 @@
 import { get } from "idb-keyval";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import Head from "next/head";
 import { useAuth } from "../../hooks/use-auth";
 import { Loading } from "../common/loading";
-import { Footer } from "./footer";
-import { Navbar } from "./navbar";
+import { Footer } from "../public-pages/footer";
+import { Navbar } from "../public-pages/navbar";
 import {
   ColorMode,
   Container,
@@ -16,13 +17,11 @@ import {
 import { width } from "../../theme/theme";
 
 interface Props {
-  title: string;
   isProtectedPage?: boolean;
 }
 
 export const PageWrapper: FunctionComponent<Props> = ({
   children,
-  title,
   isProtectedPage,
 }) => {
   const [, setLoadColorMode] = useState(true);
@@ -51,11 +50,12 @@ export const PageWrapper: FunctionComponent<Props> = ({
 
   return (
     <>
-      <Head>
-        <title>{title} - SimplyShift</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
+      <NextSeo
+        titleTemplate="%s | SimplyShift, the simple shift scheduler"
+        title="Simple Usage Example"
+        description="A short description goes here."
+      />
+
       <Navbar />
       <Flex direction="column">
         <Container maxW={width} px={[5, 5, 5, 0]}>
