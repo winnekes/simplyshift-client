@@ -73,7 +73,7 @@ export default function Login() {
               <FormLabel>Email address</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <Icon as={FaEnvelope} color="green.400" />
+                  <Icon as={FaEnvelope} color="green.500" />
                 </InputLeftElement>
                 <Input
                   type="email"
@@ -91,7 +91,7 @@ export default function Login() {
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <Icon as={FaKey} color="green.400" />
+                  <Icon as={FaKey} color="green.500" />
                 </InputLeftElement>
                 <Input
                   type={showPassword ? "text" : "password"}

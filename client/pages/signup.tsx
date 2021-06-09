@@ -33,7 +33,6 @@ export default function Signup() {
 
   const { isLoading, mutate } = useMutation(signupMutation, {
     onSuccess: async ({ data }) => {
-      console.log("here");
       auth.setToken(data.token);
       auth.setUser(data.user);
 
@@ -63,7 +62,7 @@ export default function Signup() {
               <FormLabel>Email address</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <Icon as={FaEnvelope} color="green.400" />
+                  <Icon as={FaEnvelope} color="green.500" />
                 </InputLeftElement>
                 <Input
                   type="email"
@@ -111,7 +110,7 @@ export default function Signup() {
               <FormLabel>Password</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <Icon as={FaKey} color="green.400" />
+                  <Icon as={FaKey} color="green.500" />
                 </InputLeftElement>
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -140,7 +139,7 @@ export default function Signup() {
               <FormLabel>Confirm your password</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <Icon as={FaKey} color="green.400" />
+                  <Icon as={FaKey} color="green.500" />
                 </InputLeftElement>
                 <Input
                   type={showPasswordRepeated ? "text" : "password"}

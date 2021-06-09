@@ -49,8 +49,8 @@ export function Footer() {
                 </span>
               </HStack>
               <Text color="gray.400">
-                Made with <Icon as={BiHeart} color="green.400" /> by{" "}
-                <Link isExternal href="https://tinyhive.dev" color="green.400">
+                Made with <Icon as={BiHeart} color="green.500" /> by{" "}
+                <Link isExternal href="https://tinyhive.dev">
                   tinyhive.dev <ExternalLinkIcon mx="2px" />
                 </Link>
               </Text>
@@ -58,7 +58,6 @@ export function Footer() {
               <BrandText>Found an issue?</BrandText> <br />
               Let us know at{" "}
               <Link
-                color="green.400"
                 href="mailto:simplyshift@tinyhive.dev"
                 isExternal
                 style={{ whiteSpace: "nowrap" }}
@@ -68,11 +67,10 @@ export function Footer() {
             </Box>
           </Stack>
           <Stack align="flex-start">
-            {/*<Text fontWeight="500" fontSize="lg" mb={2}>*/}
-            {/*  About SimplyShift*/}
-            {/*</Text>*/}
-            {/*<Link href="#">Privacy Policy</Link>*/}
-            {/*<Link href="#">Terms and Conditions</Link>*/}
+            <Text fontWeight="500" fontSize="lg" mb={2}>
+              About SimplyShift
+            </Text>
+            <Link href="/privacy">Privacy Policy</Link>
           </Stack>
           <NewsletterSubscribe />
         </SimpleGrid>

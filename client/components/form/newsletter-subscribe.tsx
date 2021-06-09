@@ -46,7 +46,7 @@ export const NewsletterSubscribe = () => {
                 isLoading={status === "sending"}
                 icon={<BiMailSend />}
                 color="white"
-                bg="green.400"
+                bg="green.500"
                 _hover={{
                   bg: "green.500",
                 }}

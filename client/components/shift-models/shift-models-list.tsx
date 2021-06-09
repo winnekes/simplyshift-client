@@ -120,7 +120,7 @@ export const ShiftModelsList = ({
         })}
 
         <Tag
-          color="green.400"
+          color="green.500"
           boxShadow="none"
           borderRadius="20px"
           cursor="pointer"

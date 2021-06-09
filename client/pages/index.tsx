@@ -9,6 +9,7 @@ import {
   VStack,
   Button,
   useColorModeValue,
+  Spacer,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -18,6 +19,12 @@ import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
 import { useAuth } from "../hooks/use-auth";
+import {
+  BiBell,
+  BiCalendarHeart,
+  BiCloudDownload,
+  BiShareAlt,
+} from "react-icons/bi";
 
 export default function Home() {
   const { initialising, user } = useAuth();
@@ -54,14 +61,14 @@ export default function Home() {
                 position: "absolute",
                 bottom: 1,
                 left: 0,
-                bg: "green.400",
+                bg: "green.500",
                 zIndex: -1,
               }}
             >
               SimplyShift,
             </Text>
             <br />
-            <Text as="span" color="green.400">
+            <Text as="span" color="green.500">
               the simple shift scheduler
             </Text>
           </Heading>
@@ -97,7 +104,6 @@ export default function Home() {
             src={useColorModeValue("/laptop_light.png", "/laptop_dark.png")}
             w="100%"
             alt=""
-            //       mixBlendMode="multiply"
           />
         </VStack>
       </Stack>
@@ -122,47 +128,47 @@ export default function Home() {
         </SimpleGrid>
       </VStack>
 
-      {/*<VStack p={4} mt="150px">*/}
-      {/*  <Heading mb={20}>*/}
-      {/*    Coming soon to <BrandText>SimplyShift</BrandText>*/}
-      {/*  </Heading>*/}
-      {/*  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiShareAlt} w={10} h={10} />}*/}
-      {/*      title="Share your calendar"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiBell} w={10} h={10} />}*/}
-      {/*      title="Notifications!"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiCloudDownload} w={10} h={10} />}*/}
-      {/*      title="Download as image or PDF"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiCalendarHeart} w={10} h={10} />}*/}
-      {/*      title="Connect to your personal calendar"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={EditIcon} w={10} h={10} />}*/}
-      {/*      title="Unlimited shifts that you create and customize"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={EditIcon} w={10} h={10} />}*/}
-      {/*      title="Instant Delivery"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*  </SimpleGrid>*/}
-      {/*  <Spacer />*/}
-      {/*  <Heading mb={20} size="md">*/}
-      {/*    ... and more! Let us know what you functionality you are missing!*/}
-      {/*  </Heading>*/}
-      {/*</VStack>*/}
+      <VStack p={4} mt="150px">
+        <Heading mb={20}>
+          Coming soon to <BrandText>SimplyShift</BrandText>
+        </Heading>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+          <Feature
+            icon={<Icon as={BiShareAlt} w={10} h={10} />}
+            title="Share your calendar"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={BiBell} w={10} h={10} />}
+            title="Notifications!"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={BiCloudDownload} w={10} h={10} />}
+            title="Download as image or PDF"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={BiCalendarHeart} w={10} h={10} />}
+            title="Connect to your personal calendar"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={EditIcon} w={10} h={10} />}
+            title="Unlimited shifts that you create and customize"
+            text=""
+          />
+          <Feature
+            icon={<Icon as={EditIcon} w={10} h={10} />}
+            title="Instant Delivery"
+            text=""
+          />
+        </SimpleGrid>
+        <Spacer />
+        <Heading mb={20} size="md">
+          ... and more! Let us know what you functionality you are missing!
+        </Heading>
+      </VStack>
     </PageWrapper>
   );
 }

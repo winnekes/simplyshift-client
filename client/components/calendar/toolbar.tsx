@@ -50,7 +50,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
       <Box>
         <Text fontWeight="bold" fontSize="3xl" m={0} p={0}>
           {date.format("MMMM")}{" "}
-          <Text as="span" color="green.400">
+          <Text as="span" color="green.500">
             {date.format("YYYY")}
           </Text>
         </Text>
@@ -69,7 +69,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
         />
       </Flex>
       <Center mt={5}>
-        <ButtonGroup size="lg" isAttached variant="ghost" color="green.400">
+        <ButtonGroup size="lg" isAttached variant="ghost" color="green.500">
           <IconButton
             aria-label="Add to friends"
             icon={<ArrowLeftIcon />}
@@ -86,7 +86,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
         </ButtonGroup>
       </Center>
       <Center mb={4}>
-        <ButtonGroup size="xs" isAttached color="green.400" variant="ghost">
+        <ButtonGroup size="xs" isAttached color="green.500" variant="ghost">
           <Button
             mr="-px"
             onClick={switchToWeekView}
