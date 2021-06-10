@@ -88,7 +88,6 @@ export const Scheduler = () => {
         fontSize: "12px",
         border: "0px",
         paddingLeft: "10px",
-        display: "block",
       },
     };
   };
@@ -174,6 +173,7 @@ export const Scheduler = () => {
         <BigCalendar
           localizer={localizer}
           events={events}
+          //        backgroundEvents={events}
           date={selectedTimeframe}
           startAccessor="start"
           endAccessor="end"

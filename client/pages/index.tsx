@@ -42,6 +42,7 @@ export default function Home() {
             lineHeight={1.1}
             fontWeight={600}
             fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}
+            alignSelf="flex-start"
           >
             <Text
               as="span"
@@ -64,7 +65,7 @@ export default function Home() {
               the simple shift scheduler
             </Text>
           </Heading>
-          <Container maxWidth="container.md" py={5}>
+          <Container maxWidth="container." py={5}>
             <Text fontSize="xl">
               Are you a nurse, a firefighter or a doctor? Is your work schedule
               ever-changing? Then <BrandText>SimplyShift</BrandText> is for you!{" "}
@@ -99,8 +100,8 @@ export default function Home() {
           />
         </VStack>
       </Stack>
-      <Features />
-      <ComingSoonFeatures />
+      {/*<Features />*/}
+      {/*<ComingSoonFeatures />*/}
     </PageWrapper>
   );
 }

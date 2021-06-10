@@ -13,7 +13,13 @@ export const ChakraNextImage: ComponentWithAs<"div", BoxProps & ImageProps> = ({
 }) => {
   return (
     <Box position="relative" {...props}>
-      <Image objectFit="cover" layout="fill" src={src} alt={alt} />
+      <Image
+        objectFit="cover"
+        layout="fill"
+        src={src}
+        alt={alt}
+        quality={100}
+      />
     </Box>
   );
 };

@@ -9,8 +9,7 @@ export const Features = () => {
         <Feature
           icon={<Icon as={TimeIcon} w={10} h={10} />}
           title="Fast and easy"
-          text="Are you a nurse, a firefighter or a doctor? Is your work schedule
-              ever-changing? Then"
+          text="Create shifts in seconds, unique names and colors"
         />
         <Feature
           icon={<Icon as={EditIcon} w={10} h={10} />}
