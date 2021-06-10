@@ -10,7 +10,6 @@ import {
   useColorMode,
   Divider,
   Icon,
-  Image,
   HStack,
 } from "@chakra-ui/react";
 import { BiHeart } from "react-icons/bi";

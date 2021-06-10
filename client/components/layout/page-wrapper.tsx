@@ -2,7 +2,6 @@ import { get } from "idb-keyval";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
-import Head from "next/head";
 import { useAuth } from "../../hooks/use-auth";
 import { Loading } from "../common/loading";
 import { Footer } from "../public-pages/footer";
