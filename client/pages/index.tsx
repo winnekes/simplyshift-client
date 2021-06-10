@@ -1,11 +1,9 @@
-import { EditIcon, TimeIcon, CheckIcon } from "@chakra-ui/icons";
+import { CheckIcon } from "@chakra-ui/icons";
 import {
   Container,
   Heading,
-  Icon,
   Stack,
   Text,
-  SimpleGrid,
   VStack,
   Button,
   useColorModeValue,
@@ -14,9 +12,10 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { BrandText } from "../components/common/brand-text";
 import { ChakraNextImage } from "../components/common/chakra-next-image";
-import { Feature } from "../components/common/feature";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
+import { ComingSoonFeatures } from "../components/public-pages/home/coming-soon-features";
+import { Features } from "../components/public-pages/home/features";
 import { useAuth } from "../hooks/use-auth";
 
 export default function Home() {
@@ -30,7 +29,7 @@ export default function Home() {
   }, []);
 
   return (
-    <PageWrapper title="A simple calendar to keep track of your shifts">
+    <PageWrapper>
       <Stack
         align="left"
         spacing={{ base: 8, md: 10 }}
@@ -43,6 +42,7 @@ export default function Home() {
             lineHeight={1.1}
             fontWeight={600}
             fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}
+            alignSelf="flex-start"
           >
             <Text
               as="span"
@@ -54,18 +54,18 @@ export default function Home() {
                 position: "absolute",
                 bottom: 1,
                 left: 0,
-                bg: "green.400",
+                bg: "green.500",
                 zIndex: -1,
               }}
             >
               SimplyShift,
             </Text>
             <br />
-            <Text as="span" color="green.400">
+            <Text as="span" color="green.500">
               the simple shift scheduler
             </Text>
           </Heading>
-          <Container maxWidth="container.md" py={5}>
+          <Container maxWidth="container." py={5}>
             <Text fontSize="xl">
               Are you a nurse, a firefighter or a doctor? Is your work schedule
               ever-changing? Then <BrandText>SimplyShift</BrandText> is for you!{" "}
@@ -96,73 +96,12 @@ export default function Home() {
             h="lg"
             src={useColorModeValue("/laptop_light.png", "/laptop_dark.png")}
             w="100%"
-            alt=""
-            //       mixBlendMode="multiply"
+            alt="Preview of app inside, shown on a laptop"
           />
         </VStack>
       </Stack>
-
-      <VStack p={4} mt="150px">
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
-          <Feature
-            icon={<Icon as={TimeIcon} w={10} h={10} />}
-            title="Fast and easy"
-            text=""
-          />
-          <Feature
-            icon={<Icon as={EditIcon} w={10} h={10} />}
-            title="Unlimited shifts"
-            text=""
-          />
-          <Feature
-            icon={<Icon as={EditIcon} w={10} h={10} />}
-            title="Instant Delivery"
-            text=""
-          />
-        </SimpleGrid>
-      </VStack>
-
-      {/*<VStack p={4} mt="150px">*/}
-      {/*  <Heading mb={20}>*/}
-      {/*    Coming soon to <BrandText>SimplyShift</BrandText>*/}
-      {/*  </Heading>*/}
-      {/*  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiShareAlt} w={10} h={10} />}*/}
-      {/*      title="Share your calendar"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiBell} w={10} h={10} />}*/}
-      {/*      title="Notifications!"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiCloudDownload} w={10} h={10} />}*/}
-      {/*      title="Download as image or PDF"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={BiCalendarHeart} w={10} h={10} />}*/}
-      {/*      title="Connect to your personal calendar"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={EditIcon} w={10} h={10} />}*/}
-      {/*      title="Unlimited shifts that you create and customize"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*    <Feature*/}
-      {/*      icon={<Icon as={EditIcon} w={10} h={10} />}*/}
-      {/*      title="Instant Delivery"*/}
-      {/*      text=""*/}
-      {/*    />*/}
-      {/*  </SimpleGrid>*/}
-      {/*  <Spacer />*/}
-      {/*  <Heading mb={20} size="md">*/}
-      {/*    ... and more! Let us know what you functionality you are missing!*/}
-      {/*  </Heading>*/}
-      {/*</VStack>*/}
+      {/*<Features />*/}
+      {/*<ComingSoonFeatures />*/}
     </PageWrapper>
   );
 }

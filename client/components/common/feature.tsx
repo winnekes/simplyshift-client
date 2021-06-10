@@ -17,7 +17,7 @@ export const Feature = ({ title, text, icon }: Props) => {
         justify="center"
         color="white"
         rounded="full"
-        bg="green.400"
+        bg="green.500"
         mb={1}
       >
         {icon}

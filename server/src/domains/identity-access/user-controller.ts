@@ -20,6 +20,7 @@ const { OAuth2Client } = require("google-auth-library");
 export default class UserController {
   private userRepository = getCustomRepository(UserRepository);
   private userService = new UserService();
+
   private googleClient = new OAuth2Client(process.env.CLIENT_ID);
 
   @Authorized()

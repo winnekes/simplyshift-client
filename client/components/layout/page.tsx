@@ -17,9 +17,7 @@ const Title: FunctionComponent<PageProps> = ({ children }) => {
 };
 
 const PageTitle: FunctionComponent<PageProps> = ({ children, simple }) => {
-  console.log(simple);
   if (simple) {
-    console.log("dd");
     return (
       <Center>
         <Title>{children}</Title>

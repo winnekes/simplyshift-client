@@ -109,7 +109,7 @@ export const Navbar: FunctionComponent = () => {
                     p={0}
                     cursor="pointer"
                   >
-                    <Avatar bg="green.400" size="sm" />
+                    <Avatar bg="green.500" size="sm" />
                   </MenuButton>
                   <MenuList bg={colors[colorMode].ui02}>
                     <Link href="/settings" passHref>

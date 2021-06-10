@@ -4,7 +4,7 @@ export const Loading = () => {
   return (
     <Center h="100vh">
       <Spinner
-        color="green.400"
+        color="green.500"
         emptyColor="green.100"
         height="100px"
         width="100px"

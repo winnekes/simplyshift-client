@@ -44,12 +44,11 @@ export const ModifiedEvent = ({
     mutate({ shiftEntryId });
   };
 
-  let str = event.title;
-  let acronym = str
+  const shortenedEvenTitle = event.title
     .split(/\s/)
-    .reduce((response, word) => (response += word.slice(0, 1)), "");
+    .reduce((response, word) => (response += word.slice(0, 1)), "")
+    .toUpperCase();
 
-  console.log(acronym);
   return (
     <Tooltip
       label={
@@ -61,7 +60,7 @@ export const ModifiedEvent = ({
     >
       <Flex align="center" pr={1}>
         <Text fontSize="xs">
-          {useBreakpointValue({ base: acronym.toUpperCase(), md: event.title })}
+          {useBreakpointValue({ base: shortenedEvenTitle, md: event.title })}
         </Text>
         <Spacer />
         {isEditingCalendar && event.event.id !== 0 && (

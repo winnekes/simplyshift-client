@@ -32,6 +32,14 @@ h6 {
   }
 }
 
+a {
+  color: rgb(72, 187, 120) !important;
+}
+
+a:hover {
+  color: rgb(56, 161, 105) !important;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 10px;

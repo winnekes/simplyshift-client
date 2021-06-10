@@ -46,7 +46,7 @@ export const ChangePassword = () => {
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
-                <Icon as={FaKey} color="green.400" />
+                <Icon as={FaKey} color="green.500" />
               </InputLeftElement>
               <Input
                 type={showPassword ? "text" : "password"}
@@ -76,7 +76,7 @@ export const ChangePassword = () => {
             <FormLabel>Confirm your password</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
-                <Icon as={FaKey} color="green.400" />
+                <Icon as={FaKey} color="green.500" />
               </InputLeftElement>
               <Input
                 type={showPasswordRepeated ? "text" : "password"}

@@ -79,7 +79,7 @@ export const AuthProvider: FunctionComponent<Props> = (props) => {
     setCanFetchProfile(false);
 
     delete api.defaults.headers["Authorization"];
-    await router.push("/login");
+    await router.push("/");
   };
 
   const onResponse = (response: AxiosResponse): AxiosResponse => {

@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SWRConfig, SWRConfiguration } from "swr";
+import { MetaHead } from "../components/meta-head";
 import { AuthProvider } from "../hooks/use-auth";
 import { api } from "../mutations/api";
 import "../theme/calendar.scss";
@@ -41,13 +42,7 @@ function App({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <SWRConfig value={swrConfig}>
           <AuthProvider globalLoading={loading}>
-            <Head>
-              <meta
-                name="viewport"
-                content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5"
-              />
-              <meta name="theme-color" content="#48BB78" />
-            </Head>
+            <MetaHead />
             <Component {...pageProps} />
           </AuthProvider>
         </SWRConfig>
