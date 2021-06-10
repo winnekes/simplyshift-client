@@ -12,7 +12,7 @@ export default function Custom404() {
   });
 
   return (
-    <PageWrapper title="Oops!" isProtectedPage>
+    <PageWrapper isProtectedPage>
       <Page>
         <Page.Title>
           <Heading>Could not find the requested page.</Heading>

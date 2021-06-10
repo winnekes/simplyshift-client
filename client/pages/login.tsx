@@ -62,7 +62,7 @@ export default function Login() {
   }
 
   return (
-    <PageWrapper title="Login">
+    <PageWrapper>
       <Page simple>
         <Page.Title>
           <Heading>Login</Heading>

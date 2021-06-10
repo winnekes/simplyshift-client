@@ -5,7 +5,7 @@ import { PageWrapper } from "../components/layout/page-wrapper";
 
 export default function Privacy() {
   return (
-    <PageWrapper title="Privacy Policy">
+    <PageWrapper>
       <Page>
         <Page.Title>
           <Heading>Our privacy policy</Heading>

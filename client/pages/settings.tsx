@@ -6,7 +6,7 @@ import { DeleteAccount } from "../components/settings/delete-account";
 
 export default function Settings() {
   return (
-    <PageWrapper title="Settings" isProtectedPage>
+    <PageWrapper isProtectedPage>
       <Page>
         <Page.Title>
           <Heading>Settings</Heading>
