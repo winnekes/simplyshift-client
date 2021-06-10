@@ -14,8 +14,6 @@ import { BrandText } from "../components/common/brand-text";
 import { ChakraNextImage } from "../components/common/chakra-next-image";
 import { PageWrapper } from "../components/layout/page-wrapper";
 import Link from "next/link";
-import { ComingSoonFeatures } from "../components/public-pages/home/coming-soon-features";
-import { Features } from "../components/public-pages/home/features";
 import { useAuth } from "../hooks/use-auth";
 
 export default function Home() {
