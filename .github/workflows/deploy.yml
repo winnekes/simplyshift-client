@@ -57,7 +57,8 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
           script: |
           cd /home/simona/webapps/simplyshift/server
-          npm install && npm run migration:run
+          npm install
+          npm run migration:run
           pm2 restart simplyshift-server
 
   build-client:
