@@ -7,10 +7,10 @@ import {
 } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { CalendarRepository } from "../calendar/calendar-repository";
-import User from "../identity-access/user";
-import ShiftModel from "../shift-model/shift-model";
+import { User } from "../identity-access/user-entity";
+import { ShiftModel } from "../shift-model/shift-model-entity";
 import { ShiftModelRepository } from "../shift-model/shift-model-repository";
-import ShiftEntry from "./shift-entry";
+import { ShiftEntry } from "./shift-entry-entity";
 import { ShiftEntryRepository } from "./shift-entry-repository";
 
 export class ShiftEntryService {
@@ -78,7 +78,7 @@ export class ShiftEntryService {
 
     // map the military time of the shift model to the selected day of the shift
     const startDate = moment(data.date).startOf("day");
-    console.log({ startDate });
+
     const startsAt = moment(startDate)
       .add(moment.duration(shiftModel.startsAt))
       .toDate();
@@ -90,7 +90,6 @@ export class ShiftEntryService {
             .toDate()
         : moment(startDate).add(moment.duration(shiftModel.endsAt)).toDate();
 
-    console.log({ startsAt, endsAt });
     // we cannot allow overlapping shift entries, we find potential conflicting ones and delete them
     const conflictingShiftEntries =
       await this.shiftEntryRepository.findConflictingEntriesForUser(user, {

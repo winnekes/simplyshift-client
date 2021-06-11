@@ -12,12 +12,12 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
-import Calendar from "../calendar/calendar";
-import ShiftEntry from "../shift-entry/shift-entry";
-import ShiftModel from "../shift-model/shift-model";
+import { Calendar } from "../calendar/calendar-entity";
+import { ShiftEntry } from "../shift-entry/shift-entry-entity";
+import { ShiftModel } from "../shift-model/shift-model-entity";
 
 @Entity()
-export default class User extends BaseEntity {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 

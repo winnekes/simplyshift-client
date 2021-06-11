@@ -5,13 +5,13 @@ import { JsonWebTokenError } from "jsonwebtoken";
 import "reflect-metadata";
 import { Action, createKoaServer } from "routing-controllers";
 import { connectToDb } from "./database/connection";
-import UserController from "./domains/identity-access/user-controller";
-import User from "./domains/identity-access/user";
+import { UserController } from "./domains/identity-access/user-controller";
+import { User } from "./domains/identity-access/user-entity";
 import { ErrorLoggingMiddleware } from "./utils/error-logging-middleware";
 import { ExtendedHttpError } from "./utils/extended-http-error";
-import LoginController from "./domains/identity-access/login-controller";
-import ShiftEntryController from "./domains/shift-entry/shift-entry-controller";
-import ShiftModelController from "./domains/shift-model/shift-model-controller";
+import { LoginController } from "./domains/identity-access/login-controller";
+import { ShiftEntryController } from "./domains/shift-entry/shift-entry-controller";
+import { ShiftModelController } from "./domains/shift-model/shift-model-controller";
 import SpecController from "./domains/specs/spec-controller";
 import logger from "koa-logger";
 import "moment-timezone";
@@ -23,8 +23,7 @@ dotenv.config();
 const port = process.env.PORT;
 
 Sentry.init({
-  dsn:
-    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  dsn: "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
   logLevel: LogLevel.Error,
 });
 

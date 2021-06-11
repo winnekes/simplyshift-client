@@ -13,9 +13,8 @@ import {
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
-
-import ShiftModel from "./shift-model";
-import User from "../identity-access/user";
+import { ShiftModel } from "./shift-model-entity";
+import { User } from "../identity-access/user-entity";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { ShiftModelRepository } from "./shift-model-repository";
 
@@ -25,7 +24,7 @@ import { ShiftModelRepository } from "./shift-model-repository";
 @OpenAPI({
   security: [{ bearerAuth: [] }],
 })
-export default class ShiftModelController {
+export class ShiftModelController {
   private shiftModelRepository = getCustomRepository(ShiftModelRepository);
 
   @Authorized()

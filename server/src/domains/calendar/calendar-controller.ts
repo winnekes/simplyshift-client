@@ -1,6 +1,6 @@
 import { CurrentUser, Get, JsonController } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
-import User from "../identity-access/user";
+import { User } from "../identity-access/user-entity";
 import { CalendarRepository } from "./calendar-repository";
 
 @JsonController()
@@ -10,4 +10,7 @@ export default class CalendarController {
   async authenticate(@CurrentUser() user: User) {
     return await this.calendarRepository.find(user);
   }
+
+  // @Get(/calendars/)
+  // async getIcsUrl(@CurrentUser() user: User) {}
 }

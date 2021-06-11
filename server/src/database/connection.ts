@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 import { createConnection } from "typeorm";
-import Calendar from "../domains/calendar/calendar";
-import User from "../domains/identity-access/user";
-import ShiftEntry from "../domains/shift-entry/shift-entry";
-import ShiftModel from "../domains/shift-model/shift-model";
+import { Calendar } from "../domains/calendar/calendar-entity";
+import { User } from "../domains/identity-access/user-entity";
+import { ShiftEntry } from "../domains/shift-entry/shift-entry-entity";
+import { ShiftModel } from "../domains/shift-model/shift-model-entity";
 import { CustomNamingStrategy } from "./naming-strategy";
 
 dotenv.config({

@@ -6,8 +6,8 @@ import {
   MoreThan,
   Repository,
 } from "typeorm";
-import User from "../identity-access/user";
-import ShiftEntry from "./shift-entry";
+import { User } from "../identity-access/user-entity";
+import { ShiftEntry } from "./shift-entry-entity";
 
 @EntityRepository(ShiftEntry)
 export class ShiftEntryRepository extends Repository<ShiftEntry> {

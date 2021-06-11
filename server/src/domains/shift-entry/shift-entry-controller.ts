@@ -13,8 +13,8 @@ import {
 import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { ShiftEntryService } from "./shift-entry-service";
-import ShiftEntry from "./shift-entry";
-import User from "../identity-access/user";
+import { ShiftEntry } from "./shift-entry-entity";
+import { User } from "../identity-access/user-entity";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { getCustomRepository } from "typeorm";
 import { ShiftEntryRepository } from "./shift-entry-repository";
@@ -24,7 +24,7 @@ import "moment-timezone";
 @OpenAPI({
   security: [{ bearerAuth: [] }],
 })
-export default class ShiftEntryController {
+export class ShiftEntryController {
   private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
   private shiftEntryService = new ShiftEntryService();
 
