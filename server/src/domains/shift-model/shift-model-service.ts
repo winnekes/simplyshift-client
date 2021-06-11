@@ -1,5 +1,5 @@
 import { EntityManager, getCustomRepository } from "typeorm";
-import User from "../identity-access/user";
+import User from "../identity-access/user-entity";
 import { ShiftModelRepository } from "../shift-model/shift-model-repository";
 import { sampleShiftModels } from "./sample-data";
 

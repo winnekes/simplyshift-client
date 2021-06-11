@@ -4,9 +4,11 @@ import dotenv from "dotenv";
 import { JsonWebTokenError } from "jsonwebtoken";
 import "reflect-metadata";
 import { Action, createKoaServer } from "routing-controllers";
+import { getCustomRepository } from "typeorm";
 import { connectToDb } from "./database/connection";
 import UserController from "./domains/identity-access/user-controller";
-import User from "./domains/identity-access/user";
+import User from "./domains/identity-access/user-entity";
+import { UserRepository } from "./domains/identity-access/user-repository";
 import { ErrorLoggingMiddleware } from "./utils/error-logging-middleware";
 import { ExtendedHttpError } from "./utils/extended-http-error";
 import LoginController from "./domains/identity-access/login-controller";
@@ -23,8 +25,7 @@ dotenv.config();
 const port = process.env.PORT;
 
 Sentry.init({
-  dsn:
-    "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
+  dsn: "https://56ce9013692f44d684241992a0d63e01@o573511.ingest.sentry.io/5724040",
   logLevel: LogLevel.Error,
 });
 
@@ -41,13 +42,14 @@ const app = createKoaServer({
     SpecController,
   ],
   authorizationChecker: async (action: Action) => {
+    const userRepo = getCustomRepository(UserRepository);
     const header: string = action.request.headers.authorization;
     console.log({ req: action.request.cookies });
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
       try {
         const userId = verify(token).data;
-        const user = await User.findOne(userId);
+        const user = await userRepo.findOne(userId);
         return !!user;
       } catch (e) {
         if (e instanceof JsonWebTokenError) {

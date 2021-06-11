@@ -1,6 +1,6 @@
 import { CurrentUser, Get, JsonController } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
-import User from "../identity-access/user";
+import User from "../identity-access/user-entity";
 import { CalendarRepository } from "./calendar-repository";
 
 @JsonController()

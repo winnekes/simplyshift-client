@@ -17,8 +17,8 @@ import {
   IsMilitaryTime,
   IsHexColor,
 } from "class-validator";
-import User from "../identity-access/user";
-import ShiftEntry from "../shift-entry/shift-entry";
+import User from "../identity-access/user-entity";
+import ShiftEntry from "../shift-entry/shift-entry-entity";
 
 @Entity()
 @Unique("UNQ_NAME_USER", ["name", "user"])
@@ -30,6 +30,11 @@ export default class ShiftModel extends BaseEntity {
   @MinLength(2)
   @Column("text")
   name!: string;
+
+  @IsString()
+  @MinLength(2)
+  @Column("text")
+  test!: string;
 
   @IsMilitaryTime()
   @Column("time")

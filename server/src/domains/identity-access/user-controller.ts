@@ -11,7 +11,7 @@ import {
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { sign } from "../../utils/jwt";
-import User from "./user";
+import User from "./user-entity";
 import { UserRepository } from "./user-repository";
 import { UserService } from "./user-service";
 const { OAuth2Client } = require("google-auth-library");

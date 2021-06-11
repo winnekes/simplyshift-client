@@ -1,4 +1,4 @@
-import ShiftModel from "./shift-model";
+import ShiftModel from "./shift-model-entity";
 
 const earlyShift = {
   name: "Early shift",

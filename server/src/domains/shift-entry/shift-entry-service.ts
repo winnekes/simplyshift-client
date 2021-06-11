@@ -7,10 +7,10 @@ import {
 } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { CalendarRepository } from "../calendar/calendar-repository";
-import User from "../identity-access/user";
-import ShiftModel from "../shift-model/shift-model";
+import User from "../identity-access/user-entity";
+import ShiftModel from "../shift-model/shift-model-entity";
 import { ShiftModelRepository } from "../shift-model/shift-model-repository";
-import ShiftEntry from "./shift-entry";
+import ShiftEntry from "./shift-entry-entity";
 import { ShiftEntryRepository } from "./shift-entry-repository";
 
 export class ShiftEntryService {

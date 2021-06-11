@@ -4,8 +4,8 @@ import {
   FindOneOptions,
   Repository,
 } from "typeorm";
-import User from "../identity-access/user";
-import Calendar from "./calendar";
+import User from "../identity-access/user-entity";
+import Calendar from "./calendar-entity";
 
 // TODO refactor into generic typed repo
 @EntityRepository(Calendar)
