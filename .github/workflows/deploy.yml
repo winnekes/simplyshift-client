@@ -55,7 +55,7 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/server && npm install && npm run migrate:run && pm2 restart simplyshift-server
+          script: cd /home/simona/webapps/simplyshift/server && npm install && npm run migration:run && pm2 restart simplyshift-server
 
   build-client:
     runs-on: ubuntu-latest
