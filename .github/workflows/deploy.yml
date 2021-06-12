@@ -55,7 +55,10 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/server && npm install && npm run migration:run && pm2 restart ss-server-4400
+          script: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          cd /home/simona/webapps/simplyshift/server && npm install && npm run migration:run && pm2 restart ss-server-4400
 
   build-client:
     runs-on: ubuntu-latest
@@ -108,4 +111,8 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/client && npm install && pm2 restart ss-client-3008
+
+          script: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          cd /home/simona/webapps/simplyshift/client && npm install && pm2 restart ss-client-3008
