@@ -20,5 +20,5 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/server && npm run migration:revert && pm2 restart simplyshift-server
+          script: cd /home/simona/webapps/simplyshift/server && npm run migration:revert && pm2 restart ss-server-4400
 
