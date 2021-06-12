@@ -56,8 +56,8 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
           script: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
           cd /home/simona/webapps/simplyshift/server && npm install && npm run migration:run && pm2 restart ss-server-4400
 
   build-client:
@@ -113,6 +113,6 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
 
           script: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
           cd /home/simona/webapps/simplyshift/client && npm install && pm2 restart ss-client-3008
