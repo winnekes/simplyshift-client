@@ -31,11 +31,6 @@ export default class ShiftModel extends BaseEntity {
   @Column("text")
   name!: string;
 
-  @IsString()
-  @MinLength(2)
-  @Column("text")
-  test!: string;
-
   @IsMilitaryTime()
   @Column("time")
   startsAt!: string;
