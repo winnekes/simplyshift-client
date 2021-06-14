@@ -1,4 +1,4 @@
-name: Rollback recent database migration
+name: Run recent database migration
 on:
   workflow_dispatch:
 
@@ -21,5 +21,5 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/server && npm run migration:revert && pm2 restart ss-server-4400
+          script: cd /home/simona/webapps/simplyshift/server && npm run migration:run && pm2 restart ss-server-4400
 
