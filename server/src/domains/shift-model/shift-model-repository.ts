@@ -3,6 +3,8 @@ import {
   FindConditions,
   FindOneOptions,
   Repository,
+  Not,
+  IsNull,
 } from "typeorm";
 import User from "../identity-access/user-entity";
 import ShiftModel from "./shift-model-entity";
@@ -14,6 +16,10 @@ export class ShiftModelRepository extends Repository<ShiftModel> {
   }
 
   findOneForUser(currentUser: User, options?: FindOneOptions<ShiftModel>) {
-    return this.findOne({ user: currentUser, ...options });
+    return this.findOne({
+      user: currentUser,
+      deletedAt: Not(IsNull()),
+      ...options,
+    });
   }
 }
