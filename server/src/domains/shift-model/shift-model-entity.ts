@@ -4,7 +4,6 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  Unique,
   DeleteDateColumn,
   CreateDateColumn,
   UpdateDateColumn,
@@ -21,7 +20,6 @@ import User from "../identity-access/user-entity";
 import ShiftEntry from "../shift-entry/shift-entry-entity";
 
 @Entity()
-@Unique("UNQ_NAME_USER", ["name", "user"])
 export default class ShiftModel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;

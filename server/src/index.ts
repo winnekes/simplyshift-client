@@ -44,7 +44,7 @@ const app = createKoaServer({
   authorizationChecker: async (action: Action) => {
     const userRepo = getCustomRepository(UserRepository);
     const header: string = action.request.headers.authorization;
-    console.log({ req: action.request.cookies });
+
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
       try {
@@ -64,7 +64,9 @@ const app = createKoaServer({
     if (header && header.startsWith("Bearer ")) {
       const [, token] = header.split(" ");
 
-      return await User.findOne(verify(token).data);
+      const user = await User.findOne(verify(token).data);
+      console.log({ user });
+      return user;
     }
     return;
   },

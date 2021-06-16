@@ -12,8 +12,6 @@ import {
   Delete,
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
-import { ExtendedHttpError } from "../../utils/extended-http-error";
-
 import ShiftModel from "./shift-model-entity";
 import User from "../identity-access/user-entity";
 import { OpenAPI } from "routing-controllers-openapi/build/decorators";
@@ -40,16 +38,6 @@ export default class ShiftModelController {
     @CurrentUser() user: User,
     @Body() shiftModel: ShiftModel
   ) {
-    const existingShiftModelByName =
-      await this.shiftModelRepository.findOneForUser(user, {
-        where: { name: shiftModel.name },
-      });
-    if (existingShiftModelByName) {
-      throw new ExtendedHttpError(
-        "A shift model with the same name already exists.",
-        "DUPLICATE_SHIFT_MODEL_NAME"
-      );
-    }
     shiftModel.user = user;
     return this.shiftModelRepository.save(shiftModel);
   }
