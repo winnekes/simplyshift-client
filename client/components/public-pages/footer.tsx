@@ -11,16 +11,20 @@ import {
   Divider,
   Icon,
   HStack,
+  Flex,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { BiHeart } from "react-icons/bi";
 import { colors } from "../../theme/colors";
 import { width } from "../../theme/theme";
 import { BrandText } from "../common/brand-text";
 import { ChakraNextImage } from "../common/chakra-next-image";
+import { LanguageSwitch } from "./language-switch";
 import { NewsletterSubscribe } from "./newsletter-subscribe";
 
 export function Footer() {
   const { colorMode } = useColorMode();
+  const [selected, setSelected] = useState("");
 
   return (
     <Box
@@ -76,6 +80,10 @@ export function Footer() {
           </Stack>
           <NewsletterSubscribe />
         </SimpleGrid>
+        <Divider my={5} />
+        <Flex justify="flex-end">
+          <LanguageSwitch />
+        </Flex>
       </Container>
     </Box>
   );
