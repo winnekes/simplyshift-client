@@ -2,12 +2,8 @@ module.exports = {
   locales: ["en-US", "de-DE"],
   defaultLocale: "en-US",
   pages: {
-    "*": ["common"],
+    "*": ["common", "forms"],
     "/": ["home"],
-  },
-  interpolation: {
-    prefix: "${",
-    suffix: "}",
   },
   loadLocaleFrom: (locale, namespace) =>
     import(`./translations/${locale}/${namespace}.json`).then((m) => m.default),
