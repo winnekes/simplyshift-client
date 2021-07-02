@@ -1,3 +1,3 @@
 export enum Home {
-  MAIN_TAGLINE = "main-tagline",
+  MAIN_TAGLINE = "mainTagline",
 }

@@ -1,3 +1,3 @@
 export enum Common {
-  CHANGE_LANGUAGE = "change-language",
+  CHANGE_LANGUAGE = "changeLanguage",
 }

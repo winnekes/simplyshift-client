@@ -1,0 +1,7 @@
+{
+  "firstName": "Vorname",
+  "secondName": "Nachname",
+  "emailAddress": "E-Mail-Adresse",
+  "password": "Passwort",
+  "repeatPassword": "Passwort wiederholen"
+}
