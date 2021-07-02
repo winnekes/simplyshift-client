@@ -45,17 +45,17 @@ jobs:
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
         with:
-          source: "./server/lib,./server/package.json, ./server/package-lock.json, ./server/.env"
+          source: "./server/lib,./server/package.json, ./server/package-lock.json, ./server/ormconfig.js, ./server/.env"
           target: "/home/simona/webapps/simplyshift"
 
-      - name: install server dependencies
+      - name: install server dependencies and run database migrations
         uses: appleboy/ssh-action@master
         with:
           HOST: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/server && npm install && pm2 restart simplyshift-server
+          script:  export NVM_DIR=~/.nvm && source ~/.nvm/nvm.sh && cd /home/simona/webapps/simplyshift/server && npm install && npm run migration:run && pm2 restart ss-server-4400
 
   build-client:
     runs-on: ubuntu-latest
@@ -108,4 +108,5 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script: cd /home/simona/webapps/simplyshift/client && npm i && pm2 restart simplyshift-client
+
+          script: export NVM_DIR=~/.nvm && source ~/.nvm/nvm.sh && cd /home/simona/webapps/simplyshift/client && npm install && pm2 restart ss-client-3008

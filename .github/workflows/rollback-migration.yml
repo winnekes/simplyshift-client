@@ -1,0 +1,25 @@
+name: Rollback recent database migration
+on:
+  workflow_dispatch:
+
+jobs:
+
+  rollback-migration:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "15.x"
+
+      - name: revert database migration
+        uses: appleboy/ssh-action@master
+        with:
+          HOST: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
+          KEY: ${{ secrets.SSH_KEY }}
+          script: cd /home/simona/webapps/simplyshift/server && npm run migration:revert && pm2 restart ss-server-4400
+
