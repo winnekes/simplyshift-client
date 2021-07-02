@@ -142,12 +142,12 @@ export const Navbar: FunctionComponent = () => {
                       fontWeight={400}
                       variant="link"
                     >
-                      Sign In
+                      Sign in
                     </Button>
                   </RouteLink>
                   <RouteLink href="/signup" passHref>
                     <Button variant="primary" fontSize="sm" fontWeight={600}>
-                      Sign Up
+                      Sign up
                     </Button>
                   </RouteLink>
                 </Stack>
