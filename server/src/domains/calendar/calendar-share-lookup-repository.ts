@@ -6,7 +6,7 @@ import {
 } from "typeorm";
 import { User } from "../identity-access/user-entity";
 import { Calendar } from "./calendar-entity";
-import CalendarShareLookup from "./calendar-share-lookup-entity";
+import { CalendarShareLookup } from "./calendar-share-lookup-entity";
 
 @EntityRepository(Calendar)
 export class CalendarShareLookupRepository extends Repository<CalendarShareLookup> {

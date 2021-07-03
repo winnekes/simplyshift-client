@@ -13,7 +13,7 @@ import {
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { Calendar } from "../calendar/calendar-entity";
-import CalendarShareLookup from "../calendar/calendar-share-lookup-entity";
+import { CalendarShareLookup } from "../calendar/calendar-share-lookup-entity";
 import { ShiftEntry } from "../shift-entry/shift-entry-entity";
 import { ShiftModel } from "../shift-model/shift-model-entity";
 
