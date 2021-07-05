@@ -1,7 +1,7 @@
 import { getCustomRepository, getManager } from "typeorm";
 import { CalendarRepository } from "../calendar/calendar-repository";
 import { ShiftModelService } from "../shift-model/shift-model-service";
-import User from "./user-entity";
+import { User } from "./user-entity";
 import { UserRepository } from "./user-repository";
 
 export class UserService {

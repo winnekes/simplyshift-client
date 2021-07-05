@@ -4,10 +4,9 @@ import {
   FindOneOptions,
   Repository,
 } from "typeorm";
-import User from "../identity-access/user-entity";
-import Calendar from "./calendar-entity";
+import { User } from "../identity-access/user-entity";
+import { Calendar } from "./calendar-entity";
 
-// TODO refactor into generic typed repo
 @EntityRepository(Calendar)
 export class CalendarRepository extends Repository<Calendar> {
   findAllForUser(currentUser: User, options?: FindConditions<Calendar>) {

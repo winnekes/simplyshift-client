@@ -10,12 +10,12 @@ import {
 } from "typeorm";
 import { BaseEntity } from "typeorm/repository/BaseEntity";
 import { IsString, IsDate } from "class-validator";
-import Calendar from "../calendar/calendar-entity";
-import User from "../identity-access/user-entity";
-import ShiftModel from "../shift-model/shift-model-entity";
+import { Calendar } from "../calendar/calendar-entity";
+import { User } from "../identity-access/user-entity";
+import { ShiftModel } from "../shift-model/shift-model-entity";
 
 @Entity("shift_entries")
-export default class ShiftEntry extends BaseEntity {
+export class ShiftEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 

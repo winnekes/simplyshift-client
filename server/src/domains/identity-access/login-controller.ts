@@ -17,7 +17,7 @@ class AuthenticationPayload {
 }
 
 @JsonController()
-export default class LoginController {
+export class LoginController {
   private userRepository = getCustomRepository(UserRepository);
   @Post("/login")
   async authenticate(@Body() data: AuthenticationPayload) {

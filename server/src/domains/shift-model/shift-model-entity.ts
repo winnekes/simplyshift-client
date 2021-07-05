@@ -16,11 +16,11 @@ import {
   IsMilitaryTime,
   IsHexColor,
 } from "class-validator";
-import User from "../identity-access/user-entity";
-import ShiftEntry from "../shift-entry/shift-entry-entity";
+import { User } from "../identity-access/user-entity";
+import { ShiftEntry } from "../shift-entry/shift-entry-entity";
 
 @Entity()
-export default class ShiftModel extends BaseEntity {
+export class ShiftModel extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 

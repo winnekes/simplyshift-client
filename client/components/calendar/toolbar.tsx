@@ -10,16 +10,22 @@ import {
   Text,
 } from "@chakra-ui/react";
 import moment from "moment";
+import { Dispatch, SetStateAction } from "react";
 import { ToolbarProps } from "react-big-calendar";
-import { EditModeSettings } from "./edit-mode-settings";
-
+import { CalendarActions } from "./calendar-actions";
 interface Props {
   toolbar: ToolbarProps;
   isEditingCalendar: boolean;
   onEditMode: () => void;
+  setShowViewShareOptions: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
+export const Toolbar = ({
+  toolbar,
+  isEditingCalendar,
+  onEditMode,
+  setShowViewShareOptions,
+}: Props) => {
   const gotToPreviousMonth = () => {
     toolbar.date.setMonth(toolbar.date.getMonth());
     toolbar.onNavigate("PREV");
@@ -63,8 +69,9 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
       <Flex align="start">
         <SelectedMonthLabel />
         <Spacer />
-        <EditModeSettings
+        <CalendarActions
           isEditingCalendar={isEditingCalendar}
+          setShowViewShareOptions={setShowViewShareOptions}
           onChange={onEditMode}
         />
       </Flex>

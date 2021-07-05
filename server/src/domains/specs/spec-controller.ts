@@ -14,12 +14,10 @@ export default class SpecController {
     const metadatas = (getFromContainer(MetadataStorage) as any)
       .validationMetadatas;
 
-    const schemas = validationMetadatasToSchemas(metadatas, {
-      refPointerPrefix: "#/components/schemas/",
-    });
+    const schemas = validationMetadatasToSchemas(metadatas);
 
     const storage = getMetadataArgsStorage();
-    const spec = routingControllersToSpec(
+    return routingControllersToSpec(
       storage,
       {},
       {
@@ -36,7 +34,5 @@ export default class SpecController {
         info: { title: "SimplyShift", version: "1.0.0" },
       }
     );
-    console.log(spec);
-    return spec;
   }
 }
