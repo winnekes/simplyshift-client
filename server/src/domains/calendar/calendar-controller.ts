@@ -1,11 +1,16 @@
+import ical, { ICalCalendar } from "ical-generator";
+import { Context } from "koa";
+import moment from "moment";
 import {
   Authorized,
+  Ctx,
   CurrentUser,
   Delete,
   Get,
   JsonController,
   Param,
   Post,
+  QueryParam,
 } from "routing-controllers";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
@@ -32,8 +37,6 @@ export default class CalendarController {
       where: { name: calendarName },
     });
 
-    console.log({ calendar });
-
     if (!calendar) {
       throw new ExtendedHttpError(
         "Cannot find the calendar",
@@ -46,14 +49,12 @@ export default class CalendarController {
       { where: { calendar } }
     );
 
-    console.log({ existingCalendarShareLookup });
-
     return {
       id: calendar.id,
       name: calendar.name,
       isShared: !!existingCalendarShareLookup,
       icsUrl: existingCalendarShareLookup
-        ? `/calendars/t=${existingCalendarShareLookup.uuid}`
+        ? `/calendars?t=${existingCalendarShareLookup.uuid}`
         : undefined,
     };
   }
@@ -95,7 +96,6 @@ export default class CalendarController {
     calendarShareLookup.calendar = calendar;
 
     await this.calendarShareLookupRepository.save(calendarShareLookup);
-    console.log({ calendarShareLookup });
 
     return `api/calendars/${calendarShareLookup.uuid}`;
   }
@@ -124,8 +124,6 @@ export default class CalendarController {
       }
     );
 
-    console.log({ sharedCalendar });
-
     if (!sharedCalendar) {
       throw new ExtendedHttpError(
         "Cannot find the calendar",
@@ -140,14 +138,15 @@ export default class CalendarController {
     return true;
   }
 
-  @Get("/calendars/link/:uuid")
-  async getSharedCalendar(@Param("uuid") uuid: number): Promise<string> {
-    //  add tracking
-    //
-
+  @Get("/calendars")
+  async getSharedCalendar(
+    @QueryParam("t") uuid: string,
+    @Ctx() ctx: Context
+  ): Promise<ICalCalendar> {
     const sharedCalendarLookup = await this.calendarShareLookupRepository.findOne(
       {
         where: { uuid },
+        relations: ["calendar"],
       }
     );
 
@@ -158,12 +157,42 @@ export default class CalendarController {
       );
     }
 
+    // todo typeguard
     const sharedCalendar = await this.calendarRepository.findOne({
       where: { id: sharedCalendarLookup.calendar.id },
+      relations: ["shiftEntries", "shiftEntries.shiftModel"],
     });
 
+    if (!sharedCalendar) {
+      throw new ExtendedHttpError(
+        "Cannot find the calendar",
+        "CALENDAR_NOT_FOUND"
+      );
+    }
     // todo create events with ical
-    //
-    return "";
+
+    const calendar = ical({
+      name: "SimplyShift",
+    });
+
+    calendar.prodId({
+      company: "SimplyShift",
+      language: "EN",
+      product: "Shift calendar",
+    });
+
+    for (const shiftEntry of sharedCalendar?.shiftEntries) {
+      calendar.createEvent({
+        start: moment(shiftEntry.startsAt),
+        end: moment(shiftEntry.endsAt),
+        summary: shiftEntry.shiftModel.name,
+      });
+    }
+
+    // necessary to serve calendar over koa
+    ctx.status = 200;
+    ctx.respond = false;
+
+    return calendar.serve(ctx.res, "simplyshift.ics");
   }
 }

@@ -8,14 +8,11 @@ import {
   IconButton,
   Spacer,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import moment from "moment";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { ToolbarProps } from "react-big-calendar";
 import { CalendarActions } from "./calendar-actions";
-import { ViewShareOptionsModal } from "./sharing/view-share-options-modal";
-
 interface Props {
   toolbar: ToolbarProps;
   isEditingCalendar: boolean;

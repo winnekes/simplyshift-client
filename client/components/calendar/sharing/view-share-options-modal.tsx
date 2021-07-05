@@ -11,9 +11,6 @@ import {
   AlertIcon,
   Heading,
   Link,
-  FormControl,
-  FormLabel,
-  Switch,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useMutation } from "react-query";
@@ -23,8 +20,6 @@ import { unshareCalendarMutation } from "../../../mutations/unshare-calendar";
 import { Calendar } from "../../../types";
 import { ErrorContainer } from "../../common/error-container";
 import { Loading } from "../../common/loading";
-import { useDisclosure } from "@chakra-ui/react";
-
 import { ModalContent } from "../../common/overrides/modal";
 import { Paragraph } from "../../common/paragraph";
 
@@ -73,7 +68,8 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
           <Heading as="h2" size="md">
             Generate a calendar link
           </Heading>
-
+          {error && <ErrorContainer />}
+          {!calendar && <Loading />}
           {calendar && (
             <>
               <Paragraph>
