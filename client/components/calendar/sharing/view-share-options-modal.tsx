@@ -118,7 +118,7 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
               {calendar.icsUrl && (
                 <Alert status="success" my={4}>
                   <AlertIcon />
-                  Link: {calendar.icsUrl}
+                  {process.env.NEXT_PUBLIC_BACKEND_URL + calendar.icsUrl}
                 </Alert>
               )}
             </>
