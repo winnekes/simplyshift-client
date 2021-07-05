@@ -74,12 +74,12 @@ jobs:
       - name: build client
         run: |
           cd client
-          printf "$ENV_PRODUCTION" >> .env.production
+          printf "$ENV_CLIENT_PRODUCTION" >> .env.production
           npm i
           npm rebuild node-sass
           npm run build
         env:
-          ENV_PRODUCTION: ${{secrets.ENV_PRODUCTION}}
+          ENV_PRODUCTION: ${{secrets.ENV_CLIENT_PRODUCTION}}
 
       - name: delete old client
         uses: appleboy/ssh-action@master
