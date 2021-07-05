@@ -16,7 +16,10 @@ import {
   Switch,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useMutation } from "react-query";
 import useSWR from "swr";
+import { shareCalendarMutation } from "../../../mutations/share-calendar";
+import { unshareCalendarMutation } from "../../../mutations/unshare-calendar";
 import { Calendar } from "../../../types";
 import { ErrorContainer } from "../../common/error-container";
 import { Loading } from "../../common/loading";
@@ -30,20 +33,32 @@ interface Props {
 }
 
 export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
-  // todo fetch calendar information
-  // generate link
-  // share/unshare feature
-  const { data, error } = useSWR<Calendar>(`/calendars/${calendarName}`);
+  // generate link  // share/unshare feature
+  const { data: calendar, error, mutate: refetch } = useSWR<Calendar>(
+    `/calendars/${calendarName}`
+  );
 
-  // const { id, ...rest } = model;
-  // const methods = useForm<AddShiftModelData>({ defaultValues: { ...rest } });
-  //
-  // const { isLoading, mutate } = useMutation(editShiftModelMutation, {
-  //   onSuccess: () => onClose(),
-  //   onSettled: () => fetch("/shift-model"),
-  // });
-  //
-  // const onSubmit = methods.handleSubmit((data) => mutate({ id, ...data }));
+  const {
+    isLoading: shareCalendarLoading,
+    mutate: shareCalendar,
+  } = useMutation(shareCalendarMutation, {
+    onSettled: () => refetch(),
+  });
+
+  const {
+    isLoading: unshareCalendarLoading,
+    mutate: unshareCalendar,
+  } = useMutation(unshareCalendarMutation, {
+    onSettled: () => refetch(),
+  });
+
+  const toggleShareCalendar = (calendar: Calendar) => {
+    if (calendar.isShared) {
+      unshareCalendar({ id: calendar.id });
+    } else {
+      shareCalendar({ id: calendar.id });
+    }
+  };
 
   return (
     <Modal isOpen onClose={onClose} isCentered size="lg">
@@ -58,57 +73,63 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
             Generate a calendar link
           </Heading>
           {error && <ErrorContainer />}
-          {!data && <Loading />}
-          <Paragraph>
-            This allows you to add your shifts to your personal agenda, for
-            example to{" "}
-            <NextLink href="" passHref>
-              <Link isExternal> Google Calendar</Link>
-            </NextLink>
-            ,{" "}
-            <NextLink href="" passHref>
-              <Link isExternal>Outlook</Link>
-            </NextLink>{" "}
-            or{" "}
-            <NextLink href="" passHref>
-              <Link isExternal>Apple Calendar</Link>
-            </NextLink>
-            . Use the button below to generate a link and follow the
-            instructions of your calendar app.
-            <br />
-          </Paragraph>
-          <Paragraph color="gray.500">
-            <strong>Bonus</strong>: You can share the link with friends and
-            family and they can view your shifts in their personal calendar app!
-          </Paragraph>
+          {!calendar && <Loading />}
+          {calendar && (
+            <>
+              <Paragraph>
+                This allows you to add your shifts to your personal agenda, for
+                example to{" "}
+                <NextLink href="" passHref>
+                  <Link isExternal> Google Calendar</Link>
+                </NextLink>
+                ,{" "}
+                <NextLink href="" passHref>
+                  <Link isExternal>Outlook</Link>
+                </NextLink>{" "}
+                or{" "}
+                <NextLink href="" passHref>
+                  <Link isExternal>Apple Calendar</Link>
+                </NextLink>
+                . Use the button below to generate a link and follow the
+                instructions of your calendar app.
+                <br />
+              </Paragraph>
+              <Paragraph color="gray.500">
+                <strong>Bonus</strong>: You can share the link with friends and
+                family and they can view your shifts in their personal calendar
+                app!
+              </Paragraph>
 
-          <Alert status="warning" my={4}>
-            <AlertIcon />
-            Note: be careful who you share the link with. Anyone with the link
-            can view your shifts.
-          </Alert>
+              <Alert status="warning" my={4}>
+                <AlertIcon />
+                Note: be careful who you share the link with. Anyone with the
+                link can view your shifts.
+              </Alert>
 
-          <FormControl
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <FormLabel htmlFor="email-alerts" mb="0">
-              {data.isShared ? "Unshare" : "Share"} your calendar now
-            </FormLabel>
-            <Switch
-              id="email-alerts"
-              colorScheme="green"
-              isChecked={data.isShared}
-              // onChange={onChange}
-            />
-          </FormControl>
+              <FormControl
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
+              >
+                <FormLabel htmlFor="email-alerts" mb="0">
+                  {calendar.isShared ? "Unshare" : "Share"} your calendar now
+                </FormLabel>
+                <Switch
+                  id="email-alerts"
+                  colorScheme="green"
+                  isChecked={calendar.isShared}
+                  onChange={() => toggleShareCalendar(calendar)}
+                  isDisabled={shareCalendarLoading || unshareCalendarLoading}
+                />
+              </FormControl>
 
-          {data.isShared && (
-            <Alert status="success" my={4}>
-              <AlertIcon />
-              Link:
-            </Alert>
+              {calendar.icsUrl && (
+                <Alert status="success" my={4}>
+                  <AlertIcon />
+                  Link: {calendar.icsUrl}
+                </Alert>
+              )}
+            </>
           )}
         </ModalBody>
 

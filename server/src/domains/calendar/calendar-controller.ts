@@ -65,7 +65,7 @@ export default class CalendarController {
     @CurrentUser() user: User
   ): Promise<string> {
     const calendar = await this.calendarRepository.findOneForUser(user, {
-      where: { calendarId },
+      where: { id: calendarId },
     });
 
     if (!calendar) {
@@ -84,7 +84,7 @@ export default class CalendarController {
       }
     );
 
-    if (!existingCalendarShareLookup) {
+    if (existingCalendarShareLookup) {
       throw new ExtendedHttpError(
         "Calendar is already shared",
         "CALENDAR_ALREADY_SHARED"
@@ -106,12 +106,25 @@ export default class CalendarController {
     @Param("id") calendarId: number,
     @CurrentUser() user: User
   ): Promise<boolean> {
+    const calendar = await this.calendarRepository.findOneForUser(user, {
+      where: { id: calendarId },
+    });
+
+    if (!calendar) {
+      throw new ExtendedHttpError(
+        "Cannot find the calendar",
+        "CALENDAR_NOT_FOUND"
+      );
+    }
+
     const sharedCalendar = await this.calendarShareLookupRepository.findOneForUser(
       user,
       {
-        where: { calendarId },
+        where: { calendar },
       }
     );
+
+    console.log({ sharedCalendar });
 
     if (!sharedCalendar) {
       throw new ExtendedHttpError(
@@ -120,7 +133,7 @@ export default class CalendarController {
       );
     }
 
-    await this.calendarShareLookupRepository.softDelete({
+    await this.calendarShareLookupRepository.delete({
       id: sharedCalendar.id,
     });
 
