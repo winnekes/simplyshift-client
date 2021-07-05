@@ -15,7 +15,7 @@ jobs:
         run: |
           cd client
           npm ci
-          npm run audit
+          npm audit
           npm run lint
 
   test-server:
@@ -31,7 +31,7 @@ jobs:
         run: |
           cd server
           npm ci
-          npm run audit
+          npm audit
           npm run lint
 
 
