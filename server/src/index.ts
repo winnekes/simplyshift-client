@@ -5,6 +5,7 @@ import { JsonWebTokenError } from "jsonwebtoken";
 import "reflect-metadata";
 import { Action, createKoaServer } from "routing-controllers";
 import { connectToDb } from "./database/connection";
+import CalendarController from "./domains/calendar/calendar-controller";
 import { UserController } from "./domains/identity-access/user-controller";
 import { User } from "./domains/identity-access/user-entity";
 import { ErrorLoggingMiddleware } from "./utils/error-logging-middleware";
@@ -39,6 +40,7 @@ const app = createKoaServer({
     ShiftModelController,
     ShiftEntryController,
     SpecController,
+    CalendarController,
   ],
   authorizationChecker: async (action: Action) => {
     const header: string = action.request.headers.authorization;

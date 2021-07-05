@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import moment from "moment";
 import { ToolbarProps } from "react-big-calendar";
-import { EditModeSettings } from "./edit-mode-settings";
+import { CalendarActions } from "./calendar-actions";
 
 interface Props {
   toolbar: ToolbarProps;
@@ -63,7 +63,7 @@ export const Toolbar = ({ toolbar, isEditingCalendar, onEditMode }: Props) => {
       <Flex align="start">
         <SelectedMonthLabel />
         <Spacer />
-        <EditModeSettings
+        <CalendarActions
           isEditingCalendar={isEditingCalendar}
           onChange={onEditMode}
         />

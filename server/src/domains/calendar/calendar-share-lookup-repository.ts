@@ -5,10 +5,9 @@ import {
   Repository,
 } from "typeorm";
 import { User } from "../identity-access/user-entity";
-import { Calendar } from "./calendar-entity";
 import { CalendarShareLookup } from "./calendar-share-lookup-entity";
 
-@EntityRepository(Calendar)
+@EntityRepository(CalendarShareLookup)
 export class CalendarShareLookupRepository extends Repository<CalendarShareLookup> {
   findAllForUser(
     currentUser: User,
@@ -18,13 +17,6 @@ export class CalendarShareLookupRepository extends Repository<CalendarShareLooku
   }
 
   findOneForUser(
-    currentUser: User,
-    options?: FindOneOptions<CalendarShareLookup>
-  ) {
-    return this.findOne({ user: currentUser, ...options });
-  }
-
-  findActiveOneForUser(
     currentUser: User,
     options?: FindOneOptions<CalendarShareLookup>
   ) {
