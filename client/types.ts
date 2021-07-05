@@ -18,6 +18,13 @@ export type ShiftModel = {
   deletedAt: Date | null;
 };
 
+export type Calendar = {
+  id: number;
+  name: string;
+  icsUrl?: string;
+  isShared: boolean;
+};
+
 export type ShiftEntry = {
   id: number;
   startsAt: Date;
