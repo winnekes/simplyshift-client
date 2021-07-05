@@ -11,18 +11,21 @@ import {
   useColorMode,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { BiShare } from "react-icons/bi";
 import { colors } from "../../theme/colors";
-import { ViewShareOptionsModal } from "./sharing/view-share-options-modal";
 
 interface Props {
   isEditingCalendar: boolean;
   onChange: () => void;
+  setShowViewShareOptions: Dispatch<SetStateAction<boolean>>;
 }
 
-export function CalendarActions({ isEditingCalendar, onChange }: Props) {
-  const [showViewShareOptions, setShowViewShareOptions] = useState(false);
+export function CalendarActions({
+  isEditingCalendar,
+  setShowViewShareOptions,
+  onChange,
+}: Props) {
   const { colorMode } = useColorMode();
 
   return (
@@ -61,13 +64,6 @@ export function CalendarActions({ isEditingCalendar, onChange }: Props) {
           </Text>
         )}
       </VStack>
-
-      {showViewShareOptions && (
-        <ViewShareOptionsModal
-          calendarName="default"
-          onClose={() => setShowViewShareOptions(false)}
-        />
-      )}
     </>
   );
 }

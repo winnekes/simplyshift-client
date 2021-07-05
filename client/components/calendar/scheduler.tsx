@@ -23,6 +23,7 @@ import {
   localizer,
   slotPropGetter,
 } from "./scheduler-utils";
+import { ViewShareOptionsModal } from "./sharing/view-share-options-modal";
 import { Toolbar } from "./toolbar";
 import { WeekView } from "./week-view";
 
@@ -33,6 +34,7 @@ export const Scheduler = () => {
   const [events, setEvents] = useState<ShiftEntryEvent[]>([]);
   const [selectedTimeframe, setSelectedTimeFrame] = useState(new Date());
   const [isEditingCalendar, setIsEditingCalendar] = useState(false);
+  const [showViewShareOptions, setShowViewShareOptions] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
   const [newShiftEntryData, setNewShiftEntryData] = useState<{
     shiftModel: ShiftModel;
@@ -148,6 +150,7 @@ export const Scheduler = () => {
           toolbar={toolbar}
           isEditingCalendar={isEditingCalendar}
           onEditMode={onEditMode}
+          setShowViewShareOptions={setShowViewShareOptions}
         />
       );
     },
@@ -173,7 +176,6 @@ export const Scheduler = () => {
         <BigCalendar
           localizer={localizer}
           events={events}
-          //        backgroundEvents={events}
           date={selectedTimeframe}
           startAccessor="start"
           endAccessor="end"
@@ -206,6 +208,13 @@ export const Scheduler = () => {
         <ConfirmOverrideShiftEntryModal
           newShiftEntryData={newShiftEntryData}
           onClose={() => setShowConfirmOverrideShiftEntryModal(false)}
+        />
+      )}
+
+      {showViewShareOptions && (
+        <ViewShareOptionsModal
+          calendarName="default"
+          onClose={() => setShowViewShareOptions(false)}
         />
       )}
     </>

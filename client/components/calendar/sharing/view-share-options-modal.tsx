@@ -23,34 +23,35 @@ import { unshareCalendarMutation } from "../../../mutations/unshare-calendar";
 import { Calendar } from "../../../types";
 import { ErrorContainer } from "../../common/error-container";
 import { Loading } from "../../common/loading";
+import { useDisclosure } from "@chakra-ui/react";
 
 import { ModalContent } from "../../common/overrides/modal";
 import { Paragraph } from "../../common/paragraph";
 
 interface Props {
   calendarName: string;
+
   onClose: () => void;
 }
 
 export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
   // generate link  // share/unshare feature
-  const { data: calendar, error, mutate: refetch } = useSWR<Calendar>(
-    `/calendars/${calendarName}`
-  );
+  const {
+    data: calendar,
+    error,
+    mutate: refetch,
+    isValidating,
+  } = useSWR<Calendar>(`/calendars/${calendarName}`);
 
   const {
     isLoading: shareCalendarLoading,
     mutate: shareCalendar,
-  } = useMutation(shareCalendarMutation, {
-    onSettled: () => refetch(),
-  });
+  } = useMutation(shareCalendarMutation, { onSettled: () => refetch() });
 
   const {
     isLoading: unshareCalendarLoading,
     mutate: unshareCalendar,
-  } = useMutation(unshareCalendarMutation, {
-    onSettled: () => refetch(),
-  });
+  } = useMutation(unshareCalendarMutation, { onSettled: () => refetch() });
 
   const toggleShareCalendar = (calendar: Calendar) => {
     if (calendar.isShared) {
@@ -61,7 +62,7 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
   };
 
   return (
-    <Modal isOpen onClose={onClose} isCentered size="lg">
+    <Modal isOpen trapFocus={true} onClose={onClose} isCentered size="lg">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
@@ -72,8 +73,7 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
           <Heading as="h2" size="md">
             Generate a calendar link
           </Heading>
-          {error && <ErrorContainer />}
-          {!calendar && <Loading />}
+
           {calendar && (
             <>
               <Paragraph>
@@ -106,22 +106,14 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
                 link can view your shifts.
               </Alert>
 
-              <FormControl
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-end"
+              <Button
+                isLoading={
+                  unshareCalendarLoading || shareCalendarLoading || isValidating
+                }
+                onClick={() => toggleShareCalendar(calendar)}
               >
-                <FormLabel htmlFor="email-alerts" mb="0">
-                  {calendar.isShared ? "Unshare" : "Share"} your calendar now
-                </FormLabel>
-                <Switch
-                  id="email-alerts"
-                  colorScheme="green"
-                  isChecked={calendar.isShared}
-                  onChange={() => toggleShareCalendar(calendar)}
-                  isDisabled={shareCalendarLoading || unshareCalendarLoading}
-                />
-              </FormControl>
+                {calendar.isShared ? "Unshare" : "Share"} your calendar now
+              </Button>
 
               {calendar.icsUrl && (
                 <Alert status="success" my={4}>
@@ -134,9 +126,7 @@ export function ViewShareOptionsModal({ calendarName, onClose }: Props) {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="primary" onClick={onClose}>
-            Close
-          </Button>
+          <Button variant="primary">Close</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
