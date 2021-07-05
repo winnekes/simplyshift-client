@@ -55,7 +55,7 @@ jobs:
           USERNAME: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           KEY: ${{ secrets.SSH_KEY }}
-          script:  export NVM_DIR=~/.nvm && source ~/.nvm/nvm.sh && cd /home/simona/webapps/simplyshift/server && npm install && npm run migration:run && pm2 restart ss-server-4400
+          script:  export NVM_DIR=~/.nvm && source ~/.nvm/nvm.sh && cd /home/simona/webapps/simplyshift/server && npm install && pm2 restart ss-server-4400
 
   build-client:
     runs-on: ubuntu-latest
