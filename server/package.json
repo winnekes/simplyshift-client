@@ -23,9 +23,9 @@
   "dependencies": {
     "@sentry/node": "^6.2.5",
     "bcrypt": "^5.0.0",
-    "class-transformer": ">=0.3.1",
-    "class-validator": "^0.12.0",
-    "class-validator-jsonschema": "^2.1.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "class-validator-jsonschema": "^3.0.1",
     "dotenv": "^8.2.0",
     "google-auth-library": "^7.1.0",
     "ical-generator": "^2.2.0",
@@ -44,7 +44,7 @@
     "routing-controllers-openapi": "^3.0.0",
     "ts-node": "^8.10.2",
     "typedoc": "^0.20.36",
-    "typeorm": "^0.2.32",
+    "typeorm": "^0.2.34",
     "dayjs": "^1.10.5",
     "rrule": "^2.6.8"
   },
