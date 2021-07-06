@@ -48,9 +48,9 @@ export default class CalendarController {
       );
     }
 
-    const existingCalendarShareLookup = await this.calendarShareLookupRepository.findOneForUser(
+    const existingCalendarShareLookup = await this.calendarShareLookupRepository.findOneForUserByCalendarId(
       user,
-      { where: { calendar } }
+      calendar.id
     );
 
     return {
@@ -81,13 +81,9 @@ export default class CalendarController {
       );
     }
 
-    const existingCalendarShareLookup = await this.calendarShareLookupRepository.findOneForUser(
+    const existingCalendarShareLookup = await this.calendarShareLookupRepository.findOneForUserByCalendarId(
       user,
-      {
-        where: {
-          calendar: { id: calendarId },
-        },
-      }
+      calendarId
     );
 
     if (existingCalendarShareLookup) {
@@ -127,11 +123,9 @@ export default class CalendarController {
       );
     }
 
-    const sharedCalendar = await this.calendarShareLookupRepository.findOneForUser(
+    const sharedCalendar = await this.calendarShareLookupRepository.findOneForUserByUUID(
       user,
-      {
-        where: { calendar },
-      }
+      calendar.id
     );
 
     if (!sharedCalendar) {
@@ -164,7 +158,6 @@ export default class CalendarController {
       }
     );
 
-    console.dir({ uuid, sharedCalendarLookup }, { depth: null });
     if (!sharedCalendarLookup) {
       throw new ExtendedHttpError(
         "Calendar is not shared",
