@@ -91,11 +91,13 @@ export class ShiftEntryService {
         : moment(startDate).add(moment.duration(shiftModel.endsAt)).toDate();
 
     // we cannot allow overlapping shift entries, we find potential conflicting ones and delete them
-    const conflictingShiftEntries =
-      await this.shiftEntryRepository.findConflictingEntriesForUser(user, {
+    const conflictingShiftEntries = await this.shiftEntryRepository.findConflictingEntriesForUser(
+      user,
+      {
         startsAt,
         endsAt,
-      });
+      }
+    );
 
     const newShiftEntry = this.shiftEntryRepository.create();
     newShiftEntry.user = user;

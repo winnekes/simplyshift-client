@@ -13,13 +13,13 @@ export class CalendarShareLookupRepository extends Repository<CalendarShareLooku
     currentUser: User,
     options?: FindConditions<CalendarShareLookup>
   ) {
-    return this.find({ user: currentUser, ...options });
+    return this.find({ where: { user: currentUser }, ...options });
   }
 
   findOneForUser(
     currentUser: User,
     options?: FindOneOptions<CalendarShareLookup>
   ) {
-    return this.findOne({ user: currentUser, ...options });
+    return this.findOne({ where: { user: currentUser }, ...options });
   }
 }

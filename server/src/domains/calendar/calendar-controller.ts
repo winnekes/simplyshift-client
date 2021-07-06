@@ -1,4 +1,5 @@
 import ical, { ICalCalendar } from "ical-generator";
+import { ICalCalendarMethod } from "ical-generator/dist/calendar";
 import { Context } from "koa";
 import moment from "moment";
 import {
@@ -12,10 +13,11 @@ import {
   Post,
   QueryParam,
 } from "routing-controllers";
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, getManager, IsNull } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { User } from "../identity-access/user-entity";
 import { CalendarRepository } from "./calendar-repository";
+import { CalendarShareLookup } from "./calendar-share-lookup-entity";
 import { CalendarShareLookupRepository } from "./calendar-share-lookup-repository";
 
 @JsonController()
@@ -33,10 +35,12 @@ export default class CalendarController {
   ) {
     // todo currently user only ever has one calendar
     // change logic once multiple calendar feature gets added
-    const calendar = await this.calendarRepository.findOneForUser(user, {
-      where: { name: calendarName },
-    });
+    const calendar = await this.calendarRepository.findOneForUserByName(
+      user,
+      calendarName
+    );
 
+    console.log({ calendar, user });
     if (!calendar) {
       throw new ExtendedHttpError(
         "Cannot find the calendar",
@@ -65,9 +69,10 @@ export default class CalendarController {
     @Param("id") calendarId: number,
     @CurrentUser() user: User
   ): Promise<string> {
-    const calendar = await this.calendarRepository.findOneForUser(user, {
-      where: { id: calendarId },
-    });
+    const calendar = await this.calendarRepository.findOneForUserById(
+      user,
+      calendarId
+    );
 
     if (!calendar) {
       throw new ExtendedHttpError(
@@ -94,8 +99,12 @@ export default class CalendarController {
     const calendarShareLookup = await this.calendarShareLookupRepository.create();
     calendarShareLookup.user = user;
     calendarShareLookup.calendar = calendar;
+    calendar.calendarShareLookup = calendarShareLookup;
 
-    await this.calendarShareLookupRepository.save(calendarShareLookup);
+    await getManager().transaction(async (transactionalEntityManager) => {
+      await transactionalEntityManager.save(calendarShareLookup);
+      await transactionalEntityManager.save(calendar);
+    });
 
     return `api/calendars/${calendarShareLookup.uuid}`;
   }
@@ -106,9 +115,10 @@ export default class CalendarController {
     @Param("id") calendarId: number,
     @CurrentUser() user: User
   ): Promise<boolean> {
-    const calendar = await this.calendarRepository.findOneForUser(user, {
-      where: { id: calendarId },
-    });
+    const calendar = await this.calendarRepository.findOneForUserById(
+      user,
+      calendarId
+    );
 
     if (!calendar) {
       throw new ExtendedHttpError(
@@ -131,8 +141,12 @@ export default class CalendarController {
       );
     }
 
-    await this.calendarShareLookupRepository.delete({
-      id: sharedCalendar.id,
+    calendar.calendarShareLookup = null;
+    await getManager().transaction(async (transactionalEntityManager) => {
+      await transactionalEntityManager.save(calendar);
+      await transactionalEntityManager.delete(CalendarShareLookup, {
+        id: sharedCalendar.id,
+      });
     });
 
     return true;
@@ -145,11 +159,12 @@ export default class CalendarController {
   ): Promise<ICalCalendar> {
     const sharedCalendarLookup = await this.calendarShareLookupRepository.findOne(
       {
-        where: { uuid },
+        where: { uuid, deletedAt: IsNull() },
         relations: ["calendar"],
       }
     );
 
+    console.dir({ uuid, sharedCalendarLookup }, { depth: null });
     if (!sharedCalendarLookup) {
       throw new ExtendedHttpError(
         "Calendar is not shared",
@@ -157,22 +172,17 @@ export default class CalendarController {
       );
     }
 
-    // todo typeguard
-    const sharedCalendar = await this.calendarRepository.findOne({
-      where: { id: sharedCalendarLookup.calendar.id },
-      relations: ["shiftEntries", "shiftEntries.shiftModel"],
-    });
-
-    if (!sharedCalendar) {
+    if (!sharedCalendarLookup.calendar) {
       throw new ExtendedHttpError(
         "Cannot find the calendar",
         "CALENDAR_NOT_FOUND"
       );
     }
-    // todo create events with ical
 
     const calendar = ical({
       name: "SimplyShift",
+      method: ICalCalendarMethod.PUBLISH,
+      url: "https://simplyshift.app",
     });
 
     calendar.prodId({
@@ -181,11 +191,15 @@ export default class CalendarController {
       product: "Shift calendar",
     });
 
-    for (const shiftEntry of sharedCalendar?.shiftEntries) {
+    for (const shiftEntry of sharedCalendarLookup.calendar.shiftEntries) {
       calendar.createEvent({
         start: moment(shiftEntry.startsAt),
         end: moment(shiftEntry.endsAt),
         summary: shiftEntry.shiftModel.name,
+        description: `${shiftEntry.user.firstName} ${shiftEntry.user.lastName}`,
+        organizer: {
+          name: `${shiftEntry.user.firstName} ${shiftEntry.user.lastName}`,
+        },
       });
     }
 

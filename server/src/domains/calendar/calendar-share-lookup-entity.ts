@@ -20,14 +20,14 @@ export class CalendarShareLookup extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne(() => Calendar)
-  @JoinColumn()
-  calendar!: Calendar;
-
   @IsUUID()
   @Generated("uuid")
   @Column("uuid")
-  uuid!: number;
+  uuid!: string;
+
+  @OneToOne(() => Calendar, (calendar) => calendar.calendarShareLookup)
+  @JoinColumn()
+  calendar!: Calendar;
 
   @ManyToOne(() => User, (user) => user.calendarShareLookups, {
     cascade: true,
