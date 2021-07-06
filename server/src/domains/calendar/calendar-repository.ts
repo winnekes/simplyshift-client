@@ -1,12 +1,12 @@
 import { EntityRepository } from "typeorm";
-import { BaseRepository } from "../identity-access/base-repository";
+import { BaseRepository } from "../../database/core/base-repository";
 import { User } from "../identity-access/user-entity";
 import { Calendar } from "./calendar-entity";
 
 @EntityRepository(Calendar)
 export class CalendarRepository extends BaseRepository<Calendar> {
   scoped(currentUser: User) {
-    return this.getScoped(currentUser, this.createQueryBuilder("calendar"));
+    return this.getUserScope(currentUser, this.createQueryBuilder("calendar"));
   }
 
   findAllForUser(currentUser: User) {

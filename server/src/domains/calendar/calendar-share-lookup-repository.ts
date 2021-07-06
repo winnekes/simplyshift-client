@@ -1,12 +1,12 @@
 import { EntityRepository } from "typeorm";
-import { BaseRepository } from "../identity-access/base-repository";
+import { BaseRepository } from "../../database/core/base-repository";
 import { User } from "../identity-access/user-entity";
 import { CalendarShareLookup } from "./calendar-share-lookup-entity";
 
 @EntityRepository(CalendarShareLookup)
 export class CalendarShareLookupRepository extends BaseRepository<CalendarShareLookup> {
   scoped(currentUser: User) {
-    return this.getScoped(
+    return this.getUserScope(
       currentUser,
       this.createQueryBuilder("calendarShareLookup")
     );
