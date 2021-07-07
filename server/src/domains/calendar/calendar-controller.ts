@@ -10,8 +10,8 @@ import {
   JsonController,
   Param,
   Post,
-  QueryParam,
 } from "routing-controllers";
+import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { getCustomRepository, getManager } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { User } from "../identity-access/user-entity";
@@ -19,6 +19,7 @@ import { ShiftEntryRepository } from "../shift-entry/shift-entry-repository";
 import { CalendarRepository } from "./calendar-repository";
 import { CalendarShareLookup } from "./calendar-share-lookup-entity";
 import { CalendarShareLookupRepository } from "./calendar-share-lookup-repository";
+import short from "short-uuid";
 
 @JsonController()
 export default class CalendarController {
@@ -29,6 +30,9 @@ export default class CalendarController {
   );
 
   @Authorized()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }],
+  })
   @Get("/calendars/:name")
   async getCalendar(
     @Param("name") calendarName: string,
@@ -53,17 +57,24 @@ export default class CalendarController {
       calendar.id
     );
 
+    const shortUuid =
+      existingCalendarShareLookup &&
+      short().fromUUID(existingCalendarShareLookup.uuid);
+
     return {
       id: calendar.id,
       name: calendar.name,
       isShared: !!existingCalendarShareLookup,
       icsUrl: existingCalendarShareLookup
-        ? `/calendars?t=${existingCalendarShareLookup.uuid}`
+        ? `/calendars/shared/${shortUuid}`
         : undefined,
     };
   }
 
   @Authorized()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }],
+  })
   @Post("/calendars/:id/share")
   async shareCalendar(
     @Param("id") calendarId: number,
@@ -101,10 +112,14 @@ export default class CalendarController {
       await transactionalEntityManager.save(calendar);
     });
 
-    return `api/calendars/${calendarShareLookup.uuid}`;
+    const shortUuid = short().fromUUID(calendarShareLookup.uuid);
+    return `api/calendars/shared/${shortUuid}`;
   }
 
   @Authorized()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }],
+  })
   @Delete("/calendars/:id/unshare")
   async unshareCalendar(
     @Param("id") calendarId: number,
@@ -144,11 +159,13 @@ export default class CalendarController {
     return true;
   }
 
-  @Get("/calendars")
+  @Get("/calendars/shared/:shortUuid")
   async getSharedCalendar(
-    @QueryParam("t") uuid: string,
+    @Param("shortUuid") shortUuid: string,
     @Ctx() ctx: Context
   ): Promise<ICalCalendar> {
+    const uuid = short().toUUID(shortUuid);
+
     const sharedCalendarLookup = await this.calendarShareLookupRepository
       .createQueryBuilder("scl")
       .where("scl.uuid = :uuid", { uuid })
@@ -206,7 +223,10 @@ export default class CalendarController {
       product: "SimplyShift",
     });
 
-    calendar.x([{ key: "X-PUBLISHED-TTL", value: "PT1H" }]);
+    calendar.x([
+      { key: "X-PUBLISHED-TTL", value: "PT1H" },
+      //  { key: "REFRESH-INTERVAL;VALUE=DURATION", value: "P1H" },
+    ]);
 
     for (const shiftEntry of shiftEntries) {
       const event = calendar.createEvent({
@@ -229,6 +249,6 @@ export default class CalendarController {
     ctx.status = 200;
     ctx.respond = false;
 
-    return calendar.serve(ctx.res, "simplyshift.ics");
+    return calendar.serve(ctx.res, "simplyshift-default-calendar.ics");
   }
 }

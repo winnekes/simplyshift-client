@@ -8,6 +8,7 @@ import {
   Put,
   Delete,
 } from "routing-controllers";
+import { OpenAPI } from "routing-controllers-openapi/build/decorators";
 import { getCustomRepository } from "typeorm";
 import { ExtendedHttpError } from "../../utils/extended-http-error";
 import { sign } from "../../utils/jwt";
@@ -24,6 +25,9 @@ export class UserController {
   private googleClient = new OAuth2Client(process.env.CLIENT_ID);
 
   @Authorized()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }],
+  })
   @Get("/users/profile")
   async getUser(@CurrentUser() user: User) {
     return user;
@@ -66,6 +70,9 @@ export class UserController {
   }
 
   @Authorized()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }],
+  })
   @Put("/users/profile/change-password")
   async changePassword(
     @CurrentUser() user: User,
@@ -114,6 +121,9 @@ export class UserController {
   }
 
   @Authorized()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }],
+  })
   @Delete("/users")
   async deleteUser(@CurrentUser() user: User) {
     return (await this.userRepository.delete(user.id)).affected === 0;
