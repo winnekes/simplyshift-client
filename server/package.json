@@ -26,6 +26,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "class-validator-jsonschema": "^3.0.1",
+    "dayjs": "^1.10.5",
     "dotenv": "^8.2.0",
     "google-auth-library": "^7.1.0",
     "ical-generator": "^2.2.0",
@@ -42,11 +43,11 @@
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.9.0",
     "routing-controllers-openapi": "^3.0.0",
+    "rrule": "^2.6.8",
+    "short-uuid": "^4.2.0",
     "ts-node": "^8.10.2",
     "typedoc": "^0.20.36",
-    "typeorm": "^0.2.34",
-    "dayjs": "^1.10.5",
-    "rrule": "^2.6.8"
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@sentry/types": "^6.2.5",
