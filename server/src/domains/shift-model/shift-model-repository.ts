@@ -1,25 +1,27 @@
-import {
-  EntityRepository,
-  FindConditions,
-  FindOneOptions,
-  IsNull,
-  Not,
-  Repository,
-} from "typeorm";
+import { EntityRepository } from "typeorm";
+import { BaseRepository } from "../../database/core/base-repository";
 import { User } from "../identity-access/user-entity";
 import { ShiftModel } from "./shift-model-entity";
 
 @EntityRepository(ShiftModel)
-export class ShiftModelRepository extends Repository<ShiftModel> {
-  findAllForUser(currentUser: User, options?: FindConditions<ShiftModel>) {
-    return this.find({ user: currentUser, ...options });
+export class ShiftModelRepository extends BaseRepository<ShiftModel> {
+  scoped(currentUser: User) {
+    return this.getUserScope(currentUser, this.createQueryBuilder("calendar"));
   }
 
-  findOneForUser(currentUser: User, options?: FindOneOptions<ShiftModel>) {
-    return this.findOne({
-      user: currentUser,
-      deletedAt: Not(IsNull()),
-      ...options,
-    });
+  findAllForUser(currentUser: User) {
+    return this.scoped(currentUser).getMany();
+  }
+
+  findOneForUserById(currentUser: User, shiftModelId: number) {
+    return this.scoped(currentUser)
+      .where("id = :shiftModelId", { shiftModelId })
+      .forUser.getOne();
+  }
+
+  findOneForUserByName(currentUser: User, shiftModelName: string) {
+    return this.scoped(currentUser)
+      .where("name = :shiftModelName", { shiftModelName })
+      .forUser.getOne();
   }
 }

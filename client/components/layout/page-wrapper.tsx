@@ -1,5 +1,4 @@
 import { get } from "idb-keyval";
-import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { FunctionComponent, useEffect, useState } from "react";
 import { useAuth } from "../../hooks/use-auth";
@@ -49,12 +48,6 @@ export const PageWrapper: FunctionComponent<Props> = ({
 
   return (
     <>
-      <NextSeo
-        titleTemplate="%s | SimplyShift, the simple shift scheduler"
-        title="Simple Usage Example"
-        description="A short description goes here."
-      />
-
       <Navbar />
       <Flex direction="column">
         <Container maxW={width} px={[5, 5, 5, 0]}>

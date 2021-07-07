@@ -19,6 +19,7 @@ class AuthenticationPayload {
 @JsonController()
 export class LoginController {
   private userRepository = getCustomRepository(UserRepository);
+
   @Post("/login")
   async authenticate(@Body() data: AuthenticationPayload) {
     const user = await this.userRepository.findOne({

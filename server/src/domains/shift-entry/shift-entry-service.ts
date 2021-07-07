@@ -17,16 +17,20 @@ export class ShiftEntryService {
   private shiftModelRepository = getCustomRepository(ShiftModelRepository);
   private shiftEntryRepository = getCustomRepository(ShiftEntryRepository);
   private calendarRepository = getCustomRepository(CalendarRepository);
+
   public async getShiftEntriesForSingleMonth(
     user: User,
     date: Date
   ): Promise<ShiftEntry[]> {
     const selectedMonth = moment(date).startOf("month");
-    console.log({ selectedMonth });
-    const shiftEntries = await this.shiftEntryRepository.findAllForUser(user, {
-      startsAt: MoreThanOrEqual(moment(selectedMonth).subtract(7, "days")),
-      endsAt: LessThan(moment(selectedMonth).add(1, "month").add(7, "days")),
-    });
+
+    const shiftEntries = await this.shiftEntryRepository.findAllForUserForSelectedMonth(
+      user,
+      {
+        startsAt: MoreThanOrEqual(moment(selectedMonth).subtract(7, "days")),
+        endsAt: LessThan(moment(selectedMonth).add(1, "month").add(7, "days")),
+      }
+    );
 
     // cannot query soft-deleted relations through generic find option, so we have to map the shiftModels manually to the shift entries
     const shiftModels = await this.shiftModelRepository
@@ -56,11 +60,11 @@ export class ShiftEntryService {
     user: User,
     data: { shiftModelId: number; date: Date }
   ): Promise<ShiftEntry> {
-    const shiftModel = await this.shiftModelRepository.findOneForUser(user, {
-      where: { id: data.shiftModelId },
-    });
+    const shiftModel = await this.shiftModelRepository.findOneForUserById(
+      user,
+      data.shiftModelId
+    );
 
-    console.log({ data });
     if (!shiftModel) {
       throw new ExtendedHttpError(
         "Could not find the model for this shift entry.",
@@ -91,11 +95,13 @@ export class ShiftEntryService {
         : moment(startDate).add(moment.duration(shiftModel.endsAt)).toDate();
 
     // we cannot allow overlapping shift entries, we find potential conflicting ones and delete them
-    const conflictingShiftEntries =
-      await this.shiftEntryRepository.findConflictingEntriesForUser(user, {
+    const conflictingShiftEntries = await this.shiftEntryRepository.findConflictingEntriesForUser(
+      user,
+      {
         startsAt,
         endsAt,
-      });
+      }
+    );
 
     const newShiftEntry = this.shiftEntryRepository.create();
     newShiftEntry.user = user;
@@ -107,7 +113,6 @@ export class ShiftEntryService {
 
     await getManager().transaction(async (transactionalEntityManager) => {
       await transactionalEntityManager.softRemove(conflictingShiftEntries);
-
       await transactionalEntityManager.save(newShiftEntry);
     });
 

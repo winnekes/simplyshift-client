@@ -39,10 +39,11 @@ export class ShiftModelController {
     @CurrentUser() user: User,
     @Body() shiftModel: ShiftModel
   ) {
-    const existingShiftModelByName =
-      await this.shiftModelRepository.findOneForUser(user, {
-        where: { name: shiftModel.name },
-      });
+    const existingShiftModelByName = await this.shiftModelRepository.findOneForUserByName(
+      user,
+      shiftModel.name
+    );
+
     if (existingShiftModelByName) {
       throw new ExtendedHttpError(
         "A shift model with the same name already exists.",

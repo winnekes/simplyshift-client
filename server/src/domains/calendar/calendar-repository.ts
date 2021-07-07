@@ -1,23 +1,33 @@
-import {
-  EntityRepository,
-  FindConditions,
-  FindOneOptions,
-  Repository,
-} from "typeorm";
+import { EntityRepository } from "typeorm";
+import { BaseRepository } from "../../database/core/base-repository";
 import { User } from "../identity-access/user-entity";
 import { Calendar } from "./calendar-entity";
 
 @EntityRepository(Calendar)
-export class CalendarRepository extends Repository<Calendar> {
-  findAllForUser(currentUser: User, options?: FindConditions<Calendar>) {
-    return this.find({ user: currentUser, ...options });
+export class CalendarRepository extends BaseRepository<Calendar> {
+  scoped(currentUser: User) {
+    return this.getUserScope(currentUser, this.createQueryBuilder("calendar"));
   }
 
-  findOneForUser(currentUser: User, options?: FindOneOptions<Calendar>) {
-    return this.findOne({ user: currentUser, ...options });
+  findAllForUser(currentUser: User) {
+    return this.scoped(currentUser).forUser.getOne();
   }
 
-  findActiveOneForUser(currentUser: User, options?: FindOneOptions<Calendar>) {
-    return this.findOne({ user: currentUser, isDefault: true, ...options });
+  findOneForUserByName(currentUser: User, calendarName: string) {
+    return this.scoped(currentUser)
+      .where("name = :calendarName", { calendarName })
+      .forUser.getOne();
+  }
+
+  findOneForUserById(currentUser: User, calendarId: number) {
+    return this.scoped(currentUser)
+      .where("id = :calendarId", { calendarId })
+      .forUser.getOne();
+  }
+
+  findActiveOneForUser(currentUser: User) {
+    return this.scoped(currentUser)
+      .where("calendar.isDefault = true")
+      .forUser.getOne();
   }
 }
