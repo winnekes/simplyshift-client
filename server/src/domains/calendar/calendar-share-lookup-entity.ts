@@ -25,7 +25,7 @@ export class CalendarShareLookup extends BaseEntity {
   @Column("uuid")
   uuid!: string;
 
-  @OneToOne(() => Calendar, (calendar) => calendar.calendarShareLookup)
+  @OneToOne(() => Calendar)
   @JoinColumn()
   calendar!: Calendar;
 
