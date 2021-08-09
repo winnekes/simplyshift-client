@@ -1,30 +1,35 @@
-import {
-  EntityRepository,
-  FindConditions,
-  FindOneOptions,
-  LessThan,
-  MoreThan,
-  Repository,
-} from "typeorm";
+import { EntityRepository, FindConditions, LessThan, MoreThan } from "typeorm";
+import { BaseRepository } from "../../database/core/base-repository";
 import { User } from "../identity-access/user-entity";
 import { ShiftEntry } from "./shift-entry-entity";
 
 @EntityRepository(ShiftEntry)
-export class ShiftEntryRepository extends Repository<ShiftEntry> {
-  findAllForUser(currentUser: User, options?: FindConditions<ShiftEntry>) {
-    return this.find({ user: currentUser, ...options });
+export class ShiftEntryRepository extends BaseRepository<ShiftEntry> {
+  scoped(currentUser: User) {
+    return this.getUserScope(
+      currentUser,
+      this.createQueryBuilder("shiftEntry")
+    );
   }
 
-  findOneForUser(currentUser: User, options?: FindOneOptions<ShiftEntry>) {
-    return this.findOne({ user: currentUser, ...options });
+  findOneForUserById(currentUser: User, shiftEntryId: number) {
+    return this.scoped(currentUser)
+      .where("id = :shiftEntryId", { shiftEntryId })
+      .forUser.getOne();
+  }
+
+  // todo use userScope
+  findAllForUserForSelectedMonth(
+    currentUser: User,
+    options?: FindConditions<ShiftEntry>
+  ) {
+    return this.find({ user: currentUser, ...options });
   }
 
   findConflictingEntriesForUser(
     currentUser: User,
-    time: { startsAt: Date; endsAt: Date },
-    options?: FindConditions<ShiftEntry>
+    time: { startsAt: Date; endsAt: Date }
   ) {
-    console.log({ time });
     return this.find({
       where: [
         {
@@ -38,7 +43,6 @@ export class ShiftEntryRepository extends Repository<ShiftEntry> {
           endsAt: time.startsAt,
         },
       ],
-      ...options,
     });
   }
 }

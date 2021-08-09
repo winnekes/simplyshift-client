@@ -48,7 +48,6 @@ export class ShiftEntryController {
     try {
       return this.shiftEntryService.createNewShiftEntry(user, data);
     } catch (error) {
-      console.log({ error });
       throw new ExtendedHttpError(
         "Could not create new entry",
         "CREATE_SHIFT_ENTRY_FAILED"
@@ -63,9 +62,10 @@ export class ShiftEntryController {
     @CurrentUser() user: User,
     @Body() data: Partial<ShiftEntry>
   ) {
-    const shiftEntry = await this.shiftEntryRepository.findOne(id, {
-      where: { user },
-    });
+    const shiftEntry = await this.shiftEntryRepository.findOneForUserById(
+      user,
+      id
+    );
     if (!shiftEntry) {
       throw new ExtendedHttpError(
         "Cannot find the shift entry.",
@@ -81,7 +81,6 @@ export class ShiftEntryController {
 
       return await this.shiftEntryRepository.save(updatedEntity);
     } catch (error) {
-      console.log({ error });
       throw new ExtendedHttpError(
         "Could not update shift entry",
         "UPDATE_SHIFT_ENTRY_FAILED"
@@ -95,9 +94,10 @@ export class ShiftEntryController {
     @Param("id") id: number,
     @CurrentUser() user: User
   ): Promise<UpdateResult> {
-    const shiftEntry = await this.shiftEntryRepository.findOneForUser(user, {
-      where: { id },
-    });
+    const shiftEntry = await this.shiftEntryRepository.findOneForUserById(
+      user,
+      id
+    );
 
     if (!shiftEntry) {
       throw new ExtendedHttpError(
@@ -109,7 +109,6 @@ export class ShiftEntryController {
     try {
       return this.shiftEntryRepository.softDelete({ id: shiftEntry.id });
     } catch (error) {
-      console.log({ error });
       throw new ExtendedHttpError(
         "Could not delete shift entry",
         "DELETE_SHIFT_ENTRY_FAILED"
